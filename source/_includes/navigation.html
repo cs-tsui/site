@@ -117,6 +117,13 @@
 </ul>
   {% endunless %}
   {% endif %}
+  
+  {% if site.linkedin_url %}
+<ul class="subscription">
+  <li><a href="{{ site.linkedin_url }}" rel="subscribe-linkedin" title="{{ site.linkedin_name }} on LinkedIn">LinkedIn</a></li>
+</ul>
+  {% endif %}
+
   {% if site.simple_search %}
     {% if site.adsense_cse_partner_ID %}
       <form action="http://www.google.com" id="cse-search-box" target="_blank">
