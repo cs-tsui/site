@@ -29,7 +29,8 @@ email:
 root: /
 permalink: /blog/:year/:month/:day/:title/
 source: source
-destination: public
+#destination: public
+destination: docs 
 plugins: plugins
 code_dir: downloads/code
 category_dir: blog/categories
