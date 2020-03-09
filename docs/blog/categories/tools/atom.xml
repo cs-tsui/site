@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Tools | Chun Sing Tsui]]></title>
+  <link href="http://www.cstsui.com/blog/categories/tools/atom.xml" rel="self"/>
+  <link href="http://www.cstsui.com/"/>
+  <updated>2020-03-08T22:14:16-04:00</updated>
+  <id>http://www.cstsui.com/</id>
+  <author>
+    <name><![CDATA[Chun Sing Tsui]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Setting Up E<sup>2</sup>studio for RL78/G14 RDK Developement]]></title>
+    <link href="http://www.cstsui.com/blog/2014/05/10/setting-up-e2studio-for-rl78g14-rdk-developement/"/>
+    <updated>2014-05-10T00:00:00-04:00</updated>
+    <id>http://www.cstsui.com/blog/2014/05/10/setting-up-e2studio-for-rl78g14-rdk-developement</id>
+    <content type="html"><![CDATA[<p>Set up e<sup>2</sup>studio for RL78 development following the steps below. These downloads are the files provided on the RL78/G14 RDK installation DVD. However, this will be useful if you happen to lose the DVD, don't have a DVD drive, or want to install/update a particular item when it becomes outdated.</p>
+
+
+<h3>Setup e<sup>2</sup>studio</h3>
+
+
+<p>1). Download/Install e<sup>2</sup>studio from Renesas website:</p>
+
+
+<ul>
+<li>http://sg.renesas.com/products/mpumcu/rl78/rl78g1x/rl78g14/soft_tools_index.jsp</li>
+</ul>
+
+
+<p>2) Download KPIT GNU Toolchain for RL78 and register it with e<sup>2</sup>studio (should automatically pop up when you open e<sup>2</sup>studio). The GNURL78 compiler is a free compiler with no size limitations.</p>
+
+
+<ul>
+<li>http://www.kpitgnutools.com/latestToolchain.php</li>
+</ul>
+
+
+<p>3) Download/Install IAR Plugin for e<sup>2</sup>studio using the appropriate update site. The IAR plugin allows projects for the IAR compiler to be built and debugged in e<sup>2</sup>studio.</p>
+
+
+<ul>
+<li>http://www.iar.com/eclipse/</li>
+</ul>
+
+
+
+
+<!-- more -->
+
+
+<h3>Useful Links</h3>
+
+
+<ul>
+<li><a href="http://renesasrulz.com/renesas_products/rl78/m/mediagallery/2628.aspx">Using the code generator included with e<sup>2</sup>studio</a></li>
+<li><a href="http://documentation.renesas.com/doc/products/tools/r20uw0117eu0200_yrdkrl78g14_qsg.pdf">RL78/G14 RDK Quick Start Guide</a></li>
+<li><a href="http://am.renesas.com/support/downloads/download_results/C1000000-C9999999/tools/rl78_g14_rdk_sample_projects.jsp">RL78/G14 RDK Sample Projects</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Useful Notepad++ Plugins]]></title>
+    <link href="http://www.cstsui.com/blog/2012/03/20/useful-notepad-plugins/"/>
+    <updated>2012-03-20T00:00:00-04:00</updated>
+    <id>http://www.cstsui.com/blog/2012/03/20/useful-notepad-plugins</id>
+    <content type="html"><![CDATA[<p><a href="http://notepad-plus-plus.org/">Notepad++</a> is easily one of the best text editors for Windows. I've compiled below a few useful plugins that extends its functionality even further.</p>
+
+
+<ul>
+<li>
+<h4><a href="http://sourceforge.net/projects/tabstospacesnpp/">CLR Tabs to Spaces</a></h4>
+</li>
+</ul>
+
+
+<p style="padding-left:60px;">If your code contains a mix of spaces and tabs, they will often be inconsistently displayed with different editors. One thing that I've tried to do is making sure my code contains no tabs to avoid inconsistency. This plugin makes it easy to convert tabs to spaces for existing code.</p>
+
+
+<ul>
+<li>
+<h4><a href="http://sourceforge.net/projects/npp-compare/">Compare</a></h4>
+</li>
+</ul>
+
+
+<p style="padding-left:60px;">Everyone needs a diff tool. File comparison is always a useful feature when you need to find the differences between two files.</p>
+
+
+<ul>
+<li>
+<h4><a href="http://sourceforge.net/projects/npp-plugins/files/MultiClipboard/">MultiClipboard</a></h4>
+</li>
+</ul>
+
+
+<p style="padding-left:60px;">This plugin conveniently allows you to have more than one item in your clipboard, easing copy and paste operations.</p>
+
+
+<ul>
+<li>
+<h4><a href="http://code.google.com/p/nppastyle/downloads/list">NppAStyle</a></h4>
+</li>
+</ul>
+
+
+<p style="padding-left:60px;">A plugin of <a href="http://astyle.sourceforge.net/">Artistic Style</a>, which is a C, C++, C#, and Java source code automatic formatter. The one complain that I have with NppAStyle is that it doesn't handle comments very well. Comments will stay at their original position, which is generally not the wanted action.</p>
+
+
+<ul>
+<li>
+<h4><a href="http://sites.google.com/site/fstellari/nppplugins">RunMe</a></h4>
+</li>
+</ul>
+
+
+<p style="padding-left:60px;">RunMe is excellent for allowing the execution of the currently open file based on its shell association. Since I've been working with Perl, this allows me to run and test the script easily at the file location.</p>
+
+
+<ul>
+<li>
+<h4><a href="http://sourceforge.net/projects/npp-plugins/files/TextFX/">TextFX</a></h4>
+</li>
+</ul>
+
+
+<p style="padding-left:60px;">TextFX contains a slew of functions that are too many to list. It no longer comes with the latest unicode version of Notepad++ (v5.9.6.2), but you can manual install it to get the added features.</p>
+
+]]></content>
+  </entry>
+  
+</feed>

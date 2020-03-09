@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: General | Chun Sing Tsui]]></title>
+  <link href="http://www.cstsui.com/blog/categories/general/atom.xml" rel="self"/>
+  <link href="http://www.cstsui.com/"/>
+  <updated>2020-03-08T22:14:16-04:00</updated>
+  <id>http://www.cstsui.com/</id>
+  <author>
+    <name><![CDATA[Chun Sing Tsui]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Site Update]]></title>
+    <link href="http://www.cstsui.com/blog/2014/08/16/site-update/"/>
+    <updated>2014-08-16T08:17:22-04:00</updated>
+    <id>http://www.cstsui.com/blog/2014/08/16/site-update</id>
+    <content type="html"><![CDATA[<p>Finally got around to migrating my site off of Wordpress. I&rsquo;ve read good things about Octopress, so that&rsquo;s what the new site is based on. It is relatively straightforward to migrate the posts into the Octopress/Jekyll markdown format using the included tools.</p>
+
+<p>Currently the site is using a popular theme called Whitespace. Hopefully I will get around to customizing the theme a bit in the near future.</p>
+
+<p>More updates that will be coming:</p>
+
+<ul>
+<li>import scale modeling posts</li>
+<li>rehost images</li>
+<li>add project pages</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

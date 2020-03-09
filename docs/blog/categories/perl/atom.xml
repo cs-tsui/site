@@ -1,0 +1,905 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Perl | Chun Sing Tsui]]></title>
+  <link href="http://www.cstsui.com/blog/categories/perl/atom.xml" rel="self"/>
+  <link href="http://www.cstsui.com/"/>
+  <updated>2020-03-08T22:14:16-04:00</updated>
+  <id>http://www.cstsui.com/</id>
+  <author>
+    <name><![CDATA[Chun Sing Tsui]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Nested Dispatch Tables]]></title>
+    <link href="http://www.cstsui.com/blog/2016/08/06/perl-nested-dispatch-table/"/>
+    <updated>2016-08-06T10:00:27-04:00</updated>
+    <id>http://www.cstsui.com/blog/2016/08/06/perl-nested-dispatch-table</id>
+    <content type="html"><![CDATA[<p>The dispatch table pattern is very commonly used in Perl for mapping an action to a handler function. A simple dispatch table looks something like this.</p>
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="k">my</span> <span class="nv">$dispatch</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">insert</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{</span>
+</span><span class='line'>        <span class="c1"># Do insert</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">remove</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{</span>
+</span><span class='line'>        <span class="c1"># Do remove</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">};</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="nv">$dispatch</span><span class="o">-&gt;</span><span class="p">{</span><span class="nv">$action</span><span class="p">}</span><span class="o">-&gt;</span><span class="p">()</span> <span class="k">if</span> <span class="nb">exists</span> <span class="nv">$dispatch</span><span class="o">-&gt;</span><span class="p">{</span><span class="nv">$action</span><span class="p">};</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>This is used in place of if/else or switches to determine which logic path to follow with the advantage of each logic path broken up into clearly separated subroutines.</p>
+
+<h3>Multi-level Actions</h3>
+
+<p>When there are any additional levels of sub-actions possible for each action, each combination will again have to be taken care of.</p>
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">Nested</span> <span class="k">if</span><span class="sr">/else&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="k">if</span> <span class="p">(</span><span class="nv">$action</span> <span class="ow">eq</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">primary_action</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span>    <span class="p">(</span><span class="nv">$subaction</span> <span class="ow">eq</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">option1</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;)</span> <span class="p">{}</span>
+</span><span class='line'>    <span class="k">elsif</span> <span class="p">(</span><span class="nv">$subaction</span> <span class="ow">eq</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">option2</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;)</span> <span class="p">{}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">elsif</span> <span class="p">(</span><span class="nv">$action</span> <span class="ow">eq</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">secondary_action</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span>    <span class="p">(</span><span class="nv">$subaction</span> <span class="ow">eq</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">option1</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;)</span> <span class="p">{}</span>
+</span><span class='line'>    <span class="k">elsif</span> <span class="p">(</span><span class="nv">$subaction</span> <span class="ow">eq</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">option2</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;)</span> <span class="p">{}</span>
+</span><span class='line'><span class="p">}</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">Nested</span> <span class="n">dispatch</span> <span class="n">table</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="k">my</span> <span class="nv">$dispatch</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">primary_action</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>        <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">option1</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
+</span><span class='line'>        <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">option2</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">secondary_action</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>        <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">option1</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
+</span><span class='line'>        <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">option2</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">};</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="nv">$dispatch</span><span class="o">-&gt;</span><span class="p">{</span><span class="nv">$action</span><span class="p">}</span><span class="o">-&gt;</span><span class="p">{</span><span class="nv">$subaction</span><span class="p">}</span><span class="o">-&gt;</span><span class="p">();</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>Using the nested display approach is slightly cleaner and more succinct than the nested if/else approach, <em>especially</em> if the code for each logic path is long or if there are many action and subaction combinations. But the advantage is small if there aren&rsquo;t too many actions and subaction combinations.</p>
+
+<h3>Mimic Polymorphism</h3>
+
+<p>Suppose we are looping through a list of items (list of hashes) and we want to apply some action to each. In an object-oriented system, this would likely be a list of objects with all items implementing the same interface, allowing different behavior depending on the implementation of the interface functions.</p>
+
+<p>This technique is most useful when working with existing procedural systems where you want to mimic this behaviour, and creating classes solely for a small portion of the code doesn&rsquo;t make much sense.</p>
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">Nested</span> <span class="n">dispatch</span> <span class="n">with</span> <span class="n">multiple</span> <span class="n">steps</span> <span class="k">for</span> <span class="nb">each</span> <span class="n">combination</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="k">my</span> <span class="nv">$dispatch</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">primary_action</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>        <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">option1</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">should_skip</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
+</span><span class='line'>            <span class="n">do_work</span>     <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">option2</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">should_skip</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
+</span><span class='line'>            <span class="n">do_work</span>     <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">secondary_action</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>         <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">option1</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">should_skip</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
+</span><span class='line'>            <span class="n">do_work</span>     <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">option2</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">should_skip</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
+</span><span class='line'>            <span class="n">do_work</span>     <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">};</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="k">for</span> <span class="k">my</span> <span class="nv">$item</span> <span class="n">in</span> <span class="p">(</span><span class="nv">@items</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">my</span> <span class="nv">$item_prop1</span> <span class="o">=</span> <span class="nv">$item</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">prop1</span><span class="p">};</span>
+</span><span class='line'>    <span class="k">my</span> <span class="nv">$item_prop2</span> <span class="o">=</span> <span class="nv">$item</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">prop2</span><span class="p">};</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;</span><span class="c1"># Skip this item if we don&#39;t need to work on it for now</span>
+</span><span class='line'><span class="c1"># to save some resources for fetching additional data</span>
+</span><span class='line'><span class="k">next</span> <span class="k">if</span> <span class="nv">$dispatch</span><span class="o">-&amp;</span><span class="ow">gt</span><span class="p">;{</span><span class="nv">$action1</span><span class="p">}</span><span class="o">-&amp;</span><span class="ow">gt</span><span class="p">;{</span><span class="nv">$subaction2</span><span class="p">}</span><span class="o">-&amp;</span><span class="ow">gt</span><span class="p">;{</span><span class="n">should_skip</span><span class="p">}</span><span class="o">-&amp;</span><span class="ow">gt</span><span class="p">;();</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Fetch additional information not available in the item hash itself</span>
+</span><span class='line'><span class="k">my</span> <span class="nv">$additional_args</span> <span class="o">=</span> <span class="n">fetch_data</span><span class="p">(</span><span class="nv">$item</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Do Work </span>
+</span><span class='line'><span class="nv">$dispatch</span><span class="o">-&amp;</span><span class="ow">gt</span><span class="p">;{</span><span class="nv">$action1</span><span class="p">}</span><span class="o">-&amp;</span><span class="ow">gt</span><span class="p">;{</span><span class="nv">$subaction2</span><span class="p">}</span><span class="o">-&amp;</span><span class="ow">gt</span><span class="p">;{</span><span class="n">do_work</span><span class="p">}</span><span class="o">-&amp;</span><span class="ow">gt</span><span class="p">;(</span><span class="nv">$additional_args</span><span class="p">);</span>
+</span><span class='line'><span class="sr">&lt;/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="p">}</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h3>Summary</h3>
+
+<p>Without using a nested dispatch table, multiple if/else blocks or switches will have to be used to mimic this nested branching behavior. Using a dispatch table is a good way to avoid duplicating code. Now all the related code are consolidated in one place in a hash data structure that can easily be modified. Another advantage of this approach is the dispatch table may be created at a local scope to take advantage of closures so the handler functions can focus on a
+small tasks and assume certain state variables that are only available within the local scope are availible without explicitly passing all variables as arguments.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Easy HTML Table Generation From Perl DBI and SQL]]></title>
+    <link href="http://www.cstsui.com/blog/2016/02/23/easy-html-table-generation-from-perl-dbi-and-sql/"/>
+    <updated>2016-02-23T22:17:32-05:00</updated>
+    <id>http://www.cstsui.com/blog/2016/02/23/easy-html-table-generation-from-perl-dbi-and-sql</id>
+    <content type="html"><![CDATA[<p>The following script is used to quickly generate HTML tables for reports using only a SQL query as an input. Useful if you needed to generate and send out a report quickly without installing yet yet another package.</p>
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="o">!</span><span class="sr">/usr/</span><span class="n">bin</span><span class="sr">/perl&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="k">use</span> <span class="n">DBI</span><span class="p">;</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">Query</span> <span class="n">as</span> <span class="n">in</span> <span class="n">input</span><span class="p">,</span> <span class="ow">and</span> <span class="n">generate</span> <span class="n">HTML</span> <span class="n">table</span> <span class="n">output</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="k">my</span> <span class="nv">$query</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="nb">select</span> <span class="o">*</span> <span class="n">from</span> <span class="n">data</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;;</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="mi">1</span><span class="p">)</span> <span class="n">Connect</span> <span class="ow">and</span> <span class="n">get</span> <span class="n">DB</span> <span class="n">handle</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="k">my</span> <span class="nv">$dbh</span> <span class="o">=</span> <span class="n">connect_db</span><span class="p">();</span> <span class="c1"># use your own connection here&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="mi">2</span><span class="p">)</span> <span class="n">Run</span> <span class="n">your</span> <span class="n">query</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="k">my</span> <span class="nv">$sth</span>   <span class="o">=</span> <span class="nv">$dbh</span><span class="o">-&gt;</span><span class="n">prepare</span><span class="p">(</span><span class="nv">$query</span><span class="p">);</span>
+</span><span class='line'><span class="k">my</span> <span class="nv">@loh</span>   <span class="o">=</span> <span class="nv">@</span><span class="p">{</span> <span class="nv">$sth</span><span class="o">-&gt;</span><span class="n">fetchall_arrayref</span><span class="p">({})</span> <span class="p">};</span>
+</span><span class='line'><span class="k">my</span> <span class="nv">@cols</span>  <span class="o">=</span> <span class="nv">@</span><span class="p">{</span> <span class="nv">$sth</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">NAME</span><span class="p">}</span> <span class="p">};</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="mi">3</span><span class="p">)</span> <span class="n">Generate</span> <span class="n">HTML</span> <span class="n">Table</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="k">my</span> <span class="nv">$thead</span> <span class="o">=</span> <span class="nb">join</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span> <span class="nb">map</span> <span class="p">{</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="sr">&lt;td&gt;</span><span class="nv">$_</span><span class="sr">&lt;/td&gt;</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;}</span> <span class="nv">@cols</span><span class="p">);</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="k">my</span> <span class="nv">@rows</span> <span class="o">=</span> <span class="p">();</span>
+</span><span class='line'><span class="k">for</span> <span class="k">my</span> <span class="nv">$hr</span> <span class="p">(</span><span class="nv">@loh</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nb">push</span> <span class="nv">@rows</span><span class="p">,</span> <span class="nb">join</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span> <span class="nb">map</span> <span class="p">{</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="sr">&lt;td&gt;</span><span class="nv">$_</span><span class="sr">&lt;/td&gt;</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;}</span> <span class="nv">@</span><span class="p">{</span><span class="nv">$hr</span><span class="p">}{</span><span class="nv">@cols</span><span class="p">});</span>
+</span><span class='line'><span class="p">}</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="k">my</span> <span class="nv">$tbody</span> <span class="o">=</span> <span class="nb">join</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;,</span> <span class="nb">map</span> <span class="p">{</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="sr">&lt;tr&gt;</span><span class="nv">$_</span><span class="sr">&lt;/tr&gt;</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;}</span> <span class="nv">@rows</span><span class="p">);</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="k">my</span> <span class="nv">$html</span> <span class="o">=</span> <span class="sx">qq|&lt;table&gt; $thead &lt;thead&gt; $thead &lt;/thead&gt; &lt;tbody&gt; $tbody &lt;/tbody&gt; &lt;/table&gt;|</span><span class="p">;</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="k">print</span> <span class="nv">$html</span><span class="p">;</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="nb">exit</span> <span class="mi">0</span><span class="p">;</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Finding Duplicate Files]]></title>
+    <link href="http://www.cstsui.com/blog/2012/03/15/perl-finding-duplicate-files/"/>
+    <updated>2012-03-15T00:00:00-04:00</updated>
+    <id>http://www.cstsui.com/blog/2012/03/15/perl-finding-duplicate-files</id>
+    <content type="html"><![CDATA[<p>Another script I wrote to learn more about Perl. I used a script found on <a href="http://www.perlmonks.org/?node_id=49198">PerlMonks</a> as a starting point, and modified it with an additional function of moving all duplicate files into a folder. Again, it is heavily commented to help myself understand the code while I'm writing it.</p>
+
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="o">!</span><span class="sr">/usr/</span><span class="n">bin</span><span class="sr">/perl&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="k">use</span> <span class="n">Cwd</span><span class="p">;</span>
+</span><span class='line'><span class="k">use</span> <span class="nn">File::</span><span class="n">Find</span><span class="p">;</span>
+</span><span class='line'><span class="k">use</span> <span class="nn">Digest::</span><span class="n">MD5</span><span class="p">;</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">ndash</span><span class="p">;</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">This</span> <span class="n">is</span> <span class="n">a</span> <span class="n">script</span> <span class="k">for</span> <span class="n">finding</span> <span class="n">duplicate</span> <span class="n">files</span> <span class="n">in</span> <span class="n">the</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">current</span> <span class="n">directory</span><span class="o">.</span> <span class="n">It</span> <span class="n">checks</span> <span class="k">for</span> <span class="n">the</span> <span class="n">same</span> <span class="n">file</span> <span class="n">size</span><span class="o">.</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">If</span> <span class="n">file</span> <span class="n">sizes</span> <span class="n">are</span> <span class="n">different</span><span class="p">,</span> <span class="k">then</span> <span class="n">files</span> <span class="n">are</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">different</span><span class="o">.</span> <span class="n">If</span> <span class="n">file</span> <span class="n">sizes</span> <span class="n">are</span> <span class="n">the</span> <span class="n">same</span><span class="p">,</span> <span class="n">it</span> <span class="n">goes</span> <span class="n">on</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">to</span> <span class="n">check</span> <span class="k">for</span> <span class="n">the</span> <span class="n">MD5</span> <span class="n">value</span> <span class="n">to</span> <span class="n">determine</span> <span class="n">uniqueness</span><span class="o">.</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">If</span> <span class="n">MD5</span> <span class="n">matches</span><span class="p">,</span> <span class="n">move</span> <span class="n">duplicate</span> <span class="n">files</span> <span class="n">to</span> <span class="n">a</span> <span class="n">folder</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">ndash</span><span class="p">;</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">Get</span> <span class="n">current</span> <span class="n">working</span> <span class="n">directory</span> <span class="ow">and</span> <span class="n">create</span> <span class="n">duplicate</span> <span class="n">folder</span> <span class="n">directory</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="nv">$currentDir</span> <span class="o">=</span> <span class="n">cwd</span><span class="p">();</span>
+</span><span class='line'><span class="nv">$dupFolder</span>  <span class="o">=</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">duplicates</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;;</span>
+</span><span class='line'><span class="nv">$dupDir</span> <span class="o">=</span> <span class="nv">$currentDir</span><span class="o">.&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="sr">/&amp;rdquo;.$dupFolder;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">Hash</span> <span class="n">to</span> <span class="n">store</span> <span class="n">filesize</span> <span class="n">as</span> <span class="n">key</span> <span class="ow">and</span> <span class="n">an</span> <span class="n">array</span> <span class="n">of</span> <span class="n">filenames</span> <span class="n">as</span> <span class="n">value</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="nv">%filesSizeHash</span>  <span class="o">=</span> <span class="p">();</span>
+</span><span class='line'><span class="nv">$duplicateCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="nv">$totalDupSize</span>   <span class="o">=</span> <span class="mi">0</span><span class="p">;</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">Using</span> <span class="n">the</span> <span class="n">file</span><span class="p">()</span> <span class="n">function</span><span class="p">,</span> <span class="n">it</span> <span class="n">calls</span> <span class="n">the</span> <span class="n">wanted</span><span class="p">()</span> <span class="n">function</span> <span class="n">on</span> <span class="n">every</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">file</span> <span class="n">in</span> <span class="n">the</span> <span class="n">current</span> <span class="n">directory</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="n">find</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">check_each_file</span><span class="p">,</span> <span class="nv">$currentDir</span><span class="p">);</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">Loop</span> <span class="n">to</span> <span class="n">first</span> <span class="n">find</span> <span class="n">files</span> <span class="n">of</span> <span class="n">the</span> <span class="n">same</span> <span class="n">file</span> <span class="n">size</span><span class="p">;</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="k">if</span> <span class="n">there</span> <span class="n">are</span> <span class="n">multiple</span><span class="p">,</span> <span class="n">check</span> <span class="n">MD5values</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="k">foreach</span> <span class="k">my</span> <span class="nv">$size</span> <span class="p">(</span><span class="nb">sort</span> <span class="p">{</span><span class="nv">$b</span> <span class="o">&amp;</span><span class="ow">lt</span><span class="p">;</span><span class="o">=&gt;</span> <span class="nv">$a</span><span class="p">}</span> <span class="nb">keys</span> <span class="nv">%filesSizeHash</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1"># Process next filesize unless there are more than one value in</span>
+</span><span class='line'>    <span class="k">next</span> <span class="k">unless</span> <span class="nv">@</span><span class="p">{</span><span class="nv">$filesSizeHash</span><span class="p">{</span><span class="nv">$size</span><span class="p">}}</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="c1">#print($size.&amp;ldquo;\n&amp;rdquo;);&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;</span><span class="c1"># Hash to store MD5 values as key and an array of filenames as value</span>
+</span><span class='line'><span class="k">my</span> <span class="nv">%fileMD5Hash</span> <span class="o">=</span> <span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Loop through and get MD5 and store for each file with same size</span>
+</span><span class='line'><span class="k">foreach</span> <span class="k">my</span> <span class="nv">$file</span> <span class="p">(</span><span class="nv">@</span><span class="p">{</span><span class="nv">$filesSizeHash</span><span class="p">{</span><span class="nv">$size</span><span class="p">}})</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nb">open</span><span class="p">(</span><span class="n">FILE</span><span class="p">,</span> <span class="nv">$file</span><span class="p">)</span> <span class="ow">or</span> <span class="k">next</span><span class="p">;</span>
+</span><span class='line'>    <span class="nb">binmode</span><span class="p">(</span><span class="n">FILE</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">my</span> <span class="nv">$ctx</span> <span class="o">=</span> <span class="nn">Digest::</span><span class="n">MD5</span><span class="o">-&amp;</span><span class="ow">gt</span><span class="p">;</span><span class="k">new</span><span class="o">-&amp;</span><span class="ow">gt</span><span class="p">;</span><span class="n">addfile</span><span class="p">(</span><span class="o">*</span><span class="n">FILE</span><span class="p">);</span>
+</span><span class='line'>    <span class="nb">push</span> <span class="nv">@</span><span class="p">{</span><span class="nv">$fileMD5Hash</span><span class="p">{</span><span class="nv">$ctx</span><span class="o">-&amp;</span><span class="ow">gt</span><span class="p">;</span><span class="n">hexdigest</span><span class="p">}},</span><span class="nv">$file</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Now, take care of file if more than one file has same MD5</span>
+</span><span class='line'><span class="k">foreach</span> <span class="k">my</span> <span class="nv">$hash</span> <span class="p">(</span><span class="nb">keys</span> <span class="nv">%fileMD5Hash</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">next</span> <span class="k">unless</span> <span class="nv">@</span><span class="p">{</span><span class="nv">$fileMD5Hash</span><span class="p">{</span><span class="nv">$hash</span><span class="p">}}</span> <span class="o">&amp;</span><span class="ow">gt</span><span class="p">;</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">unless</span> <span class="p">(</span><span class="o">-</span><span class="n">d</span> <span class="nv">$dupDir</span><span class="p">){</span><span class="nb">mkdir</span> <span class="nv">$dupDir</span> <span class="ow">or</span> <span class="nb">die</span><span class="p">;}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># There are duplicate files to deal with from this point</span>
+</span><span class='line'>    <span class="c1"># Until the currently accessed array inside the md5 hash has only</span>
+</span><span class='line'>    <span class="c1"># one item(file), move file into a different directory</span>
+</span><span class='line'>    <span class="k">my</span> <span class="nv">$count</span> <span class="o">=</span> <span class="nv">@</span><span class="p">{</span><span class="nv">$fileMD5Hash</span><span class="p">{</span><span class="nv">$hash</span><span class="p">}};</span>
+</span><span class='line'>    <span class="k">for</span><span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&amp;</span><span class="ow">lt</span><span class="p">;</span> <span class="nv">$count</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>        <span class="nv">$duplicateCount</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">my</span> <span class="nv">$fileName</span> <span class="o">=</span> <span class="nv">@</span><span class="p">{</span><span class="nv">$fileMD5Hash</span><span class="p">{</span><span class="nv">$hash</span><span class="p">}}[</span><span class="nv">$i</span><span class="p">];</span>
+</span><span class='line'>        <span class="nb">rename</span><span class="p">(</span><span class="nv">$fileName</span><span class="p">,</span> <span class="nv">$dupDir</span><span class="o">.</span><span class="s">&quot;/&quot;</span><span class="o">.</span><span class="nv">$fileName</span><span class="p">);</span>
+</span><span class='line'>        <span class="nv">$totalDupSize</span> <span class="o">=</span> <span class="nv">$totalDupSize</span> <span class="o">+</span> <span class="nv">$size</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">print</span><span class="p">(</span><span class="s">&quot;[File moved]: $fileName\n&quot;</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="sr">&lt;/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="p">}</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">Loop</span> <span class="n">to</span> <span class="n">first</span> <span class="n">find</span> <span class="n">files</span> <span class="n">of</span> <span class="n">the</span> <span class="n">same</span> <span class="n">file</span> <span class="n">size</span><span class="p">;</span> <span class="k">if</span> <span class="n">multiple</span><span class="p">,</span> <span class="n">check</span> <span class="n">MD5values</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="nv">$totalDupSize</span> <span class="o">=</span> <span class="n">size_format</span><span class="p">(</span><span class="nv">$totalDupSize</span><span class="p">);</span>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="o">\</span><span class="n">n</span><span class="p">[</span><span class="n">Total</span> <span class="n">number</span> <span class="n">of</span> <span class="n">duplicates</span> <span class="n">found</span><span class="p">]:</span> <span class="nv">$duplicateCount</span><span class="o">\</span><span class="n">n</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;[</span><span class="n">Toal</span> <span class="n">size</span> <span class="n">of</span> <span class="n">duplicate</span> <span class="n">files</span><span class="p">]:</span>     <span class="nv">$totalDupSize</span><span class="o">\</span><span class="n">n</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">Function</span> <span class="n">that</span> <span class="n">is</span> <span class="n">called</span> <span class="n">on</span> <span class="n">every</span> <span class="n">file</span> <span class="n">in</span> <span class="n">the</span> <span class="n">directory</span> <span class="n">of</span> <span class="n">the</span> <span class="n">find</span><span class="p">()</span> <span class="n">function</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="k">sub </span><span class="nf">check_each_file</span><span class="p">{</span>
+</span><span class='line'>    <span class="c1">#If the current &amp;ldquo;file&amp;rdquo; is a file&amp;hellip;</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">-</span><span class="n">f</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1"># Get  current file&amp;rsquo;s name</span>
+</span><span class='line'>        <span class="nv">$currentFileName</span> <span class="o">=</span> <span class="nv">$</span><span class="nn">File::Find::</span><span class="nv">name</span><span class="p">;</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;</span>    <span class="c1"># Get current file&#39;s size in bytes</span>
+</span><span class='line'>    <span class="k">my</span> <span class="nv">$filesize</span> <span class="o">=</span> <span class="p">(</span><span class="nb">stat</span><span class="p">(</span><span class="nv">$currentFileName</span><span class="p">))[</span><span class="mi">7</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Push the file into an hash of arrays declared at the top,</span>
+</span><span class='line'>    <span class="c1"># with filesize as key and an array of filenames as value</span>
+</span><span class='line'>    <span class="nb">push</span><span class="p">(</span> <span class="nv">@</span><span class="p">{</span> <span class="nv">$filesSizeHash</span> <span class="p">{</span><span class="nv">$filesize</span><span class="p">}},</span> <span class="nv">$_</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="sr">&lt;/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="p">}</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">Function</span> <span class="k">for</span> <span class="n">formatting</span> <span class="n">the</span> <span class="n">total</span> <span class="n">output</span> <span class="n">size</span> <span class="n">of</span> <span class="n">duplicate</span> <span class="n">files</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="k">sub </span><span class="nf">size_format</span><span class="p">{</span>
+</span><span class='line'>   <span class="k">my</span> <span class="nv">$size</span> <span class="o">=</span> <span class="nb">shift</span><span class="p">(</span><span class="nv">@_</span><span class="p">);</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span>   <span class="k">if</span> <span class="p">(</span><span class="nv">$size</span> <span class="o">&amp;</span><span class="ow">lt</span><span class="p">;</span> <span class="mi">1024</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nv">$size</span> <span class="o">.</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span> <span class="n">bytes</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;;</span>
+</span><span class='line'>   <span class="p">}</span>
+</span><span class='line'>   <span class="k">if</span> <span class="p">(</span><span class="nv">$size</span> <span class="o">&amp;</span><span class="ow">lt</span><span class="p">;</span> <span class="p">(</span><span class="mi">1024</span><span class="sr">&lt;em&gt;</span><span class="mi">1024</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nb">sprintf</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="nv">%</span><span class="err">.</span><span class="nv">2f</span> <span class="n">KB</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span><span class="nv">$size</span> <span class="o">/</span> <span class="mi">1024</span><span class="p">);</span>
+</span><span class='line'>   <span class="p">}</span>
+</span><span class='line'>   <span class="k">if</span> <span class="p">(</span><span class="nv">$size</span> <span class="o">&amp;</span><span class="ow">lt</span><span class="p">;</span> <span class="p">(</span><span class="mi">1024</span><span class="sr">&lt;/em&gt;</span><span class="mi">1024</span><span class="sr">&lt;em&gt;</span><span class="mi">1024</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nb">sprintf</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="nv">%</span><span class="err">.</span><span class="nv">2f</span> <span class="n">MB</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span><span class="nv">$size</span> <span class="sr">/ (1024&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="mi">1024</span><span class="p">));</span>
+</span><span class='line'>   <span class="p">}</span>
+</span><span class='line'>   <span class="k">return</span> <span class="nb">sprintf</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="nv">%</span><span class="err">.</span><span class="nv">2f</span> <span class="n">GB</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span><span class="nv">$size</span> <span class="sr">/ (1024&lt;em&gt;1024&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="mi">1024</span><span class="p">));</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Random File Renaming - [Updated]]]></title>
+    <link href="http://www.cstsui.com/blog/2012/03/08/perl-random-file-renaming/"/>
+    <updated>2012-03-08T00:00:00-05:00</updated>
+    <id>http://www.cstsui.com/blog/2012/03/08/perl-random-file-renaming</id>
+    <content type="html"><![CDATA[<p><strong>Update:</strong> wrote an undo script that allows you undo the renaming once.</p>
+
+
+<p>Small script I wrote in Perl for renaming files in the current directory to a random number based on the file extension, useful for randomizing images for slide show purposes.</p>
+
+
+<p>Simply modify the @extensionArray if you want to add/remove extensions to check against.</p>
+
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="o">!</span><span class="sr">/usr/</span><span class="nb">local</span><span class="sr">/bin/</span><span class="n">perl</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">ndash</span><span class="p">;</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">Script</span> <span class="n">to</span> <span class="nb">rename</span> <span class="n">files</span> <span class="n">with</span> <span class="n">a</span> <span class="n">random</span> <span class="n">number</span> <span class="k">if</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">extension</span> <span class="n">matches</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="c1">#&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">Updated:</span> <span class="n">uses</span> <span class="n">a</span> <span class="n">different</span> <span class="n">comparison:</span> <span class="n">now</span> <span class="n">checks</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="k">for</span> <span class="n">exact</span> <span class="n">match</span> <span class="n">ignoring</span> <span class="k">case</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="c1">#&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">Updated:</span> <span class="n">outputs</span> <span class="n">a</span> <span class="n">file</span> <span class="k">for</span> <span class="n">undo</span> <span class="n">feature</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">ndash</span><span class="p">;</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h2&gt;</span><span class="n">Define</span> <span class="n">Variable</span><span class="sr">&lt;/h2&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="nv">@files</span> <span class="o">=</span> <span class="o">&amp;</span><span class="ow">lt</span><span class="p">;</span><span class="o">*&gt;</span><span class="p">;</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">Array</span> <span class="n">variable</span> <span class="n">to</span> <span class="n">hold</span> <span class="n">extensions</span> <span class="n">you</span> <span class="n">may</span> <span class="n">check</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="nv">@extensionArray</span> <span class="o">=</span> <span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">jpg</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">zip</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">Variable</span> <span class="k">for</span> <span class="n">the</span> <span class="n">largest</span> <span class="n">value</span> <span class="n">of</span> <span class="n">the</span> <span class="n">random</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="nv">$randNumCeiling</span> <span class="o">=</span> <span class="mi">100000</span><span class="p">;</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">Simple</span> <span class="n">file</span> <span class="n">counter</span> <span class="n">to</span> <span class="n">keep</span> <span class="n">track</span> <span class="n">of</span> <span class="c1"># of files processed&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="nv">$numFilesRenamed</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">Open</span> <span class="n">a</span> <span class="n">file</span> <span class="k">for</span> <span class="n">writing</span> <span class="n">undo</span> <span class="n">info</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="nb">open</span><span class="p">(</span><span class="n">UNDOFILE</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="o">&gt;</span><span class="sr">&lt;em&gt;</span><span class="n">undo</span><span class="sr">&lt;/em&gt;</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;)</span><span class="ow">or</span> <span class="nb">die</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="vg">$!</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;;;</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">ndash</span><span class="p">;</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">Loop</span> <span class="n">through</span> <span class="n">all</span> <span class="n">files</span> <span class="n">in</span> <span class="n">the</span> <span class="n">directory</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">ndash</span><span class="p">;</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">If</span> <span class="n">it</span> <span class="n">is</span> <span class="n">a</span> <span class="n">file</span><span class="p">,</span> <span class="n">get</span> <span class="n">the</span> <span class="n">extension</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">Checks</span> <span class="k">if</span> <span class="n">the</span> <span class="n">extension</span> <span class="n">is</span> <span class="n">equal</span> <span class="n">to</span> <span class="n">wanted</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">extension</span><span class="p">(</span><span class="n">s</span><span class="p">)</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="c1">#&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">If</span> <span class="n">match</span><span class="p">,</span> <span class="n">generate</span> <span class="n">random</span> <span class="n">number</span> <span class="k">for</span> <span class="n">filename</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="ow">and</span> <span class="nb">rename</span> <span class="n">it</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">ndash</span><span class="p">;</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="k">foreach</span> <span class="nv">$file</span> <span class="p">(</span><span class="nv">@files</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">-</span><span class="n">f</span> <span class="nv">$file</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1"># find and ignore all characters that is not a dot, then get the rest</span>
+</span><span class='line'>        <span class="k">my</span> <span class="nv">$ext</span> <span class="o">=</span> <span class="p">(</span><span class="nv">$file</span> <span class="o">=~</span> <span class="sr">m/([^.]+)$/</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;</span>    <span class="k">if</span><span class="p">(</span><span class="n">extensionMatch</span><span class="p">(</span><span class="nv">$ext</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nv">$numFilesRenamed</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">print</span> <span class="s">&quot;($numFilesRenamed)\n&quot;</span><span class="p">;</span>
+</span><span class='line'>        <span class="c1">#Old file name</span>
+</span><span class='line'>        <span class="k">print</span> <span class="n">UNDOFILE</span> <span class="s">&quot;$file:&quot;</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">print</span> <span class="s">&quot;Old file name: $file\n&quot;</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">my</span> <span class="nv">$newName</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">rand</span><span class="p">(</span><span class="nv">$randNumCeiling</span><span class="p">));</span>
+</span><span class='line'>        <span class="nb">rename</span><span class="p">(</span><span class="nv">$file</span><span class="p">,</span> <span class="s">&quot;$newName.$ext&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="c1">#New file name</span>
+</span><span class='line'>        <span class="k">print</span> <span class="s">&quot;New file name: $newName.$ext\n\n&quot;</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">print</span> <span class="n">UNDOFILE</span> <span class="s">&quot;$newName.$ext\n&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="sr">&lt;/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="p">}</span>
+</span><span class='line'><span class="nb">close</span> <span class="n">UNDOFILE</span><span class="p">;</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">ndash</span><span class="p">;</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">Loop</span> <span class="n">through</span> <span class="n">extention</span> <span class="n">array</span> <span class="p">(</span><span class="nb">defined</span> <span class="n">a</span> <span class="n">the</span> <span class="n">top</span><span class="p">)</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">to</span> <span class="n">check</span> <span class="k">for</span> <span class="n">match</span> <span class="n">with</span> <span class="n">the</span> <span class="n">argment</span> <span class="n">passed</span> <span class="n">into</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">the</span> <span class="n">function</span> <span class="p">(</span><span class="n">which</span> <span class="n">is</span> <span class="n">the</span> <span class="n">extension</span> <span class="n">of</span> <span class="n">the</span> <span class="n">file</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">currently</span> <span class="n">being</span> <span class="n">processed</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">ndash</span><span class="p">;</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">Returns</span> <span class="n">a</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">extensions</span> <span class="n">match</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="k">else</span> <span class="n">returns</span> <span class="mi">0</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">ndash</span><span class="p">;</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="k">sub </span><span class="nf">extensionMatch</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="nv">$passedInExt</span> <span class="o">=</span> <span class="nv">@_</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">foreach</span> <span class="nv">$extension</span> <span class="p">(</span><span class="nv">@extensionArray</span><span class="p">){</span>
+</span><span class='line'>        <span class="c1">#check for exact string ignoring case</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="nv">$extension</span> <span class="o">=~</span> <span class="sr">m/^$passedInExt$/i</span><span class="p">){</span>
+</span><span class='line'>            <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<!-- more -->
+
+
+<h2>Undo</h2>
+
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="o">!</span><span class="sr">/usr/</span><span class="nb">local</span><span class="sr">/bin/</span><span class="n">perl</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">ndash</span><span class="p">;</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">Script</span> <span class="n">to</span> <span class="n">undo</span> <span class="n">the</span> <span class="n">renaming</span> <span class="n">of</span> <span class="n">files</span> <span class="n">using</span> <span class="n">the</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">random</span> <span class="n">file</span> <span class="nb">rename</span> <span class="n">script</span><span class="o">.</span> <span class="n">Simple</span> <span class="nb">rename</span> <span class="n">back</span> <span class="n">to</span> <span class="n">the</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">original</span> <span class="n">name</span> <span class="n">according</span> <span class="n">to</span> <span class="n">the</span> <span class="sr">&lt;em&gt;</span><span class="n">undo</span><span class="sr">&lt;/em&gt;</span> <span class="n">text</span> <span class="n">file</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">mdash</span><span class="p">;</span><span class="o">&amp;</span><span class="n">ndash</span><span class="p">;</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;</span><span class="n">Opens</span> <span class="n">the</span> <span class="n">file</span> <span class="k">for</span> <span class="n">reading</span><span class="sr">&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span><span class="nb">open</span> <span class="p">(</span><span class="n">UNDOFILE</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="sr">&lt;em&gt;</span><span class="n">undo</span><span class="sr">&lt;/em&gt;</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;)</span> <span class="ow">or</span> <span class="nb">die</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Cannot</span> <span class="nb">open</span> <span class="n">undo</span> <span class="n">file</span><span class="o">.&amp;</span><span class="n">rdquo</span><span class="p">;;</span>
+</span><span class='line'><span class="k">while</span> <span class="p">(</span><span class="sr">&lt;UNDOFILE&gt;</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="c1">#Split up the names</span>
+</span><span class='line'>    <span class="nv">@values</span> <span class="o">=</span> <span class="nb">split</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;:</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span> <span class="nv">$_</span><span class="p">);</span>
+</span><span class='line'>    <span class="c1">#Get the names</span>
+</span><span class='line'>    <span class="nv">$oldname</span> <span class="o">=</span> <span class="nv">@values</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'>    <span class="nv">$currentname</span> <span class="o">=</span> <span class="nv">@values</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'>    <span class="nb">chomp</span><span class="p">(</span><span class="nv">$currentname</span><span class="p">);</span>
+</span><span class='line'>    <span class="c1">#Rename back to the old name</span>
+</span><span class='line'>    <span class="c1">#In this case, old name is the new name</span>
+</span><span class='line'>    <span class="nb">rename</span><span class="p">(</span><span class="nv">$currentname</span><span class="p">,</span> <span class="nv">$oldname</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nb">close</span> <span class="n">UNDOFILE</span><span class="p">;</span><span class="sr">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+]]></content>
+  </entry>
+  
+</feed>

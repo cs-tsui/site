@@ -1,16 +1,1186 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[My Octopress Blog]]></title>
-  <link href="http://yoursite.com/atom.xml" rel="self"/>
-  <link href="http://yoursite.com/"/>
-  <updated>2020-03-08T20:28:06-04:00</updated>
-  <id>http://yoursite.com/</id>
+  <title><![CDATA[Chun Sing Tsui]]></title>
+  <link href="http://www.cstsui.com/atom.xml" rel="self"/>
+  <link href="http://www.cstsui.com/"/>
+  <updated>2020-03-08T22:14:16-04:00</updated>
+  <id>http://www.cstsui.com/</id>
   <author>
-    <name><![CDATA[Your Name]]></name>
+    <name><![CDATA[Chun Sing Tsui]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Nested Dispatch Tables]]></title>
+    <link href="http://www.cstsui.com/blog/2016/08/06/perl-nested-dispatch-table/"/>
+    <updated>2016-08-06T10:00:27-04:00</updated>
+    <id>http://www.cstsui.com/blog/2016/08/06/perl-nested-dispatch-table</id>
+    <content type="html"><![CDATA[<p>The dispatch table pattern is very commonly used in Perl for mapping an action to a handler function. A simple dispatch table looks something like this.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="k">my</span> <span class="nv">$dispatch</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="s">&#39;insert&#39;</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{</span>
+</span><span class='line'>        <span class="c1"># Do insert</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="s">&#39;remove&#39;</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{</span>
+</span><span class='line'>        <span class="c1"># Do remove </span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">$dispatch</span><span class="o">-&gt;</span><span class="p">{</span><span class="nv">$action</span><span class="p">}</span><span class="o">-&gt;</span><span class="p">()</span> <span class="k">if</span> <span class="nb">exists</span> <span class="nv">$dispatch</span><span class="o">-&gt;</span><span class="p">{</span><span class="nv">$action</span><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This is used in place of if/else or switches to determine which logic path to follow with the advantage of each logic path broken up into clearly separated subroutines.</p>
+
+<h3>Multi-level Actions</h3>
+
+<p>When there are any additional levels of sub-actions possible for each action, each combination will again have to be taken care of.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="c1"># Nested if/else</span>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="nv">$action</span> <span class="ow">eq</span> <span class="s">&#39;primary_action&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span>    <span class="p">(</span><span class="nv">$subaction</span> <span class="ow">eq</span> <span class="s">&#39;option1&#39;</span><span class="p">)</span> <span class="p">{}</span>
+</span><span class='line'>    <span class="k">elsif</span> <span class="p">(</span><span class="nv">$subaction</span> <span class="ow">eq</span> <span class="s">&#39;option2&#39;</span><span class="p">)</span> <span class="p">{}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">elsif</span> <span class="p">(</span><span class="nv">$action</span> <span class="ow">eq</span> <span class="s">&#39;secondary_action&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span>    <span class="p">(</span><span class="nv">$subaction</span> <span class="ow">eq</span> <span class="s">&#39;option1&#39;</span><span class="p">)</span> <span class="p">{}</span>
+</span><span class='line'>    <span class="k">elsif</span> <span class="p">(</span><span class="nv">$subaction</span> <span class="ow">eq</span> <span class="s">&#39;option2&#39;</span><span class="p">)</span> <span class="p">{}</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="c1"># Nested dispatch table</span>
+</span><span class='line'><span class="k">my</span> <span class="nv">$dispatch</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="s">&#39;primary_action&#39;</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>        <span class="s">&#39;option1&#39;</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
+</span><span class='line'>        <span class="s">&#39;option2&#39;</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="s">&#39;secondary_action&#39;</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>        <span class="s">&#39;option1&#39;</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
+</span><span class='line'>        <span class="s">&#39;option2&#39;</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">$dispatch</span><span class="o">-&gt;</span><span class="p">{</span><span class="nv">$action</span><span class="p">}</span><span class="o">-&gt;</span><span class="p">{</span><span class="nv">$subaction</span><span class="p">}</span><span class="o">-&gt;</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Using the nested display approach is slightly cleaner and more succinct than the nested if/else approach, <em>especially</em> if the code for each logic path is long or if there are many action and subaction combinations. But the advantage is small if there aren&rsquo;t too many actions and subaction combinations.</p>
+
+<h3>Mimic Polymorphism</h3>
+
+<p>Suppose we are looping through a list of items (list of hashes) and we want to apply some action to each. In an object-oriented system, this would likely be a list of objects with all items implementing the same interface, allowing different behavior depending on the implementation of the interface functions.</p>
+
+<p>This technique is most useful when working with existing procedural systems where you want to mimic this behaviour, and creating classes solely for a small portion of the code doesn&rsquo;t make much sense.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="c1"># Nested dispatch with multiple steps for each combination</span>
+</span><span class='line'><span class="k">my</span> <span class="nv">$dispatch</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class='line'>    <span class="s">&#39;primary_action&#39;</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>        <span class="s">&#39;option1&#39;</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">should_skip</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
+</span><span class='line'>            <span class="n">do_work</span>     <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="s">&#39;option2&#39;</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">should_skip</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
+</span><span class='line'>            <span class="n">do_work</span>     <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="s">&#39;secondary_action&#39;</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>         <span class="s">&#39;option1&#39;</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">should_skip</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
+</span><span class='line'>            <span class="n">do_work</span>     <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="s">&#39;option2&#39;</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class='line'>            <span class="n">should_skip</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
+</span><span class='line'>            <span class="n">do_work</span>     <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">for</span> <span class="k">my</span> <span class="nv">$item</span> <span class="n">in</span> <span class="p">(</span><span class="nv">@items</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">my</span> <span class="nv">$item_prop1</span> <span class="o">=</span> <span class="nv">$item</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">prop1</span><span class="p">};</span>
+</span><span class='line'>    <span class="k">my</span> <span class="nv">$item_prop2</span> <span class="o">=</span> <span class="nv">$item</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">prop2</span><span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Skip this item if we don&#39;t need to work on it for now</span>
+</span><span class='line'>    <span class="c1"># to save some resources for fetching additional data</span>
+</span><span class='line'>    <span class="k">next</span> <span class="k">if</span> <span class="nv">$dispatch</span><span class="o">-&gt;</span><span class="p">{</span><span class="nv">$action1</span><span class="p">}</span><span class="o">-&gt;</span><span class="p">{</span><span class="nv">$subaction2</span><span class="p">}</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">should_skip</span><span class="p">}</span><span class="o">-&gt;</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Fetch additional information not available in the item hash itself</span>
+</span><span class='line'>    <span class="k">my</span> <span class="nv">$additional_args</span> <span class="o">=</span> <span class="n">fetch_data</span><span class="p">(</span><span class="nv">$item</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Do Work </span>
+</span><span class='line'>    <span class="nv">$dispatch</span><span class="o">-&gt;</span><span class="p">{</span><span class="nv">$action1</span><span class="p">}</span><span class="o">-&gt;</span><span class="p">{</span><span class="nv">$subaction2</span><span class="p">}</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">do_work</span><span class="p">}</span><span class="o">-&gt;</span><span class="p">(</span><span class="nv">$additional_args</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Summary</h3>
+
+<p>Without using a nested dispatch table, multiple if/else blocks or switches will have to be used to mimic this nested branching behavior. Using a dispatch table is a good way to avoid duplicating code. Now all the related code are consolidated in one place in a hash data structure that can easily be modified. Another advantage of this approach is the dispatch table may be created at a local scope to take advantage of closures so the handler functions can focus on a
+small tasks and assume certain state variables that are only available within the local scope are availible without explicitly passing all variables as arguments.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Easy HTML Table Generation From Perl DBI and SQL]]></title>
+    <link href="http://www.cstsui.com/blog/2016/02/23/easy-html-table-generation-from-perl-dbi-and-sql/"/>
+    <updated>2016-02-23T22:17:32-05:00</updated>
+    <id>http://www.cstsui.com/blog/2016/02/23/easy-html-table-generation-from-perl-dbi-and-sql</id>
+    <content type="html"><![CDATA[<p>The following script is used to quickly generate HTML tables for reports using only a SQL query as an input. Useful if you needed to generate and send out a report quickly without installing yet yet another package.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="c1">#!/usr/bin/perl</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">use</span> <span class="n">DBI</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Query as in input, and generate HTML table output </span>
+</span><span class='line'><span class="k">my</span> <span class="nv">$query</span> <span class="o">=</span> <span class="s">&#39;select * from data&#39;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># 1) Connect and get DB handle</span>
+</span><span class='line'><span class="k">my</span> <span class="nv">$dbh</span> <span class="o">=</span> <span class="n">connect_db</span><span class="p">();</span> <span class="c1"># use your own connection here</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># 2) Run your query </span>
+</span><span class='line'><span class="k">my</span> <span class="nv">$sth</span>   <span class="o">=</span> <span class="nv">$dbh</span><span class="o">-&gt;</span><span class="n">prepare</span><span class="p">(</span><span class="nv">$query</span><span class="p">);</span>
+</span><span class='line'><span class="k">my</span> <span class="nv">@loh</span>   <span class="o">=</span> <span class="nv">@</span><span class="p">{</span> <span class="nv">$sth</span><span class="o">-&gt;</span><span class="n">fetchall_arrayref</span><span class="p">({})</span> <span class="p">};</span>
+</span><span class='line'><span class="k">my</span> <span class="nv">@cols</span>  <span class="o">=</span> <span class="nv">@</span><span class="p">{</span> <span class="nv">$sth</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">NAME</span><span class="p">}</span> <span class="p">};</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># 3) Generate HTML Table </span>
+</span><span class='line'><span class="k">my</span> <span class="nv">$thead</span> <span class="o">=</span> <span class="nb">join</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="nb">map</span> <span class="p">{</span><span class="s">&quot;&lt;td&gt;$_&lt;/td&gt;&quot;</span><span class="p">}</span> <span class="nv">@cols</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">my</span> <span class="nv">@rows</span> <span class="o">=</span> <span class="p">();</span>
+</span><span class='line'><span class="k">for</span> <span class="k">my</span> <span class="nv">$hr</span> <span class="p">(</span><span class="nv">@loh</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nb">push</span> <span class="nv">@rows</span><span class="p">,</span> <span class="nb">join</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="nb">map</span> <span class="p">{</span><span class="s">&quot;&lt;td&gt;$_&lt;/td&gt;&quot;</span><span class="p">}</span> <span class="nv">@</span><span class="p">{</span><span class="nv">$hr</span><span class="p">}{</span><span class="nv">@cols</span><span class="p">});</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">my</span> <span class="nv">$tbody</span> <span class="o">=</span> <span class="nb">join</span> <span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="nb">map</span> <span class="p">{</span><span class="s">&quot;&lt;tr&gt;$_&lt;/tr&gt;&quot;</span><span class="p">}</span> <span class="nv">@rows</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">my</span> <span class="nv">$html</span> <span class="o">=</span> <span class="sx">qq|&lt;table&gt; $thead &lt;thead&gt; $thead &lt;/thead&gt; &lt;tbody&gt; $tbody &lt;/tbody&gt; &lt;/table&gt;|</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">print</span> <span class="nv">$html</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">exit</span> <span class="mi">0</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Site Update]]></title>
+    <link href="http://www.cstsui.com/blog/2014/08/16/site-update/"/>
+    <updated>2014-08-16T08:17:22-04:00</updated>
+    <id>http://www.cstsui.com/blog/2014/08/16/site-update</id>
+    <content type="html"><![CDATA[<p>Finally got around to migrating my site off of Wordpress. I&rsquo;ve read good things about Octopress, so that&rsquo;s what the new site is based on. It is relatively straightforward to migrate the posts into the Octopress/Jekyll markdown format using the included tools.</p>
+
+<p>Currently the site is using a popular theme called Whitespace. Hopefully I will get around to customizing the theme a bit in the near future.</p>
+
+<p>More updates that will be coming:</p>
+
+<ul>
+<li>import scale modeling posts</li>
+<li>rehost images</li>
+<li>add project pages</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[GreaseMonkey Script to AutoHide Reddit Sidebar]]></title>
+    <link href="http://www.cstsui.com/blog/2014/06/16/greasemonkey-script-to-autohide-reddit-sidebar-2/"/>
+    <updated>2014-06-16T00:00:00-04:00</updated>
+    <id>http://www.cstsui.com/blog/2014/06/16/greasemonkey-script-to-autohide-reddit-sidebar-2</id>
+    <content type="html"><![CDATA[<p>This simple script hides the ridiculous sidebar that squishes up the content when viewing Reddit with only a small amount of screen space (e.g. half of screen or low resolution display). It only hides the sidebar when the window width is detected to be lower than half of your resolution.</p>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// 1920 is your screen width; adjust accordingly</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">threshold</span> <span class="o">=</span> <span class="mi">1920</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Get sidebar div element and its original display style</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">sideBar</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByClassName</span><span class="p">(</span><span class="s1">&#39;side&#39;</span><span class="p">)</span> <span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">origStyle</span> <span class="o">=</span> <span class="nx">sideBar</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Check the window width and hide it if it&#39;s too small</span>
+</span><span class='line'>    <span class="kd">function</span> <span class="nx">doCheck</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">innerWidth</span> <span class="o">&lt;</span> <span class="nx">threshold</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">sideBar</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">sideBar</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="nx">origStyle</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="c1">// Attach it the resize event</span>
+</span><span class='line'>    <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;resize&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">doCheck</span><span class="p">();</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>    <span class="c1">// Run it once initially</span>
+</span><span class='line'>    <span class="nx">doCheck</span><span class="p">();</span>
+</span><span class='line'><span class="p">}());</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Setting Up E<sup>2</sup>studio for RL78/G14 RDK Developement]]></title>
+    <link href="http://www.cstsui.com/blog/2014/05/10/setting-up-e2studio-for-rl78g14-rdk-developement/"/>
+    <updated>2014-05-10T00:00:00-04:00</updated>
+    <id>http://www.cstsui.com/blog/2014/05/10/setting-up-e2studio-for-rl78g14-rdk-developement</id>
+    <content type="html"><![CDATA[<p>Set up e<sup>2</sup>studio for RL78 development following the steps below. These downloads are the files provided on the RL78/G14 RDK installation DVD. However, this will be useful if you happen to lose the DVD, don't have a DVD drive, or want to install/update a particular item when it becomes outdated.</p>
+
+
+<h3>Setup e<sup>2</sup>studio</h3>
+
+
+<p>1). Download/Install e<sup>2</sup>studio from Renesas website:</p>
+
+
+<ul>
+<li>http://sg.renesas.com/products/mpumcu/rl78/rl78g1x/rl78g14/soft_tools_index.jsp</li>
+</ul>
+
+
+<p>2) Download KPIT GNU Toolchain for RL78 and register it with e<sup>2</sup>studio (should automatically pop up when you open e<sup>2</sup>studio). The GNURL78 compiler is a free compiler with no size limitations.</p>
+
+
+<ul>
+<li>http://www.kpitgnutools.com/latestToolchain.php</li>
+</ul>
+
+
+<p>3) Download/Install IAR Plugin for e<sup>2</sup>studio using the appropriate update site. The IAR plugin allows projects for the IAR compiler to be built and debugged in e<sup>2</sup>studio.</p>
+
+
+<ul>
+<li>http://www.iar.com/eclipse/</li>
+</ul>
+
+
+
+
+<!-- more -->
+
+
+<h3>Useful Links</h3>
+
+
+<ul>
+<li><a href="http://renesasrulz.com/renesas_products/rl78/m/mediagallery/2628.aspx">Using the code generator included with e<sup>2</sup>studio</a></li>
+<li><a href="http://documentation.renesas.com/doc/products/tools/r20uw0117eu0200_yrdkrl78g14_qsg.pdf">RL78/G14 RDK Quick Start Guide</a></li>
+<li><a href="http://am.renesas.com/support/downloads/download_results/C1000000-C9999999/tools/rl78_g14_rdk_sample_projects.jsp">RL78/G14 RDK Sample Projects</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Useful Notepad++ Plugins]]></title>
+    <link href="http://www.cstsui.com/blog/2012/03/20/useful-notepad-plugins/"/>
+    <updated>2012-03-20T00:00:00-04:00</updated>
+    <id>http://www.cstsui.com/blog/2012/03/20/useful-notepad-plugins</id>
+    <content type="html"><![CDATA[<p><a href="http://notepad-plus-plus.org/">Notepad++</a> is easily one of the best text editors for Windows. I've compiled below a few useful plugins that extends its functionality even further.</p>
+
+
+<ul>
+<li>
+<h4><a href="http://sourceforge.net/projects/tabstospacesnpp/">CLR Tabs to Spaces</a></h4>
+</li>
+</ul>
+
+
+<p style="padding-left:60px;">If your code contains a mix of spaces and tabs, they will often be inconsistently displayed with different editors. One thing that I've tried to do is making sure my code contains no tabs to avoid inconsistency. This plugin makes it easy to convert tabs to spaces for existing code.</p>
+
+
+<ul>
+<li>
+<h4><a href="http://sourceforge.net/projects/npp-compare/">Compare</a></h4>
+</li>
+</ul>
+
+
+<p style="padding-left:60px;">Everyone needs a diff tool. File comparison is always a useful feature when you need to find the differences between two files.</p>
+
+
+<ul>
+<li>
+<h4><a href="http://sourceforge.net/projects/npp-plugins/files/MultiClipboard/">MultiClipboard</a></h4>
+</li>
+</ul>
+
+
+<p style="padding-left:60px;">This plugin conveniently allows you to have more than one item in your clipboard, easing copy and paste operations.</p>
+
+
+<ul>
+<li>
+<h4><a href="http://code.google.com/p/nppastyle/downloads/list">NppAStyle</a></h4>
+</li>
+</ul>
+
+
+<p style="padding-left:60px;">A plugin of <a href="http://astyle.sourceforge.net/">Artistic Style</a>, which is a C, C++, C#, and Java source code automatic formatter. The one complain that I have with NppAStyle is that it doesn't handle comments very well. Comments will stay at their original position, which is generally not the wanted action.</p>
+
+
+<ul>
+<li>
+<h4><a href="http://sites.google.com/site/fstellari/nppplugins">RunMe</a></h4>
+</li>
+</ul>
+
+
+<p style="padding-left:60px;">RunMe is excellent for allowing the execution of the currently open file based on its shell association. Since I've been working with Perl, this allows me to run and test the script easily at the file location.</p>
+
+
+<ul>
+<li>
+<h4><a href="http://sourceforge.net/projects/npp-plugins/files/TextFX/">TextFX</a></h4>
+</li>
+</ul>
+
+
+<p style="padding-left:60px;">TextFX contains a slew of functions that are too many to list. It no longer comes with the latest unicode version of Notepad++ (v5.9.6.2), but you can manual install it to get the added features.</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Finding Duplicate Files]]></title>
+    <link href="http://www.cstsui.com/blog/2012/03/15/perl-finding-duplicate-files/"/>
+    <updated>2012-03-15T00:00:00-04:00</updated>
+    <id>http://www.cstsui.com/blog/2012/03/15/perl-finding-duplicate-files</id>
+    <content type="html"><![CDATA[<p>Another script I wrote to learn more about Perl. I used a script found on <a href="http://www.perlmonks.org/?node_id=49198">PerlMonks</a> as a starting point, and modified it with an additional function of moving all duplicate files into a folder. Again, it is heavily commented to help myself understand the code while I'm writing it.</p>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="c1">#!/usr/bin/perl</span>
+</span><span class='line'><span class="k">use</span> <span class="n">Cwd</span><span class="p">;</span>
+</span><span class='line'><span class="k">use</span> <span class="nn">File::</span><span class="n">Find</span><span class="p">;</span>
+</span><span class='line'><span class="k">use</span> <span class="nn">Digest::</span><span class="n">MD5</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">#-----------------------------------------------------</span>
+</span><span class='line'><span class="c1"># This is a script for finding duplicate files in the </span>
+</span><span class='line'><span class="c1"># current directory. It checks for the same file size. </span>
+</span><span class='line'><span class="c1"># If file sizes are different, then files are </span>
+</span><span class='line'><span class="c1"># different. If file sizes are the same, it goes on </span>
+</span><span class='line'><span class="c1"># to check for the MD5 value to determine uniqueness. </span>
+</span><span class='line'><span class="c1"># If MD5 matches, move duplicate files to a folder</span>
+</span><span class='line'><span class="c1">#-----------------------------------------------------</span>
+</span><span class='line'><span class="c1"># Get current working directory and create duplicate folder directory</span>
+</span><span class='line'><span class="nv">$currentDir</span> <span class="o">=</span> <span class="n">cwd</span><span class="p">();</span>
+</span><span class='line'><span class="nv">$dupFolder</span>  <span class="o">=</span> <span class="s">&quot;duplicates&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="nv">$dupDir</span> <span class="o">=</span> <span class="nv">$currentDir</span><span class="o">.</span><span class="s">&quot;/&quot;</span><span class="o">.</span><span class="nv">$dupFolder</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Hash to store filesize as key and an array of filenames as value</span>
+</span><span class='line'><span class="nv">%filesSizeHash</span>  <span class="o">=</span> <span class="p">();</span>
+</span><span class='line'><span class="nv">$duplicateCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="nv">$totalDupSize</span>   <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Using the file() function, it calls the wanted() function on every </span>
+</span><span class='line'><span class="c1"># file in the current directory</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">find</span><span class="p">(</span><span class="o">\&amp;</span><span class="n">check_each_file</span><span class="p">,</span> <span class="nv">$currentDir</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Loop to first find files of the same file size; </span>
+</span><span class='line'><span class="c1"># if there are multiple, check MD5values</span>
+</span><span class='line'><span class="k">foreach</span> <span class="k">my</span> <span class="nv">$size</span> <span class="p">(</span><span class="nb">sort</span> <span class="p">{</span><span class="nv">$b</span> <span class="sr">&lt;=&gt;</span> <span class="nv">$a</span><span class="p">}</span> <span class="nb">keys</span> <span class="nv">%filesSizeHash</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1"># Process next filesize unless there are more than one value in</span>
+</span><span class='line'>    <span class="k">next</span> <span class="k">unless</span> <span class="nv">@</span><span class="p">{</span><span class="nv">$filesSizeHash</span><span class="p">{</span><span class="nv">$size</span><span class="p">}}</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="c1">#print($size.&quot;\n&quot;);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Hash to store MD5 values as key and an array of filenames as value</span>
+</span><span class='line'>    <span class="k">my</span> <span class="nv">%fileMD5Hash</span> <span class="o">=</span> <span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Loop through and get MD5 and store for each file with same size</span>
+</span><span class='line'>    <span class="k">foreach</span> <span class="k">my</span> <span class="nv">$file</span> <span class="p">(</span><span class="nv">@</span><span class="p">{</span><span class="nv">$filesSizeHash</span><span class="p">{</span><span class="nv">$size</span><span class="p">}})</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nb">open</span><span class="p">(</span><span class="n">FILE</span><span class="p">,</span> <span class="nv">$file</span><span class="p">)</span> <span class="ow">or</span> <span class="k">next</span><span class="p">;</span>
+</span><span class='line'>        <span class="nb">binmode</span><span class="p">(</span><span class="n">FILE</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">my</span> <span class="nv">$ctx</span> <span class="o">=</span> <span class="nn">Digest::</span><span class="n">MD5</span><span class="o">-&gt;</span><span class="k">new</span><span class="o">-&gt;</span><span class="n">addfile</span><span class="p">(</span><span class="o">*</span><span class="n">FILE</span><span class="p">);</span>
+</span><span class='line'>        <span class="nb">push</span> <span class="nv">@</span><span class="p">{</span><span class="nv">$fileMD5Hash</span><span class="p">{</span><span class="nv">$ctx</span><span class="o">-&gt;</span><span class="n">hexdigest</span><span class="p">}},</span><span class="nv">$file</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Now, take care of file if more than one file has same MD5</span>
+</span><span class='line'>    <span class="k">foreach</span> <span class="k">my</span> <span class="nv">$hash</span> <span class="p">(</span><span class="nb">keys</span> <span class="nv">%fileMD5Hash</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">next</span> <span class="k">unless</span> <span class="nv">@</span><span class="p">{</span><span class="nv">$fileMD5Hash</span><span class="p">{</span><span class="nv">$hash</span><span class="p">}}</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">unless</span> <span class="p">(</span><span class="o">-</span><span class="n">d</span> <span class="nv">$dupDir</span><span class="p">){</span><span class="nb">mkdir</span> <span class="nv">$dupDir</span> <span class="ow">or</span> <span class="nb">die</span><span class="p">;}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1"># There are duplicate files to deal with from this point</span>
+</span><span class='line'>        <span class="c1"># Until the currently accessed array inside the md5 hash has only</span>
+</span><span class='line'>        <span class="c1"># one item(file), move file into a different directory</span>
+</span><span class='line'>        <span class="k">my</span> <span class="nv">$count</span> <span class="o">=</span> <span class="nv">@</span><span class="p">{</span><span class="nv">$fileMD5Hash</span><span class="p">{</span><span class="nv">$hash</span><span class="p">}};</span>
+</span><span class='line'>        <span class="k">for</span><span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;</span> <span class="nv">$count</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>            <span class="nv">$duplicateCount</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">my</span> <span class="nv">$fileName</span> <span class="o">=</span> <span class="nv">@</span><span class="p">{</span><span class="nv">$fileMD5Hash</span><span class="p">{</span><span class="nv">$hash</span><span class="p">}}[</span><span class="nv">$i</span><span class="p">];</span>
+</span><span class='line'>            <span class="nb">rename</span><span class="p">(</span><span class="nv">$fileName</span><span class="p">,</span> <span class="nv">$dupDir</span><span class="o">.</span><span class="s">&quot;/&quot;</span><span class="o">.</span><span class="nv">$fileName</span><span class="p">);</span>
+</span><span class='line'>            <span class="nv">$totalDupSize</span> <span class="o">=</span> <span class="nv">$totalDupSize</span> <span class="o">+</span> <span class="nv">$size</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">print</span><span class="p">(</span><span class="s">&quot;[File moved]: $fileName\n&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Loop to first find files of the same file size; if multiple, check MD5values</span>
+</span><span class='line'><span class="nv">$totalDupSize</span> <span class="o">=</span> <span class="n">size_format</span><span class="p">(</span><span class="nv">$totalDupSize</span><span class="p">);</span>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="s">&quot;\n[Total number of duplicates found]: $duplicateCount\n&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="s">&quot;[Toal size of duplicate files]:     $totalDupSize\n&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Function that is called on every file in the directory of the find() function</span>
+</span><span class='line'><span class="k">sub </span><span class="nf">check_each_file</span><span class="p">{</span>
+</span><span class='line'>    <span class="c1">#If the current &quot;file&quot; is a file...</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">-</span><span class="n">f</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1"># Get  current file&#39;s name</span>
+</span><span class='line'>        <span class="nv">$currentFileName</span> <span class="o">=</span> <span class="nv">$</span><span class="nn">File::Find::</span><span class="nv">name</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1"># Get current file&#39;s size in bytes</span>
+</span><span class='line'>        <span class="k">my</span> <span class="nv">$filesize</span> <span class="o">=</span> <span class="p">(</span><span class="nb">stat</span><span class="p">(</span><span class="nv">$currentFileName</span><span class="p">))[</span><span class="mi">7</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1"># Push the file into an hash of arrays declared at the top,</span>
+</span><span class='line'>        <span class="c1"># with filesize as key and an array of filenames as value</span>
+</span><span class='line'>        <span class="nb">push</span><span class="p">(</span> <span class="nv">@</span><span class="p">{</span> <span class="nv">$filesSizeHash</span> <span class="p">{</span><span class="nv">$filesize</span><span class="p">}},</span> <span class="nv">$_</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Function for formatting the total output size of duplicate files</span>
+</span><span class='line'><span class="k">sub </span><span class="nf">size_format</span><span class="p">{</span>
+</span><span class='line'>   <span class="k">my</span> <span class="nv">$size</span> <span class="o">=</span> <span class="nb">shift</span><span class="p">(</span><span class="nv">@_</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>   <span class="k">if</span> <span class="p">(</span><span class="nv">$size</span> <span class="o">&lt;</span> <span class="mi">1024</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nv">$size</span> <span class="o">.</span> <span class="s">&quot; bytes&quot;</span><span class="p">;</span>
+</span><span class='line'>   <span class="p">}</span>
+</span><span class='line'>   <span class="k">if</span> <span class="p">(</span><span class="nv">$size</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nb">sprintf</span><span class="p">(</span><span class="s">&quot;%.2f KB&quot;</span><span class="p">,</span><span class="nv">$size</span> <span class="o">/</span> <span class="mi">1024</span><span class="p">);</span>
+</span><span class='line'>   <span class="p">}</span>
+</span><span class='line'>   <span class="k">if</span> <span class="p">(</span><span class="nv">$size</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nb">sprintf</span><span class="p">(</span><span class="s">&quot;%.2f MB&quot;</span><span class="p">,</span><span class="nv">$size</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="p">));</span>
+</span><span class='line'>   <span class="p">}</span>
+</span><span class='line'>   <span class="k">return</span> <span class="nb">sprintf</span><span class="p">(</span><span class="s">&quot;%.2f GB&quot;</span><span class="p">,</span><span class="nv">$size</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="p">));</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Random File Renaming - [Updated]]]></title>
+    <link href="http://www.cstsui.com/blog/2012/03/08/perl-random-file-renaming/"/>
+    <updated>2012-03-08T00:00:00-05:00</updated>
+    <id>http://www.cstsui.com/blog/2012/03/08/perl-random-file-renaming</id>
+    <content type="html"><![CDATA[<p><strong>Update:</strong> wrote an undo script that allows you undo the renaming once.</p>
+
+
+<p>Small script I wrote in Perl for renaming files in the current directory to a random number based on the file extension, useful for randomizing images for slide show purposes.</p>
+
+
+<p>Simply modify the @extensionArray if you want to add/remove extensions to check against.</p>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="c1">#!/usr/local/bin/perl</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">#-----------------------------------------------------</span>
+</span><span class='line'><span class="c1"># Script to rename files with a random number if </span>
+</span><span class='line'><span class="c1"># extension matches </span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># Updated: uses a different comparison: now checks </span>
+</span><span class='line'><span class="c1"># for exact match ignoring case</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># Updated: outputs a file for undo feature</span>
+</span><span class='line'><span class="c1">#-----------------------------------------------------</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">## Define Variable ##</span>
+</span><span class='line'><span class="nv">@files</span> <span class="o">=</span> <span class="sr">&lt;*&gt;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">#Array variable to hold extensions you may check</span>
+</span><span class='line'><span class="nv">@extensionArray</span> <span class="o">=</span> <span class="p">(</span><span class="s">&quot;jpg&quot;</span><span class="p">,</span> <span class="s">&quot;zip&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">#Variable for the largest value of the random #</span>
+</span><span class='line'><span class="nv">$randNumCeiling</span> <span class="o">=</span> <span class="mi">100000</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">#Simple file counter to keep track of # of files processed</span>
+</span><span class='line'><span class="nv">$numFilesRenamed</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">#Open a file for writing undo info</span>
+</span><span class='line'><span class="nb">open</span><span class="p">(</span><span class="n">UNDOFILE</span><span class="p">,</span> <span class="s">&#39;&gt;_undo_&#39;</span><span class="p">)</span><span class="ow">or</span> <span class="nb">die</span> <span class="s">&quot;$!&quot;</span><span class="p">;;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">#-----------------------------------------------------</span>
+</span><span class='line'><span class="c1"># Loop through all files in the directory</span>
+</span><span class='line'><span class="c1">#-----------------------------------------------------</span>
+</span><span class='line'><span class="c1"># If it is a file, get the extension</span>
+</span><span class='line'><span class="c1"># Checks if the extension is equal to wanted </span>
+</span><span class='line'><span class="c1"># extension(s)</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># If match, generate random number for filename </span>
+</span><span class='line'><span class="c1"># and rename it</span>
+</span><span class='line'><span class="c1">#-----------------------------------------------------</span>
+</span><span class='line'><span class="k">foreach</span> <span class="nv">$file</span> <span class="p">(</span><span class="nv">@files</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">-</span><span class="n">f</span> <span class="nv">$file</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1"># find and ignore all characters that is not a dot, then get the rest</span>
+</span><span class='line'>        <span class="k">my</span> <span class="nv">$ext</span> <span class="o">=</span> <span class="p">(</span><span class="nv">$file</span> <span class="o">=~</span> <span class="sr">m/([^.]+)$/</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="n">extensionMatch</span><span class="p">(</span><span class="nv">$ext</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nv">$numFilesRenamed</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">print</span> <span class="s">&quot;($numFilesRenamed)\n&quot;</span><span class="p">;</span>
+</span><span class='line'>            <span class="c1">#Old file name</span>
+</span><span class='line'>            <span class="k">print</span> <span class="n">UNDOFILE</span> <span class="s">&quot;$file:&quot;</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">print</span> <span class="s">&quot;Old file name: $file\n&quot;</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">my</span> <span class="nv">$newName</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">rand</span><span class="p">(</span><span class="nv">$randNumCeiling</span><span class="p">));</span>
+</span><span class='line'>            <span class="nb">rename</span><span class="p">(</span><span class="nv">$file</span><span class="p">,</span> <span class="s">&quot;$newName.$ext&quot;</span><span class="p">);</span>
+</span><span class='line'>            <span class="c1">#New file name</span>
+</span><span class='line'>            <span class="k">print</span> <span class="s">&quot;New file name: $newName.$ext\n\n&quot;</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">print</span> <span class="n">UNDOFILE</span> <span class="s">&quot;$newName.$ext\n&quot;</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nb">close</span> <span class="n">UNDOFILE</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">#-----------------------------------------------------</span>
+</span><span class='line'><span class="c1"># Loop through extention array (defined a the top)</span>
+</span><span class='line'><span class="c1"># to check for match with the argment passed into</span>
+</span><span class='line'><span class="c1"># the function (which is the extension of the file</span>
+</span><span class='line'><span class="c1"># currently being processed</span>
+</span><span class='line'><span class="c1">#-----------------------------------------------------</span>
+</span><span class='line'><span class="c1"># Returns a 1 if extensions match</span>
+</span><span class='line'><span class="c1"># else returns 0</span>
+</span><span class='line'><span class="c1">#-----------------------------------------------------</span>
+</span><span class='line'><span class="k">sub </span><span class="nf">extensionMatch</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="nv">$passedInExt</span> <span class="o">=</span> <span class="nv">@_</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'>    <span class="k">foreach</span> <span class="nv">$extension</span> <span class="p">(</span><span class="nv">@extensionArray</span><span class="p">){</span>
+</span><span class='line'>        <span class="c1">#check for exact string ignoring case</span>
+</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="nv">$extension</span> <span class="o">=~</span> <span class="sr">m/^$passedInExt$/i</span><span class="p">){</span>
+</span><span class='line'>            <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!-- more -->
+
+
+<h2>Undo</h2>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="c1">#!/usr/local/bin/perl</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">#-----------------------------------------------------</span>
+</span><span class='line'><span class="c1"># Script to undo the renaming of files using the </span>
+</span><span class='line'><span class="c1"># random file rename script. Simple rename back to the</span>
+</span><span class='line'><span class="c1"># original name according to the _undo_ text file</span>
+</span><span class='line'><span class="c1">#-----------------------------------------------------</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Opens the file for reading</span>
+</span><span class='line'><span class="nb">open</span> <span class="p">(</span><span class="n">UNDOFILE</span><span class="p">,</span> <span class="s">&#39;_undo_&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">die</span> <span class="s">&quot;Cannot open undo file.&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="k">while</span> <span class="p">(</span><span class="sr">&lt;UNDOFILE&gt;</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="c1">#Split up the names</span>
+</span><span class='line'>    <span class="nv">@values</span> <span class="o">=</span> <span class="nb">split</span><span class="p">(</span><span class="s">&quot;:&quot;</span><span class="p">,</span> <span class="nv">$_</span><span class="p">);</span>
+</span><span class='line'>    <span class="c1">#Get the names</span>
+</span><span class='line'>    <span class="nv">$oldname</span> <span class="o">=</span> <span class="nv">@values</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'>    <span class="nv">$currentname</span> <span class="o">=</span> <span class="nv">@values</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'>    <span class="nb">chomp</span><span class="p">(</span><span class="nv">$currentname</span><span class="p">);</span>
+</span><span class='line'>    <span class="c1">#Rename back to the old name</span>
+</span><span class='line'>    <span class="c1">#In this case, old name is the new name</span>
+</span><span class='line'>    <span class="nb">rename</span><span class="p">(</span><span class="nv">$currentname</span><span class="p">,</span> <span class="nv">$oldname</span><span class="p">);</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nb">close</span> <span class="n">UNDOFILE</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[New Tools]]></title>
+    <link href="http://www.cstsui.com/blog/2011/08/21/new-tools/"/>
+    <updated>2011-08-21T00:00:00-04:00</updated>
+    <id>http://www.cstsui.com/blog/2011/08/21/new-tools</id>
+    <content type="html"><![CDATA[<p>Bought some new tools. I've read many good things about the Xuron Micro Shear Flush Cutter. Also bought the Micro Sol decal solution, Testors' putty, and some empty paint bottles for custom paint mixes.</p>
+
+
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/Tools/P8190631_979x734.jpg" alt="Photobucket" border="0" /></p>
+
+<!--more-->
+
+
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/Tools/P8190629_979x734.jpg" border="0" alt="P8190629_979x734.jpg"/>
+<img src="http://i151.photobucket.com/albums/s148/Tomster831/Tools/P8190630_979x734.jpg" border="0" alt="P8190630_979x734.jpg"/></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[MG RX-178 MK II Complete]]></title>
+    <link href="http://www.cstsui.com/blog/2011/08/10/mg-rx-178-mk-ii-complete/"/>
+    <updated>2011-08-10T00:00:00-04:00</updated>
+    <id>http://www.cstsui.com/blog/2011/08/10/mg-rx-178-mk-ii-complete</id>
+    <content type="html"><![CDATA[<p>Finished photos of the 1/100 MG Mk II v2.0. The camera picks up a lot more dust/imperfections than the eye can see. This is the first kit that I tried preshading on and I think the outcome is pretty decent. Only the white parts are preshaded because all the colored parts were painted last year when I first started working on it until I ran out of white paint.</p>
+
+
+<p>The kit will be considered finished for now, but I still need to touch up on the face area (lining) as well as apply decal solutions (when I get them), and then apply a final flat coat.</p>
+
+
+<p>As usual the paints used are Tamiya Acrylics (except for the thrusters) and topcoated with Future. Decals used are the Bandai waterslides. The thrusters are an aluminum color from a spray can and the insides were painted over with clear red. I think the results look fairly close to the aftermarket machined thrusters that are far too expensive.</p>
+
+
+
+
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20MK%20II/P8100589_979x734.jpg" alt="Photobucket" border="0" /></p>
+
+
+<!--more-->
+
+
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20MK%20II/P8070568_979x734.jpg" alt="Photobucket" border="0" /></p>
+
+
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20MK%20II/P8070569_979x734.jpg" alt="Photobucket" border="0" /></p>
+
+
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20MK%20II/P8070571_979x734.jpg" alt="Photobucket" border="0" /></p>
+
+
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20MK%20II/P8080575_979x734.jpg" alt="Photobucket" border="0" /></p>
+
+
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20MK%20II/P8100582_734x979.jpg" alt="Photobucket" border="0" /></p>
+
+
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20MK%20II/P8100583_734x979.jpg" alt="Photobucket" border="0" /></p>
+
+
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20MK%20II/P8100584_734x979.jpg" alt="Photobucket" border="0" /></p>
+
+
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20MK%20II/P8100585_734x979.jpg" alt="Photobucket" border="0" /></p>
+
+
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20MK%20II/P8100598_734x979.jpg" alt="Photobucket" border="0" /></p>
+
+
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20MK%20II/P8100596_734x979.jpg" alt="Photobucket" border="0" /></p>
+
+
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20MK%20II/P8100588_979x734.jpg" alt="Photobucket" border="0" /></p>
+
+
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20MK%20II/P8100595_734x979.jpg" alt="Photobucket" border="0" /></p>
+
+
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20MK%20II/P8100591_979x734.jpg" alt="Photobucket" border="0" /></p>
+
+
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20MK%20II/P8100590_979x734.jpg" alt="Photobucket" border="0" /></p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[1/100 MG Destiny WIP - Part 2]]></title>
+    <link href="http://www.cstsui.com/blog/2011/08/04/1100-mg-destiny-wip-part-2/"/>
+    <updated>2011-08-04T00:00:00-04:00</updated>
+    <id>http://www.cstsui.com/blog/2011/08/04/1100-mg-destiny-wip-part-2</id>
+    <content type="html"><![CDATA[<p><p>Painting is about 95% complete. I just need to mask off some areas on the handles of the anti ship sword and the beam cannon as well as the beam rifle to spray it in a dark gray for a bit of contrast.</p>
+
+<p><p><img src="http://i151.photobucket.com/albums/s148/Tomster831/41f3436f-7d0a-43bb-99b1-146e9afaf1d7.jpg" alt="Photobucket" border="0" /></p></p>
+
+<p><!--more--></p>
+
+<p><p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/Part%202/P8030544_979x734.jpg" alt="Photobucket" border="0" /></p>
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/Part%202/P8030543_979x734.jpg" alt="Photobucket" border="0" /></p>
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/Part%202/P8030533_979x734.jpg" alt="Photobucket" border="0" /></p>
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/Part%202/P8030541_979x734.jpg" alt="Photobucket" border="0" /></p>
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/Part%202/P8030534_979x734.jpg" alt="Photobucket" border="0" /></p></p>
+
+<p><p>Some beam cannon parts are masked off after spraying it in a dark green to give it a two tone color variation.<img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/Part%202/P8030540_979x734.jpg" alt="Photobucket" border="0" /></p>
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/Part%202/P8030532_979x734.jpg" alt="Photobucket" border="0" /></p>
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/Part%202/P8030531_979x734.jpg" alt="Photobucket" border="0" /></p>
+Results can be seen below. I think it turned out rather nicely.
+<p>
+<img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/Part%202/P8030537_979x734.jpg" alt="Photobucket" border="0" />
+</p>
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/Part%202/P8030536_979x734.jpg" alt="Photobucket" border="0" /></p>
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/Part%202/P8030535_979x734.jpg" alt="Photobucket" border="0" /></p>
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/Part%202/P8030545_979x734.jpg" alt="Photobucket" border="0" /></p></p>
+
+<p>Weapons put together.</p>
+
+<p><p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/Part%202/P8040548_979x734.jpg" alt="Photobucket" border="0" /></p>
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/Part%202/P8040549_979x734.jpg" alt="Photobucket" border="0" /></p></p>
+
+<p>Accident happened and the swivel joint on the handle broke. I&rsquo;ll probably just glue it back on&hellip; Guess it won&rsquo;t be swiveling anymore.</p>
+
+<p><p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/Part%202/P8040551_979x734.jpg" alt="Photobucket" border="0" /></p></p>
+
+<p><p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/Part%202/P8040550_979x734.jpg" alt="Photobucket" border="0" /></p>
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/Part%202/P8040552_979x734.jpg" alt="Photobucket" border="0" /></p>
+All the body pieces are done. Pardon my shaky hands and blurry photos. (Wings aren&rsquo;t attached because the pistons were just painted and need to wait for those to dry)
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/Part%202/P8040553_979x734.jpg" alt="Photobucket" border="0" /></p></p>
+
+<p><p>
+<img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/Part%202/P8040555_979x734.jpg" alt="Photobucket" border="0" /></p>
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/Part%202/P8040557_979x734.jpg" alt="Photobucket" border="0" /></p></p>
+
+<p>That&rsquo;s pretty much it. Just waiting for the small amount of gold parts to dry up and then on to the enamel wash and decals. The gold below is some left over Testor spray can I  had in the stash. A lot quicker than busting out the airbrush just to paint the gold pieces.</p>
+
+<p><p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/Part%202/P8040559_979x734.jpg" alt="Photobucket" border="0" /></p></p>
+
+<p><p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/Part%202/P8040558_979x734.jpg" alt="Photobucket" border="0" /></p></p>
+
+<p>Oh and the Hi-Nu is pretty close to being done. Just need to touch up on a few things and it&rsquo;ll be finished.</p>
+
+<p><p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Hi-Nu%20WIP/P8010517_1096x822.jpg" alt="Photobucket" border="0" /></p></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[1/100 MG Destiny WIP - Part 1]]></title>
+    <link href="http://www.cstsui.com/blog/2011/08/02/1100-mg-destiny-wip-part-1/"/>
+    <updated>2011-08-02T00:00:00-04:00</updated>
+    <id>http://www.cstsui.com/blog/2011/08/02/1100-mg-destiny-wip-part-1</id>
+    <content type="html"><![CDATA[<p>The kit was already snapped together when I first got it a couple of years ago. I had planned on painting this kit from the start so all the parts were already prepared for painting (pegs were cut for easier removal of the pieces and the pieces were sanded).</p>
+
+
+<p>As usually Tamiya Arylics are my paint of choice. On with the painting:</p>
+
+<p>
+<img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/P7310473_979x734.jpg" alt="Photobucket" width="979" height="734" border="0" /></p>
+
+
+
+
+<!--more-->
+
+
+
+
+<p>
+The frame was sprayed with Krylon's Short Cut spray can (Chrome) when the kit was first snapped together. Now I'm just spraying it in the same color since the paint was pretty scratched up from putting on and removing the armor pieces.
+<img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/P8010481_979x734.jpg" alt="Photobucket" border="0" /></p>
+
+
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/P8010488_979x734.jpg" alt="Photobucket" border="0" /></p>
+
+
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/P8010487_979x734.jpg" alt="Photobucket" border="0" /></p>
+
+
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/P8010484_979x734.jpg" alt="Photobucket" border="0" /></p>
+
+
+<p>All the gray, blue, red, and yellow pieces are done and top coated with Future. I went with two shades of gray (which isnt' very obvious) as well as two shades of red. The purple-ish blue is all in the same shade though.
+<img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/P8010501_979x734.jpg" alt="Photobucket" border="0" /></p>
+
+
+<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/P8010500_979x734.jpg" alt="Photobucket" border="0" /></a></p>
+
+
+<p>Destiny's head is one of my favorite Gundam head designs. The front camera and the eyes are still stickers for now. I haven't decided if I would paint it since the stickers look pretty good already.<img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/P8010494_979x734.jpg" alt="Photobucket" border="0" /></a></p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[1/100 MG Hi-Nu WIP]]></title>
+    <link href="http://www.cstsui.com/blog/2011/07/31/1100-mg-hi-nu-wip/"/>
+    <updated>2011-07-31T00:00:00-04:00</updated>
+    <id>http://www.cstsui.com/blog/2011/07/31/1100-mg-hi-nu-wip</id>
+    <content type="html"><![CDATA[<p>The kit is almost finish and here are several pics I've taken during the process. Not too many pictures were taken during this build.</p>
+
+
+<p><p>The entire kit was AB with Tamiya Acrylics, and gloss coated with Future for panel lining and decals.</p>
+
+<p><p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Hi-Nu%20WIP/P8010517_1096x822.jpg" alt="Photobucket" border="0" /></p></p>
+
+<p><!--more--></p>
+
+<p><p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Hi-Nu%20WIP/P7160426_979x734.jpg" alt="Photobucket" border="0" /></p></p>
+
+<p>The internal frame is painted in gunmetal.</p>
+
+<p><p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Hi-Nu%20WIP/P7100424_979x734.jpg" alt="Photobucket" border="0" /></p></p>
+
+<p>Snapped together after everything was painted (Excluding the fuel tanks).</p>
+
+<p><p>
+<img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Hi-Nu%20WIP/P7230437_979x734.jpg" alt="Photobucket" border="0" />
+</p></p>
+
+<p>Bought the waterslide decal set for the Hi-Nu as well as several others.</p>
+
+<p><p>
+<img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Hi-Nu%20WIP/P7270451.jpg" alt="Photobucket" border="0" />
+</p></p>
+
+<p>Decals and lining applied to the shield and other  parts.</p>
+
+<p><p>
+<img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Hi-Nu%20WIP/P7260450_979x734.jpg" alt="Photobucket" border="0" />
+</p>
+<p>
+<img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Hi-Nu%20WIP/P7260449_979x734.jpg" alt="Photobucket" border="0" />
+</p>
+<p>
+<img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Hi-Nu%20WIP/P7260449_979x734.jpg" alt="Photobucket" border="0" />
+</p>
+<p>
+<img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Hi-Nu%20WIP/P7260448_979x734.jpg" alt="Photobucket" border="0" />
+</p>
+<p>
+<img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Hi-Nu%20WIP/P7270454.jpg" alt="Photobucket" border="0" />
+</p>
+<p>
+<img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Hi-Nu%20WIP/P7270457.jpg" alt="Photobucket" border="0" />
+</p>
+<p>
+<img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Hi-Nu%20WIP/P7270458.jpg" alt="Photobucket" border="0" />
+</p>
+<p>
+<img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Hi-Nu%20WIP/P7270459.jpg" alt="Photobucket" border="0" />
+</p></p>
+]]></content>
+  </entry>
   
 </feed>

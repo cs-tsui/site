@@ -1,0 +1,412 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Finding Duplicate Files - Chun Sing Tsui</title>
+  <meta name="author" content="Chun Sing Tsui">
+
+  
+  <meta name="description" content="Another script I wrote to learn more about Perl. I used a script found on PerlMonks as a starting point, and modified it with an additional function &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.cstsui.com/blog/2012/03/15/perl-finding-duplicate-files">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="Chun Sing Tsui" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=Fjalla+One" rel="stylesheet" type="text/css">
+<!--- MathJax Configuration -->
+<script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+</head>
+
+<body   class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Chun Sing Tsui</a></h1>
+  
+    <h2>Projects and other Interests</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscribe" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS" target="_blank"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25" height="25" viewbox="0 0 100 100"><path class="social" d="M 13.310204,73.332654 C 5.967347,73.332654 0,79.322448 0,86.621428 c 0,7.338776 5.967347,13.262246 13.310204,13.262246 7.370408,0 13.328572,-5.92245 13.328572,-13.262246 0,-7.29898 -5.958164,-13.288774 -13.328572,-13.288774 z M 0.01530612,33.978572 V 53.143878 C 12.493878,53.143878 24.229592,58.02347 33.068368,66.865306 41.894898,75.685714 46.767346,87.47449 46.767346,100 h 19.25 C 66.017346,63.592858 36.4,33.979592 0.01530612,33.978572 l 0,0 z M 0.03877552,0 V 19.17449 C 44.54796,19.17551 80.77551,55.437756 80.77551,100 H 100 C 100,44.87653 55.15102,0 0.03877552,0 z"></path></svg></a></li>
+  
+</ul>
+  
+  
+  
+  
+  
+<ul class="subscribe">
+  <li><a href="https://github.com/cs-tsui" rel="subscribe-github" title="@cs-tsui on GitHub" target="_blank"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="25" height="25" viewbox="0 0 100 100"><path class="social" d="M 50,0 C 22.385714,0 0,22.385714 0,50 0,77.614286 22.385714,100 50,100 77.614286,100 100,77.614286 100,50 100,22.385714 77.614286,0 50,0 z m 29.692858,79.692858 c -3.859184,3.859182 -8.351022,6.887754 -13.35,9.00306 -1.27041,0.536736 -2.560204,1.009184 -3.867348,1.415306 v -7.493878 c 0,-3.938774 -1.35102,-6.835714 -4.053062,-8.690816 1.692858,-0.163264 3.24694,-0.390816 4.663266,-0.683672 1.416326,-0.292858 2.913266,-0.716328 4.491838,-1.27041 1.57857,-0.55408 2.994896,-1.213264 4.247958,-1.97755 1.253062,-0.765306 2.458164,-1.758164 3.613266,-2.978572 1.155102,-1.220408 2.12449,-2.604082 2.905102,-4.15 0.780612,-1.545918 1.4,-3.40204 1.855102,-5.566326 0.455102,-2.164286 0.683674,-4.54898 0.683674,-7.153062 0,-5.045918 -1.643878,-9.341836 -4.931634,-12.890816 C 77.44796,33.35 77.285714,29.10204 75.463266,24.512244 l -1.22143,-0.145918 c -0.845918,-0.09796 -2.368366,0.260204 -4.565306,1.07449 -2.196938,0.814286 -4.663264,2.14796 -7.396938,4.004082 -3.87449,-1.07449 -7.893878,-1.611224 -12.061224,-1.611224 -4.19898,0 -8.203062,0.536734 -12.012246,1.611224 -1.72449,-1.17245 -3.361224,-2.139796 -4.907142,-2.905102 C 31.753062,25.77449 30.516326,25.254082 29.587756,24.97653 28.660204,24.7 27.79796,24.528572 27,24.463266 c -0.79796,-0.0653 -1.310204,-0.08062 -1.537756,-0.04898 -0.22755,0.03164 -0.390816,0.0653 -0.487754,0.09796 -1.82347,4.62245 -1.985714,8.87143 -0.487756,12.743878 -3.287754,3.54796 -4.931632,7.844898 -4.931632,12.890816 0,2.604082 0.227552,4.988776 0.683674,7.153062 0.456122,2.164286 1.07449,4.020408 1.855102,5.566326 0.780612,1.545918 1.75,2.929592 2.905102,4.15 1.155102,1.220408 2.360204,2.213266 3.613264,2.978572 1.253062,0.766326 2.669388,1.42449 4.24796,1.97755 1.578572,0.554082 3.07551,0.976532 4.491836,1.27041 1.416328,0.292856 2.970408,0.521428 4.663266,0.683672 -2.669388,1.82347 -4.004082,4.720408 -4.004082,8.690816 v 7.639796 C 36.536734,89.818368 35.083674,89.3 33.656122,88.695918 c -4.99898,-2.115306 -9.490816,-5.143878 -13.35,-9.00306 -3.859184,-3.859184 -6.887754,-8.351022 -9.00306,-13.35 C 9.1163263,61.171428 8.0071428,55.67347 8.0071428,50 c 0,-5.67347 1.1091835,-11.171428 3.2969392,-16.342858 2.115306,-4.998978 5.143878,-9.490816 9.00306,-13.35 3.859184,-3.859182 8.351022,-6.887754 13.35,-9.00306 C 38.828572,9.1163266 44.32653,8.0071428 50,8.0071428 c 5.67347,0 11.171428,1.1091838 16.342858,3.2969392 5,2.115306 9.490816,5.143878 13.35,9.00306 3.859182,3.859184 6.887754,8.351022 9.00306,13.35 2.186736,5.17245 3.295918,10.67041 3.295918,16.342858 0,5.672448 -1.109182,11.171428 -3.296938,16.342858 -2.115306,4.998978 -5.143878,9.490816 -9.00204,13.35 l 0,0 z"></path></svg></a></li>
+</ul>
+  
+  
+  
+  
+  
+  
+  
+  
+    
+      <form action="https://www.google.com/search" method="get">
+        <fieldset role="search">
+          <input type="hidden" name="sitesearch" value="www.cstsui.com" />
+    
+          <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+        </fieldset>
+      </form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+        <h1 class="entry-title">Finding Duplicate Files</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2012-03-15T00:00:00-04:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>12:00 am</span></time>
+        
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Another script I wrote to learn more about Perl. I used a script found on <a href="http://www.perlmonks.org/?node_id=49198">PerlMonks</a> as a starting point, and modified it with an additional function of moving all duplicate files into a folder. Again, it is heavily commented to help myself understand the code while I'm writing it.</p>
+
+
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="c1">#!/usr/bin/perl</span>
+</span><span class='line'><span class="k">use</span> <span class="n">Cwd</span><span class="p">;</span>
+</span><span class='line'><span class="k">use</span> <span class="nn">File::</span><span class="n">Find</span><span class="p">;</span>
+</span><span class='line'><span class="k">use</span> <span class="nn">Digest::</span><span class="n">MD5</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">#-----------------------------------------------------</span>
+</span><span class='line'><span class="c1"># This is a script for finding duplicate files in the </span>
+</span><span class='line'><span class="c1"># current directory. It checks for the same file size. </span>
+</span><span class='line'><span class="c1"># If file sizes are different, then files are </span>
+</span><span class='line'><span class="c1"># different. If file sizes are the same, it goes on </span>
+</span><span class='line'><span class="c1"># to check for the MD5 value to determine uniqueness. </span>
+</span><span class='line'><span class="c1"># If MD5 matches, move duplicate files to a folder</span>
+</span><span class='line'><span class="c1">#-----------------------------------------------------</span>
+</span><span class='line'><span class="c1"># Get current working directory and create duplicate folder directory</span>
+</span><span class='line'><span class="nv">$currentDir</span> <span class="o">=</span> <span class="n">cwd</span><span class="p">();</span>
+</span><span class='line'><span class="nv">$dupFolder</span>  <span class="o">=</span> <span class="s">&quot;duplicates&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="nv">$dupDir</span> <span class="o">=</span> <span class="nv">$currentDir</span><span class="o">.</span><span class="s">&quot;/&quot;</span><span class="o">.</span><span class="nv">$dupFolder</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Hash to store filesize as key and an array of filenames as value</span>
+</span><span class='line'><span class="nv">%filesSizeHash</span>  <span class="o">=</span> <span class="p">();</span>
+</span><span class='line'><span class="nv">$duplicateCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="nv">$totalDupSize</span>   <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Using the file() function, it calls the wanted() function on every </span>
+</span><span class='line'><span class="c1"># file in the current directory</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">find</span><span class="p">(</span><span class="o">\&amp;</span><span class="n">check_each_file</span><span class="p">,</span> <span class="nv">$currentDir</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Loop to first find files of the same file size; </span>
+</span><span class='line'><span class="c1"># if there are multiple, check MD5values</span>
+</span><span class='line'><span class="k">foreach</span> <span class="k">my</span> <span class="nv">$size</span> <span class="p">(</span><span class="nb">sort</span> <span class="p">{</span><span class="nv">$b</span> <span class="sr">&lt;=&gt;</span> <span class="nv">$a</span><span class="p">}</span> <span class="nb">keys</span> <span class="nv">%filesSizeHash</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1"># Process next filesize unless there are more than one value in</span>
+</span><span class='line'>    <span class="k">next</span> <span class="k">unless</span> <span class="nv">@</span><span class="p">{</span><span class="nv">$filesSizeHash</span><span class="p">{</span><span class="nv">$size</span><span class="p">}}</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>    <span class="c1">#print($size.&quot;\n&quot;);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Hash to store MD5 values as key and an array of filenames as value</span>
+</span><span class='line'>    <span class="k">my</span> <span class="nv">%fileMD5Hash</span> <span class="o">=</span> <span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Loop through and get MD5 and store for each file with same size</span>
+</span><span class='line'>    <span class="k">foreach</span> <span class="k">my</span> <span class="nv">$file</span> <span class="p">(</span><span class="nv">@</span><span class="p">{</span><span class="nv">$filesSizeHash</span><span class="p">{</span><span class="nv">$size</span><span class="p">}})</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nb">open</span><span class="p">(</span><span class="n">FILE</span><span class="p">,</span> <span class="nv">$file</span><span class="p">)</span> <span class="ow">or</span> <span class="k">next</span><span class="p">;</span>
+</span><span class='line'>        <span class="nb">binmode</span><span class="p">(</span><span class="n">FILE</span><span class="p">);</span>
+</span><span class='line'>        <span class="k">my</span> <span class="nv">$ctx</span> <span class="o">=</span> <span class="nn">Digest::</span><span class="n">MD5</span><span class="o">-&gt;</span><span class="k">new</span><span class="o">-&gt;</span><span class="n">addfile</span><span class="p">(</span><span class="o">*</span><span class="n">FILE</span><span class="p">);</span>
+</span><span class='line'>        <span class="nb">push</span> <span class="nv">@</span><span class="p">{</span><span class="nv">$fileMD5Hash</span><span class="p">{</span><span class="nv">$ctx</span><span class="o">-&gt;</span><span class="n">hexdigest</span><span class="p">}},</span><span class="nv">$file</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1"># Now, take care of file if more than one file has same MD5</span>
+</span><span class='line'>    <span class="k">foreach</span> <span class="k">my</span> <span class="nv">$hash</span> <span class="p">(</span><span class="nb">keys</span> <span class="nv">%fileMD5Hash</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">next</span> <span class="k">unless</span> <span class="nv">@</span><span class="p">{</span><span class="nv">$fileMD5Hash</span><span class="p">{</span><span class="nv">$hash</span><span class="p">}}</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">unless</span> <span class="p">(</span><span class="o">-</span><span class="n">d</span> <span class="nv">$dupDir</span><span class="p">){</span><span class="nb">mkdir</span> <span class="nv">$dupDir</span> <span class="ow">or</span> <span class="nb">die</span><span class="p">;}</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1"># There are duplicate files to deal with from this point</span>
+</span><span class='line'>        <span class="c1"># Until the currently accessed array inside the md5 hash has only</span>
+</span><span class='line'>        <span class="c1"># one item(file), move file into a different directory</span>
+</span><span class='line'>        <span class="k">my</span> <span class="nv">$count</span> <span class="o">=</span> <span class="nv">@</span><span class="p">{</span><span class="nv">$fileMD5Hash</span><span class="p">{</span><span class="nv">$hash</span><span class="p">}};</span>
+</span><span class='line'>        <span class="k">for</span><span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;</span> <span class="nv">$count</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">){</span>
+</span><span class='line'>            <span class="nv">$duplicateCount</span><span class="o">++</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">my</span> <span class="nv">$fileName</span> <span class="o">=</span> <span class="nv">@</span><span class="p">{</span><span class="nv">$fileMD5Hash</span><span class="p">{</span><span class="nv">$hash</span><span class="p">}}[</span><span class="nv">$i</span><span class="p">];</span>
+</span><span class='line'>            <span class="nb">rename</span><span class="p">(</span><span class="nv">$fileName</span><span class="p">,</span> <span class="nv">$dupDir</span><span class="o">.</span><span class="s">&quot;/&quot;</span><span class="o">.</span><span class="nv">$fileName</span><span class="p">);</span>
+</span><span class='line'>            <span class="nv">$totalDupSize</span> <span class="o">=</span> <span class="nv">$totalDupSize</span> <span class="o">+</span> <span class="nv">$size</span><span class="p">;</span>
+</span><span class='line'>            <span class="k">print</span><span class="p">(</span><span class="s">&quot;[File moved]: $fileName\n&quot;</span><span class="p">);</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Loop to first find files of the same file size; if multiple, check MD5values</span>
+</span><span class='line'><span class="nv">$totalDupSize</span> <span class="o">=</span> <span class="n">size_format</span><span class="p">(</span><span class="nv">$totalDupSize</span><span class="p">);</span>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="s">&quot;\n[Total number of duplicates found]: $duplicateCount\n&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="s">&quot;[Toal size of duplicate files]:     $totalDupSize\n&quot;</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Function that is called on every file in the directory of the find() function</span>
+</span><span class='line'><span class="k">sub </span><span class="nf">check_each_file</span><span class="p">{</span>
+</span><span class='line'>    <span class="c1">#If the current &quot;file&quot; is a file...</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">-</span><span class="n">f</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="c1"># Get  current file&#39;s name</span>
+</span><span class='line'>        <span class="nv">$currentFileName</span> <span class="o">=</span> <span class="nv">$</span><span class="nn">File::Find::</span><span class="nv">name</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1"># Get current file&#39;s size in bytes</span>
+</span><span class='line'>        <span class="k">my</span> <span class="nv">$filesize</span> <span class="o">=</span> <span class="p">(</span><span class="nb">stat</span><span class="p">(</span><span class="nv">$currentFileName</span><span class="p">))[</span><span class="mi">7</span><span class="p">];</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c1"># Push the file into an hash of arrays declared at the top,</span>
+</span><span class='line'>        <span class="c1"># with filesize as key and an array of filenames as value</span>
+</span><span class='line'>        <span class="nb">push</span><span class="p">(</span> <span class="nv">@</span><span class="p">{</span> <span class="nv">$filesSizeHash</span> <span class="p">{</span><span class="nv">$filesize</span><span class="p">}},</span> <span class="nv">$_</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># Function for formatting the total output size of duplicate files</span>
+</span><span class='line'><span class="k">sub </span><span class="nf">size_format</span><span class="p">{</span>
+</span><span class='line'>   <span class="k">my</span> <span class="nv">$size</span> <span class="o">=</span> <span class="nb">shift</span><span class="p">(</span><span class="nv">@_</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'>   <span class="k">if</span> <span class="p">(</span><span class="nv">$size</span> <span class="o">&lt;</span> <span class="mi">1024</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nv">$size</span> <span class="o">.</span> <span class="s">&quot; bytes&quot;</span><span class="p">;</span>
+</span><span class='line'>   <span class="p">}</span>
+</span><span class='line'>   <span class="k">if</span> <span class="p">(</span><span class="nv">$size</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nb">sprintf</span><span class="p">(</span><span class="s">&quot;%.2f KB&quot;</span><span class="p">,</span><span class="nv">$size</span> <span class="o">/</span> <span class="mi">1024</span><span class="p">);</span>
+</span><span class='line'>   <span class="p">}</span>
+</span><span class='line'>   <span class="k">if</span> <span class="p">(</span><span class="nv">$size</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="p">))</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">return</span> <span class="nb">sprintf</span><span class="p">(</span><span class="s">&quot;%.2f MB&quot;</span><span class="p">,</span><span class="nv">$size</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="p">));</span>
+</span><span class='line'>   <span class="p">}</span>
+</span><span class='line'>   <span class="k">return</span> <span class="nb">sprintf</span><span class="p">(</span><span class="s">&quot;%.2f GB&quot;</span><span class="p">,</span><span class="nv">$size</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="p">));</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+
+
+  <span class="byline author vcard">Authored by <span class="fn">
+  
+    Chun Sing Tsui
+  
+  </span></span>
+
+
+      
+
+
+
+
+<time class='entry-date' datetime='2012-03-15T00:00:00-04:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>12:00 am</span></time>
+      
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/perl/'>perl</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.cstsui.com/blog/2012/03/15/perl-finding-duplicate-files/" data-via="" data-counturl="http://www.cstsui.com/blog/2012/03/15/perl-finding-duplicate-files/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/03/08/perl-random-file-renaming/" title="Previous Post: Random File Renaming - [Updated]">&laquo; Random File Renaming - [Updated]</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2012/03/20/useful-notepad-plugins/" title="Next Post: Useful Notepad++ Plugins">Useful Notepad++ Plugins &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+
+</div>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2020 - Chun Sing Tsui -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a> | Themed with <a href="https://github.com/lucaslew/whitespace">Whitespace</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

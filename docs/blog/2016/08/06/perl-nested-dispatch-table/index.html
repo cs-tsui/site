@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Chun Sing Tsui</title>
+  <title>Nested Dispatch Tables - Chun Sing Tsui</title>
   <meta name="author" content="Chun Sing Tsui">
 
   
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.cstsui.com">
+  <link rel="canonical" href="http://www.cstsui.com/blog/2016/08/06/perl-nested-dispatch-table">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Chun Sing Tsui" type="application/atom+xml">
@@ -82,15 +82,14 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2016/08/06/perl-nested-dispatch-table/">Nested Dispatch Tables</a></h1>
+      
+        <h1 class="entry-title">Nested Dispatch Tables</h1>
+      
     
     
       <p class="meta">
@@ -107,7 +106,7 @@
   </header>
 
 
-  <div class="entry-content"><p>The dispatch table pattern is very commonly used in Perl for mapping an action to a handler function. A simple dispatch table looks something like this.</p>
+<div class="entry-content"><p>The dispatch table pattern is very commonly used in Perl for mapping an action to a handler function. A simple dispatch table looks something like this.</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -286,308 +285,60 @@
 <p>Without using a nested dispatch table, multiple if/else blocks or switches will have to be used to mimic this nested branching behavior. Using a dispatch table is a good way to avoid duplicating code. Now all the related code are consolidated in one place in a hash data structure that can easily be modified. Another advantage of this approach is the dispatch table may be created at a local scope to take advantage of closures so the handler functions can focus on a
 small tasks and assume certain state variables that are only available within the local scope are availible without explicitly passing all variables as arguments.</p>
 </div>
-  
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2016/02/23/easy-html-table-generation-from-perl-dbi-and-sql/">Easy HTML Table Generation From Perl DBI and SQL</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2016-02-23T22:17:32-05:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2016</span></span> <span class='time'>10:17 pm</span></time>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>The following script is used to quickly generate HTML tables for reports using only a SQL query as an input. Useful if you needed to generate and send out a report quickly without installing yet yet another package.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="c1">#!/usr/bin/perl</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">use</span> <span class="n">DBI</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># Query as in input, and generate HTML table output </span>
-</span><span class='line'><span class="k">my</span> <span class="nv">$query</span> <span class="o">=</span> <span class="s">&#39;select * from data&#39;</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># 1) Connect and get DB handle</span>
-</span><span class='line'><span class="k">my</span> <span class="nv">$dbh</span> <span class="o">=</span> <span class="n">connect_db</span><span class="p">();</span> <span class="c1"># use your own connection here</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># 2) Run your query </span>
-</span><span class='line'><span class="k">my</span> <span class="nv">$sth</span>   <span class="o">=</span> <span class="nv">$dbh</span><span class="o">-&gt;</span><span class="n">prepare</span><span class="p">(</span><span class="nv">$query</span><span class="p">);</span>
-</span><span class='line'><span class="k">my</span> <span class="nv">@loh</span>   <span class="o">=</span> <span class="nv">@</span><span class="p">{</span> <span class="nv">$sth</span><span class="o">-&gt;</span><span class="n">fetchall_arrayref</span><span class="p">({})</span> <span class="p">};</span>
-</span><span class='line'><span class="k">my</span> <span class="nv">@cols</span>  <span class="o">=</span> <span class="nv">@</span><span class="p">{</span> <span class="nv">$sth</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">NAME</span><span class="p">}</span> <span class="p">};</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># 3) Generate HTML Table </span>
-</span><span class='line'><span class="k">my</span> <span class="nv">$thead</span> <span class="o">=</span> <span class="nb">join</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="nb">map</span> <span class="p">{</span><span class="s">&quot;&lt;td&gt;$_&lt;/td&gt;&quot;</span><span class="p">}</span> <span class="nv">@cols</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">my</span> <span class="nv">@rows</span> <span class="o">=</span> <span class="p">();</span>
-</span><span class='line'><span class="k">for</span> <span class="k">my</span> <span class="nv">$hr</span> <span class="p">(</span><span class="nv">@loh</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nb">push</span> <span class="nv">@rows</span><span class="p">,</span> <span class="nb">join</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="nb">map</span> <span class="p">{</span><span class="s">&quot;&lt;td&gt;$_&lt;/td&gt;&quot;</span><span class="p">}</span> <span class="nv">@</span><span class="p">{</span><span class="nv">$hr</span><span class="p">}{</span><span class="nv">@cols</span><span class="p">});</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">my</span> <span class="nv">$tbody</span> <span class="o">=</span> <span class="nb">join</span> <span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="nb">map</span> <span class="p">{</span><span class="s">&quot;&lt;tr&gt;$_&lt;/tr&gt;&quot;</span><span class="p">}</span> <span class="nv">@rows</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">my</span> <span class="nv">$html</span> <span class="o">=</span> <span class="sx">qq|&lt;table&gt; $thead &lt;thead&gt; $thead &lt;/thead&gt; &lt;tbody&gt; $tbody &lt;/tbody&gt; &lt;/table&gt;|</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">print</span> <span class="nv">$html</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nb">exit</span> <span class="mi">0</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
   
 
 
-    </article>
+
+  <span class="byline author vcard">Authored by <span class="fn">
   
+    Chun Sing Tsui
   
-    <article>
+  </span></span>
+
+
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/08/16/site-update/">Site Update</a></h1>
-    
-    
-      <p class="meta">
-        
 
 
 
 
-<time class='entry-date' datetime='2014-08-16T08:17:22-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>8:17 am</span></time>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Finally got around to migrating my site off of Wordpress. I&rsquo;ve read good things about Octopress, so that&rsquo;s what the new site is based on. It is relatively straightforward to migrate the posts into the Octopress/Jekyll markdown format using the included tools.</p>
-
-<p>Currently the site is using a popular theme called Whitespace. Hopefully I will get around to customizing the theme a bit in the near future.</p>
-
-<p>More updates that will be coming:</p>
-
-<ul>
-<li>import scale modeling posts</li>
-<li>rehost images</li>
-<li>add project pages</li>
-</ul>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
+<time class='entry-date' datetime='2016-08-06T10:00:27-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2016</span></span> <span class='time'>10:00 am</span></time>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/06/16/greasemonkey-script-to-autohide-reddit-sidebar-2/">GreaseMonkey Script to AutoHide Reddit Sidebar</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-06-16T00:00:00-04:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:00 am</span></time>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>This simple script hides the ridiculous sidebar that squishes up the content when viewing Reddit with only a small amount of screen space (e.g. half of screen or low resolution display). It only hides the sidebar when the window width is detected to be lower than half of your resolution.</p>
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1">// 1920 is your screen width; adjust accordingly</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">threshold</span> <span class="o">=</span> <span class="mi">1920</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// Get sidebar div element and its original display style</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">sideBar</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByClassName</span><span class="p">(</span><span class="s1">&#39;side&#39;</span><span class="p">)</span> <span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">origStyle</span> <span class="o">=</span> <span class="nx">sideBar</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// Check the window width and hide it if it&#39;s too small</span>
-</span><span class='line'>    <span class="kd">function</span> <span class="nx">doCheck</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">innerWidth</span> <span class="o">&lt;</span> <span class="nx">threshold</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">sideBar</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span><span class="p">;</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>        <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">sideBar</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="nx">origStyle</span><span class="p">;</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="c1">// Attach it the resize event</span>
-</span><span class='line'>    <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;resize&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">doCheck</span><span class="p">();</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'>    <span class="c1">// Run it once initially</span>
-</span><span class='line'>    <span class="nx">doCheck</span><span class="p">();</span>
-</span><span class='line'><span class="p">}());</span>
-</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
       
-  <header>
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/perl/'>perl</a>
+  
+</span>
+
+
+    </p>
     
-      <h1 class="entry-title"><a href="/blog/2014/05/10/setting-up-e2studio-for-rl78g14-rdk-developement/">Setting Up E<sup>2</sup>studio for RL78/G14 RDK Developement</a></h1>
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.cstsui.com/blog/2016/08/06/perl-nested-dispatch-table/" data-via="" data-counturl="http://www.cstsui.com/blog/2016/08/06/perl-nested-dispatch-table/" >Tweet</a>
+  
+  
+  
+</div>
+
     
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-05-10T00:00:00-04:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:00 am</span></time>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Set up e<sup>2</sup>studio for RL78 development following the steps below. These downloads are the files provided on the RL78/G14 RDK installation DVD. However, this will be useful if you happen to lose the DVD, don't have a DVD drive, or want to install/update a particular item when it becomes outdated.</p>
-
-
-<h3>Setup e<sup>2</sup>studio</h3>
-
-
-<p>1). Download/Install e<sup>2</sup>studio from Renesas website:</p>
-
-
-<ul>
-<li>http://sg.renesas.com/products/mpumcu/rl78/rl78g1x/rl78g14/soft_tools_index.jsp</li>
-</ul>
-
-
-<p>2) Download KPIT GNU Toolchain for RL78 and register it with e<sup>2</sup>studio (should automatically pop up when you open e<sup>2</sup>studio). The GNURL78 compiler is a free compiler with no size limitations.</p>
-
-
-<ul>
-<li>http://www.kpitgnutools.com/latestToolchain.php</li>
-</ul>
-
-
-<p>3) Download/Install IAR Plugin for e<sup>2</sup>studio using the appropriate update site. The IAR plugin allows projects for the IAR compiler to be built and debugged in e<sup>2</sup>studio.</p>
-
-
-<ul>
-<li>http://www.iar.com/eclipse/</li>
-</ul>
-
-
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2016/02/23/easy-html-table-generation-from-perl-dbi-and-sql/" title="Previous Post: Easy HTML Table Generation from Perl DBI and SQL">&laquo; Easy HTML Table Generation from Perl DBI and SQL</a>
+      
+      
+    </p>
+  </footer>
+</article>
 
 
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/05/10/setting-up-e2studio-for-rl78g14-rdk-developement/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  <div class="pagination">
-    
-      <a class="prev" href="/posts/2">&larr; Older</a>
-    
-    <a href="/blog/archives">Blog Archives</a>
-    
-  </div>
-</div>
-<aside class="sidebar">
-  
-    
-  
-</aside>
 
     </div>
   </div>
