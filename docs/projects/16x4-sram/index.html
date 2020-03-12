@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: General - Chun Sing Tsui</title>
+  <title>10T Based 0.34V Supply Low Energy 16x4 SRAM - Chun Sing Tsui</title>
   <meta name="author" content="Chun Sing Tsui">
 
   
-  <meta name="description" content="Category: general">
+  <meta name="description" content="10T Based 0.34V Supply Low Energy 16x4 SRAM Aug 20th, 2014 9:11 am This was a 3-person group project in our VLSI course. This page contains sections &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.cstsui.com/blog/categories/general">
+  <link rel="canonical" href="http://www.cstsui.com/projects/16x4-sram">
   <link href="/site/favicon.png" rel="icon">
   <link href="/site/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Chun Sing Tsui" type="application/atom+xml">
@@ -95,31 +95,82 @@
 <article role="article">
   
   <header>
-    <h1 class="entry-title">Category: General</h1>
+    <h1 class="entry-title">10T Based 0.34V Supply Low Energy 16x4 SRAM</h1>
+    
+        <p class="meta">
+            
+
+
+
+
+<time class='entry-date' datetime='2014-08-20T09:11:00-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>20</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>9:11 am</span></time>
+            <!-- | <a href="/site/projects/16x4-sram/index.markdown">Edit</a> -->
+        </p>
     
   </header>
   
-  <div id="blog-archives" class="category">
+  <p>This was a 3-person group project in our VLSI course. This page contains sections and images taken from the final project report to provide a quick summary of the project.</p>
+
+<h3>Summary</h3>
+
+<p>The design presented is a 64 bit (16x4) synchronous SRAM with a heavy focus on low energy operations.  Specifically, the optimization metric which drives the design is the energy-cubed-delay product (E3D). The main approach in reducing energy is by utilizing a 10 transistor memory bitcell instead of the traditional 6T bitcell in order to reduce leakage current. The 10T bitcell also isolates the read port from the cross-coupled inverters. This prevents accidental writing during a read operation, thus enhancing read static noise margins. Another major effort in reducing energy is to use minimum-sized transistors as much as possible to lower overall capacitances, thus reducing energy cost.</p>
+
+<p>The optimal voltage and clock period was determined by attempting to run the circuit at different voltages. At each voltage point, the clock period was reduced until the simulation would no longer work for the test vectors. The provided us with the optimal energy and delay for that voltage. The total simulation time and the measured energy were then used to calculate the E3D metric. The best E3D metric was found at 0.34 V.</p>
+
+<!-- Images -->
 
 
+<p><span class='caption-wrapper center'><img class='caption center' src='http://i.imgur.com/zEztHIN.png?1' width='' height='' title='Block Diagram'><span class='caption-text'>Block Diagram</span></span></p>
+
+<p><p>
+<span class='caption-wrapper center'><img class='caption center' src='http://i.imgur.com/srV8IAD.png?1' width='' height='' title='Final Top Level'><span class='caption-text'>Final Top Level</span></span>
+<p>
+<span class='caption-wrapper center'><img class='caption center' src='http://i.imgur.com/NyO0FP6.png?1' width='' height='' title='10T Bitcell'><span class='caption-text'>10T Bitcell</span></span>
+<p>
+<span class='caption-wrapper center'><img class='caption center' src='http://i.imgur.com/nKWJ2N6.png?1' width='' height='' title='TSPC Neg. Edge Flip-Flop'><span class='caption-text'>TSPC Neg. Edge Flip-Flop</span></span>
+<p>
+<span class='caption-wrapper center'><img class='caption center' src='http://i.imgur.com/HEvRb8e.png?2' width='' height='' title='Bitline Conditioning'><span class='caption-text'>Bitline Conditioning</span></span>
+<p>
+<span class='caption-wrapper center'><img class='caption center' src='http://i.imgur.com/vzaFHJ5.png?1' width='' height='' title='Row Decoder'><span class='caption-text'>Row Decoder</span></span>
+<p>
+<span class='caption-wrapper center'><img class='caption center' src='http://i.imgur.com/8cwNLd2.png?1' width='' height='' title='Column Decoder'><span class='caption-text'>Column Decoder</span></span>
+<p></p>
+
+<h3>Result Statistics</h3>
+
+<pre><code>Max Clock Frequency:    166.67 MHz (6ns clock period)
+Supply Voltage:         0.34 V
+Total Energy:           0.363 pJ
+Transistors:            976
+Area:                   387.43 µm2
+Transistors/Area:       2.52 transistors per µm2
+Design Time (Estimate): 140 hours
+</code></pre>
+
+<h3>Project Completion: 12/2013</h3>
 
   
-  <h2>2014</h2>
+    <footer>
+      <p class="meta">
+        
+        
 
-<article>
+
+
+
+<time class='entry-date' datetime='2014-08-20T09:11:00-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>20</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>9:11 am</span></time>
+        
+        
+      </p>
+      
+        <div class="sharing">
   
-<h1><a href="/site/blog/2014/08/16/site-update/">Site Update</a></h1>
-<time datetime="2014-08-16T08:17:22-04:00" pubdate><span class='month'>Aug</span> <span class='day'>16</span> <span class='year'>2014</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/site/blog/categories/general/'>general</a></span>
-</footer>
-
-
-</article>
-
+  
+  
 </div>
 
+      
+    </footer>
   
 </article>
 
