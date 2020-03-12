@@ -1,13 +1,18 @@
 ---
 layout: page
 title: "My Bookself"
-date: 2016-03-08 07:30
+date: 2020-03-11 20:00
 comments: true
 sharing: true
 footer: true
 ---
 
 Currently Reading:
+
+* [The Open Organization: Igniting Passion and Performance - Jim Whitehurst](https://www.amazon.com/Open-Organization-Igniting-Passion-Performance/dp/1625275277/)
+
+
+On Hold:
 
 * [An Introduction to Statistical Learning](http://www-bcf.usc.edu/~gareth/ISL/)
 
@@ -17,8 +22,8 @@ Currently Reading:
 
 * [The Design of the Unix Operation System](http://www.amazon.com/Design-UNIX-Operating-System/dp/0132017997/)
 
-u
-Previous Readings:
+
+Previous:
 
 * [The Phoenix Project](https://www.amazon.com/Phoenix-Project-DevOps-Helping-Business/dp/0988262592/)
 
