@@ -5,13 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Blog Archive - Chun Sing Tsui</title>
+  <title>DataPower QuickStart (Docker) - Chun Sing Tsui</title>
   <meta name="author" content="Chun Sing Tsui">
 
   
-  <meta name="description" content="Blog Archive 2020 DataPower QuickStart (Docker)
-Mar 12 2020 posted in datapower, ibm 2016 Easy HTML Table Generation From Perl DBI and SQL
-Feb 23 &hellip;">
+  <meta name="description" content="Following the IBM Developer Guide on the Dockerized version of DataPower is a great way to start playing around with the DataPower application &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -20,7 +18,7 @@ Feb 23 &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.cstsui.com/blog/archives">
+  <link rel="canonical" href="http://www.cstsui.com/blog/2020/03/12/datapower-quickstart">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Chun Sing Tsui" type="application/atom+xml">
@@ -94,226 +92,221 @@ Feb 23 &hellip;">
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Blog Archive</h1>
+    
+      
+        <h1 class="entry-title">DataPower QuickStart (Docker)</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2020-03-12T21:44:35-04:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2020</span></span> <span class='time'>9:44 pm</span></time>
+        
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives">
 
 
+<div class="entry-content"><p>Following the <a href="https://developer.ibm.com/datapower/docker">IBM Developer Guide</a> on the Dockerized version of DataPower is a great way to start playing around with the DataPower application gateway.</p>
 
-  
-  <h2>2020</h2>
+<p>There are some small gotchas that the guide does not mention and they are noted here.</p>
 
-<article>
-  
-<h1><a href="/blog/2020/03/12/datapower-quickstart/">DataPower QuickStart (Docker)</a></h1>
-<time datetime="2020-03-12T21:44:35-04:00" pubdate><span class='month'>Mar</span> <span class='day'>12</span> <span class='year'>2020</span></time>
+<h3>SSH Port Number</h3>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/datapower/'>datapower</a>, <a class='category' href='/blog/categories/ibm/'>ibm</a></span>
-</footer>
+<p>In the newer releases of DataPower in container form, the IDG process is not ran with root. Therefore using port 22 as the SSH port will fail since only root user is allowed to use ports under 1024. We have to make a small change to the target port mapping from 22 to 9022 (or another high numbered port number).</p>
 
+<p>As seen in the <a href="https://developer.ibm.com/answers/questions/394482/ssh-service-on-new-datapower-docker-container-will/">Developer Works answer found here</a>:</p>
 
-</article>
+<pre><code>One of the changes in 7.6 is that by default, the DataPower Gateway process runs as the non-root drouter user inside the Docker container. Because of this, DataPower does not have permissions to use privileged ports.
+</code></pre>
 
+<p>So we make the simple change to 9022:</p>
 
+<pre><code> docker run -it \
+    -v $PWD/config:/drouter/config \
+    -v $PWD/local:/drouter/local \
+    -e DATAPOWER_ACCEPT_LICENSE=true \
+    -e DATAPOWER_INTERACTIVE=true \
+    -p 9090:9090 \
+    -p 9022:9022 \
+    -p 5554:5554 \
+    -p 8000-8010:8000-8010 \
+    --name idg \
+    ibmcom/datapower
+</code></pre>
 
-  
-  <h2>2016</h2>
+<p>We can now enable ssh so we can log into the DataPower CLI and execute commands.</p>
 
-<article>
-  
-<h1><a href="/blog/2016/02/23/easy-html-table-generation-from-perl-dbi-and-sql/">Easy HTML Table Generation From Perl DBI and SQL</a></h1>
-<time datetime="2016-02-23T22:17:32-05:00" pubdate><span class='month'>Feb</span> <span class='day'>23</span> <span class='year'>2016</span></time>
+<h3>Enable SSH</h3>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/perl/'>perl</a></span>
-</footer>
+<p>After logging into the CLI with username and password, we can enable SSH and designate the port.</p>
 
+<p>Since we are port-forwarding via 9022, it will be the one used for SSH.</p>
 
-</article>
+<pre><code>idg# configure
+Global mode
+idg(config)# ssh 0.0.0.0 9022
 
+%   Pending
 
+SSH service listener enabled
+</code></pre>
 
-  
-  <h2>2014</h2>
+<p>If the port number selected is still in the privilege range (i.e. &lt;1024), the confusing part in trying to bring up the SSH service via the web UI or the CLI is there aren&rsquo;t any obvious errors about why the SSH service does not come up (in the case of the Web UI) or why the service is reported as up but is not reachable (in the case of the CLI)</p>
 
-<article>
-  
-<h1><a href="/blog/2014/08/16/site-update/">Site Update</a></h1>
-<time datetime="2014-08-16T08:17:22-04:00" pubdate><span class='month'>Aug</span> <span class='day'>16</span> <span class='year'>2014</span></time>
+<h3>Enable Web Admin UI</h3>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/general/'>general</a></span>
-</footer>
+<p>Port 9090 is one of the port we are exposing in the Docker run commands, and we use this to reach the web admin UI.</p>
 
+<pre><code>idg(config)# web-mgmt 0 9090 9090;
+Web management: successfully started
+</code></pre>
 
-</article>
+<p>When navigating to it in the browser via localhost, don&rsquo;t forget to specify <code>https</code></p>
 
+<pre><code>https://localhost:9090
+</code></pre>
 
+<h3>Enabling REST Management</h3>
 
-<article>
-  
-<h1><a href="/blog/2014/06/16/greasemonkey-script-to-autohide-reddit-sidebar-2/">GreaseMonkey Script to AutoHide Reddit Sidebar</a></h1>
-<time datetime="2014-06-16T00:00:00-04:00" pubdate><span class='month'>Jun</span> <span class='day'>16</span> <span class='year'>2014</span></time>
+<p>This allows us to manage the gateway using its REST API</p>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/javascript/'>javascript</a></span>
-</footer>
+<pre><code>idg(config)# rest-mgmt 0  5554
+REST management: successfully started
+</code></pre>
 
+<p>After enabling, we can check if its enabled by curl-ing the REST endpoing</p>
 
-</article>
+<pre><code>$ curl -k -u admin:admin https://localhost:5554/mgmt/config/default/RestMgmtInterface
+{
 
+    "_links" : {
 
+    "self" : {"href" : "/mgmt/config/default/RestMgmtInterface"}, 
 
-<article>
-  
-<h1><a href="/blog/2014/05/10/setting-up-e2studio-for-rl78g14-rdk-developement/">Setting Up E<sup>2</sup>studio for RL78/G14 RDK Developement</a></h1>
-<time datetime="2014-05-10T00:00:00-04:00" pubdate><span class='month'>May</span> <span class='day'>10</span> <span class='year'>2014</span></time>
+    "doc" : {"href" : "/mgmt/docs/config/RestMgmtInterface"}}, 
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/tools/'>tools</a></span>
-</footer>
+    "RestMgmtInterface" : {"name" : "RestMgmt-Settings", 
 
+    "_links" : {
 
-</article>
+    "self" : {"href" : "/mgmt/config/default/RestMgmtInterface/RestMgmt-Settings"}, 
 
+    "doc" : {"href" : "/mgmt/docs/config/RestMgmtInterface"}}, 
 
+    "mAdminState" : "enabled", 
 
-  
-  <h2>2012</h2>
+    "LocalAddress" : "0.0.0.0", 
 
-<article>
-  
-<h1><a href="/blog/2012/03/20/useful-notepad-plugins/">Useful Notepad++ Plugins</a></h1>
-<time datetime="2012-03-20T00:00:00-04:00" pubdate><span class='month'>Mar</span> <span class='day'>20</span> <span class='year'>2012</span></time>
+    "LocalPort" : 5554, 
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/tools/'>tools</a></span>
-</footer>
+    "ACL" : {"value": "rest-mgmt", 
 
+    "href" : "/mgmt/config/default/AccessControlList/rest-mgmt"}, 
 
-</article>
+    "SSLConfigType" : "server"}}
+</code></pre>
 
+<h3>Saving the Configuration</h3>
 
+<p>If you would like for the config values to persist and be picked up next time the DataPower container gets restarted, we can persist the configs to files.</p>
 
-<article>
-  
-<h1><a href="/blog/2012/03/15/perl-finding-duplicate-files/">Finding Duplicate Files</a></h1>
-<time datetime="2012-03-15T00:00:00-04:00" pubdate><span class='month'>Mar</span> <span class='day'>15</span> <span class='year'>2012</span></time>
+<pre><code>idg(config)# write memory
+Overwrite previously saved configuration? Yes/No [y/n]: y
+Configuration saved successfully.
+</code></pre>
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/perl/'>perl</a></span>
-</footer>
+<h3>Reference Commands and Outputs</h3>
 
+<pre><code>login: admin
+Password: *****
 
-</article>
+Welcome to IBM DataPower Gateway console configuration. 
+Copyright IBM Corporation 1999, 2020 
 
+Version: IDG.2018.4.1.10 build 318002 on Feb 21, 2020 11:09:49 AM
+Delivery type: LTS
+Serial number: 0000001
 
+idg# configure
+Global mode
+idg(config)# ssh 0.0.0.0 9022
 
-<article>
-  
-<h1><a href="/blog/2012/03/08/perl-random-file-renaming/">Random File Renaming - [Updated]</a></h1>
-<time datetime="2012-03-08T00:00:00-05:00" pubdate><span class='month'>Mar</span> <span class='day'>08</span> <span class='year'>2012</span></time>
+%   Pending
 
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/perl/'>perl</a></span>
-</footer>
+SSH service listener enabled
 
+idg(config)# web-mgmt 0 9090 9090;
+Web management: successfully started
 
-</article>
+idg(config)# rest-mgmt 0  5554
+REST management: successfully started
 
-
-
-  
-  <h2>2011</h2>
-
-<article>
-  
-<h1><a href="/blog/2011/08/21/new-tools/">New Tools</a></h1>
-<time datetime="2011-08-21T00:00:00-04:00" pubdate><span class='month'>Aug</span> <span class='day'>21</span> <span class='year'>2011</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/modeling-tools/'>modeling tools</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2011/08/10/mg-rx-178-mk-ii-complete/">MG RX-178 MK II Complete</a></h1>
-<time datetime="2011-08-10T00:00:00-04:00" pubdate><span class='month'>Aug</span> <span class='day'>10</span> <span class='year'>2011</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/completed-models/'>completed models</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2011/08/04/1100-mg-destiny-wip-part-2/">1/100 MG Destiny WIP - Part 2</a></h1>
-<time datetime="2011-08-04T00:00:00-04:00" pubdate><span class='month'>Aug</span> <span class='day'>04</span> <span class='year'>2011</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/work-in-progress/'>work in progress</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2011/08/02/1100-mg-destiny-wip-part-1/">1/100 MG Destiny WIP - Part 1</a></h1>
-<time datetime="2011-08-02T00:00:00-04:00" pubdate><span class='month'>Aug</span> <span class='day'>02</span> <span class='year'>2011</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/work-in-progress/'>work in progress</a></span>
-</footer>
-
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/blog/2011/07/31/1100-mg-hi-nu-wip/">1/100 MG Hi-Nu WIP</a></h1>
-<time datetime="2011-07-31T00:00:00-04:00" pubdate><span class='month'>Jul</span> <span class='day'>31</span> <span class='year'>2011</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/work-in-progress/'>work in progress</a></span>
-</footer>
-
-
-</article>
-
+idg(config)# write memory
+Overwrite previously saved configuration? Yes/No [y/n]: y
+Configuration saved successfully.
+</code></pre>
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
-</article>
 
 
-</div>
 
-<aside class="sidebar">
+  <span class="byline author vcard">Authored by <span class="fn">
   
+    Chun Sing Tsui
+  
+  </span></span>
+
+
+      
+
+
+
+
+<time class='entry-date' datetime='2020-03-12T21:44:35-04:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2020</span></span> <span class='time'>9:44 pm</span></time>
+      
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/datapower/'>datapower</a>, <a class='category' href='/blog/categories/ibm/'>ibm</a>
+  
+</span>
+
+
+    </p>
     
+      <div class="sharing">
   
-</aside>
+  
+  
+</div>
 
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2016/02/23/easy-html-table-generation-from-perl-dbi-and-sql/" title="Previous Post: Easy HTML Table Generation from Perl DBI and SQL">&laquo; Easy HTML Table Generation from Perl DBI and SQL</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+
+</div>
 
     </div>
   </div>

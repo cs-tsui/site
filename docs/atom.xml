@@ -4,7 +4,7 @@
   <title><![CDATA[Chun Sing Tsui]]></title>
   <link href="http://www.cstsui.com/atom.xml" rel="self"/>
   <link href="http://www.cstsui.com/"/>
-  <updated>2020-03-11T22:05:13-04:00</updated>
+  <updated>2020-03-12T23:10:36-04:00</updated>
   <id>http://www.cstsui.com/</id>
   <author>
     <name><![CDATA[Chun Sing Tsui]]></name>
@@ -14,188 +14,149 @@
 
   
   <entry>
-    <title type="html"><![CDATA[Nested Dispatch Tables]]></title>
-    <link href="http://www.cstsui.com/blog/2016/08/06/perl-nested-dispatch-table/"/>
-    <updated>2016-08-06T10:00:27-04:00</updated>
-    <id>http://www.cstsui.com/blog/2016/08/06/perl-nested-dispatch-table</id>
-    <content type="html"><![CDATA[<p>The dispatch table pattern is very commonly used in Perl for mapping an action to a handler function. A simple dispatch table looks something like this.</p>
+    <title type="html"><![CDATA[DataPower QuickStart (Docker)]]></title>
+    <link href="http://www.cstsui.com/blog/2020/03/12/datapower-quickstart/"/>
+    <updated>2020-03-12T21:44:35-04:00</updated>
+    <id>http://www.cstsui.com/blog/2020/03/12/datapower-quickstart</id>
+    <content type="html"><![CDATA[<p>Following the <a href="https://developer.ibm.com/datapower/docker">IBM Developer Guide</a> on the Dockerized version of DataPower is a great way to start playing around with the DataPower application gateway.</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="k">my</span> <span class="nv">$dispatch</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>    <span class="s">&#39;insert&#39;</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{</span>
-</span><span class='line'>        <span class="c1"># Do insert</span>
-</span><span class='line'>    <span class="p">},</span>
-</span><span class='line'>    <span class="s">&#39;remove&#39;</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{</span>
-</span><span class='line'>        <span class="c1"># Do remove </span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">};</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">$dispatch</span><span class="o">-&gt;</span><span class="p">{</span><span class="nv">$action</span><span class="p">}</span><span class="o">-&gt;</span><span class="p">()</span> <span class="k">if</span> <span class="nb">exists</span> <span class="nv">$dispatch</span><span class="o">-&gt;</span><span class="p">{</span><span class="nv">$action</span><span class="p">};</span>
-</span></code></pre></td></tr></table></div></figure>
+<p>There are some small gotchas that the guide does not mention and they are noted here.</p>
 
+<h3>SSH Port Number</h3>
 
-<p>This is used in place of if/else or switches to determine which logic path to follow with the advantage of each logic path broken up into clearly separated subroutines.</p>
+<p>In the newer releases of DataPower in container form, the IDG process is not ran with root. Therefore using port 22 as the SSH port will fail since only root user is allowed to use ports under 1024. We have to make a small change to the target port mapping from 22 to 9022 (or another high numbered port number).</p>
 
-<h3>Multi-level Actions</h3>
+<p>As seen in the <a href="https://developer.ibm.com/answers/questions/394482/ssh-service-on-new-datapower-docker-container-will/">Developer Works answer found here</a>:</p>
 
-<p>When there are any additional levels of sub-actions possible for each action, each combination will again have to be taken care of.</p>
+<pre><code>One of the changes in 7.6 is that by default, the DataPower Gateway process runs as the non-root drouter user inside the Docker container. Because of this, DataPower does not have permissions to use privileged ports.
+</code></pre>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="c1"># Nested if/else</span>
-</span><span class='line'><span class="k">if</span> <span class="p">(</span><span class="nv">$action</span> <span class="ow">eq</span> <span class="s">&#39;primary_action&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span>    <span class="p">(</span><span class="nv">$subaction</span> <span class="ow">eq</span> <span class="s">&#39;option1&#39;</span><span class="p">)</span> <span class="p">{}</span>
-</span><span class='line'>    <span class="k">elsif</span> <span class="p">(</span><span class="nv">$subaction</span> <span class="ow">eq</span> <span class="s">&#39;option2&#39;</span><span class="p">)</span> <span class="p">{}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="k">elsif</span> <span class="p">(</span><span class="nv">$action</span> <span class="ow">eq</span> <span class="s">&#39;secondary_action&#39;</span><span class="p">)</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span>    <span class="p">(</span><span class="nv">$subaction</span> <span class="ow">eq</span> <span class="s">&#39;option1&#39;</span><span class="p">)</span> <span class="p">{}</span>
-</span><span class='line'>    <span class="k">elsif</span> <span class="p">(</span><span class="nv">$subaction</span> <span class="ow">eq</span> <span class="s">&#39;option2&#39;</span><span class="p">)</span> <span class="p">{}</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+<p>So we make the simple change to 9022:</p>
 
+<pre><code> docker run -it \
+    -v $PWD/config:/drouter/config \
+    -v $PWD/local:/drouter/local \
+    -e DATAPOWER_ACCEPT_LICENSE=true \
+    -e DATAPOWER_INTERACTIVE=true \
+    -p 9090:9090 \
+    -p 9022:9022 \
+    -p 5554:5554 \
+    -p 8000-8010:8000-8010 \
+    --name idg \
+    ibmcom/datapower
+</code></pre>
 
+<p>We can now enable ssh so we can log into the DataPower CLI and execute commands.</p>
 
+<h3>Enable SSH</h3>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="c1"># Nested dispatch table</span>
-</span><span class='line'><span class="k">my</span> <span class="nv">$dispatch</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>    <span class="s">&#39;primary_action&#39;</span> <span class="o">=&gt;</span> <span class="p">{</span>
-</span><span class='line'>        <span class="s">&#39;option1&#39;</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
-</span><span class='line'>        <span class="s">&#39;option2&#39;</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
-</span><span class='line'>    <span class="p">},</span>
-</span><span class='line'>    <span class="s">&#39;secondary_action&#39;</span> <span class="o">=&gt;</span> <span class="p">{</span>
-</span><span class='line'>        <span class="s">&#39;option1&#39;</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
-</span><span class='line'>        <span class="s">&#39;option2&#39;</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">};</span>
-</span><span class='line'>
-</span><span class='line'><span class="nv">$dispatch</span><span class="o">-&gt;</span><span class="p">{</span><span class="nv">$action</span><span class="p">}</span><span class="o">-&gt;</span><span class="p">{</span><span class="nv">$subaction</span><span class="p">}</span><span class="o">-&gt;</span><span class="p">();</span>
-</span></code></pre></td></tr></table></div></figure>
+<p>After logging into the CLI with username and password, we can enable SSH and designate the port.</p>
 
+<p>Since we are port-forwarding via 9022, it will be the one used for SSH.</p>
 
-<p>Using the nested display approach is slightly cleaner and more succinct than the nested if/else approach, <em>especially</em> if the code for each logic path is long or if there are many action and subaction combinations. But the advantage is small if there aren&rsquo;t too many actions and subaction combinations.</p>
+<pre><code>idg# configure
+Global mode
+idg(config)# ssh 0.0.0.0 9022
 
-<h3>Mimic Polymorphism</h3>
+%   Pending
 
-<p>Suppose we are looping through a list of items (list of hashes) and we want to apply some action to each. In an object-oriented system, this would likely be a list of objects with all items implementing the same interface, allowing different behavior depending on the implementation of the interface functions.</p>
+SSH service listener enabled
+</code></pre>
 
-<p>This technique is most useful when working with existing procedural systems where you want to mimic this behaviour, and creating classes solely for a small portion of the code doesn&rsquo;t make much sense.</p>
+<p>If the port number selected is still in the privilege range (i.e. &lt;1024), the confusing part in trying to bring up the SSH service via the web UI or the CLI is there aren&rsquo;t any obvious errors about why the SSH service does not come up (in the case of the Web UI) or why the service is reported as up but is not reachable (in the case of the CLI)</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="c1"># Nested dispatch with multiple steps for each combination</span>
-</span><span class='line'><span class="k">my</span> <span class="nv">$dispatch</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class='line'>    <span class="s">&#39;primary_action&#39;</span> <span class="o">=&gt;</span> <span class="p">{</span>
-</span><span class='line'>        <span class="s">&#39;option1&#39;</span> <span class="o">=&gt;</span> <span class="p">{</span>
-</span><span class='line'>            <span class="n">should_skip</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
-</span><span class='line'>            <span class="n">do_work</span>     <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
-</span><span class='line'>        <span class="p">},</span>
-</span><span class='line'>        <span class="s">&#39;option2&#39;</span> <span class="o">=&gt;</span> <span class="p">{</span>
-</span><span class='line'>            <span class="n">should_skip</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
-</span><span class='line'>            <span class="n">do_work</span>     <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
-</span><span class='line'>        <span class="p">},</span>
-</span><span class='line'>    <span class="p">},</span>
-</span><span class='line'>    <span class="s">&#39;secondary_action&#39;</span> <span class="o">=&gt;</span> <span class="p">{</span>
-</span><span class='line'>         <span class="s">&#39;option1&#39;</span> <span class="o">=&gt;</span> <span class="p">{</span>
-</span><span class='line'>            <span class="n">should_skip</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
-</span><span class='line'>            <span class="n">do_work</span>     <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
-</span><span class='line'>        <span class="p">},</span>
-</span><span class='line'>        <span class="s">&#39;option2&#39;</span> <span class="o">=&gt;</span> <span class="p">{</span>
-</span><span class='line'>            <span class="n">should_skip</span> <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
-</span><span class='line'>            <span class="n">do_work</span>     <span class="o">=&gt;</span> <span class="k">sub </span><span class="p">{},</span>
-</span><span class='line'>        <span class="p">},</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">};</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">for</span> <span class="k">my</span> <span class="nv">$item</span> <span class="n">in</span> <span class="p">(</span><span class="nv">@items</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">my</span> <span class="nv">$item_prop1</span> <span class="o">=</span> <span class="nv">$item</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">prop1</span><span class="p">};</span>
-</span><span class='line'>    <span class="k">my</span> <span class="nv">$item_prop2</span> <span class="o">=</span> <span class="nv">$item</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">prop2</span><span class="p">};</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># Skip this item if we don&#39;t need to work on it for now</span>
-</span><span class='line'>    <span class="c1"># to save some resources for fetching additional data</span>
-</span><span class='line'>    <span class="k">next</span> <span class="k">if</span> <span class="nv">$dispatch</span><span class="o">-&gt;</span><span class="p">{</span><span class="nv">$action1</span><span class="p">}</span><span class="o">-&gt;</span><span class="p">{</span><span class="nv">$subaction2</span><span class="p">}</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">should_skip</span><span class="p">}</span><span class="o">-&gt;</span><span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># Fetch additional information not available in the item hash itself</span>
-</span><span class='line'>    <span class="k">my</span> <span class="nv">$additional_args</span> <span class="o">=</span> <span class="n">fetch_data</span><span class="p">(</span><span class="nv">$item</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># Do Work </span>
-</span><span class='line'>    <span class="nv">$dispatch</span><span class="o">-&gt;</span><span class="p">{</span><span class="nv">$action1</span><span class="p">}</span><span class="o">-&gt;</span><span class="p">{</span><span class="nv">$subaction2</span><span class="p">}</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">do_work</span><span class="p">}</span><span class="o">-&gt;</span><span class="p">(</span><span class="nv">$additional_args</span><span class="p">);</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+<h3>Enable Web Admin UI</h3>
 
+<p>Port 9090 is one of the port we are exposing in the Docker run commands, and we use this to reach the web admin UI.</p>
 
-<h3>Summary</h3>
+<pre><code>idg(config)# web-mgmt 0 9090 9090;
+Web management: successfully started
+</code></pre>
 
-<p>Without using a nested dispatch table, multiple if/else blocks or switches will have to be used to mimic this nested branching behavior. Using a dispatch table is a good way to avoid duplicating code. Now all the related code are consolidated in one place in a hash data structure that can easily be modified. Another advantage of this approach is the dispatch table may be created at a local scope to take advantage of closures so the handler functions can focus on a
-small tasks and assume certain state variables that are only available within the local scope are availible without explicitly passing all variables as arguments.</p>
+<p>When navigating to it in the browser via localhost, don&rsquo;t forget to specify <code>https</code></p>
+
+<pre><code>https://localhost:9090
+</code></pre>
+
+<h3>Enabling REST Management</h3>
+
+<p>This allows us to manage the gateway using its REST API</p>
+
+<pre><code>idg(config)# rest-mgmt 0  5554
+REST management: successfully started
+</code></pre>
+
+<p>After enabling, we can check if its enabled by curl-ing the REST endpoing</p>
+
+<pre><code>$ curl -k -u admin:admin https://localhost:5554/mgmt/config/default/RestMgmtInterface
+{
+
+    "_links" : {
+
+    "self" : {"href" : "/mgmt/config/default/RestMgmtInterface"}, 
+
+    "doc" : {"href" : "/mgmt/docs/config/RestMgmtInterface"}}, 
+
+    "RestMgmtInterface" : {"name" : "RestMgmt-Settings", 
+
+    "_links" : {
+
+    "self" : {"href" : "/mgmt/config/default/RestMgmtInterface/RestMgmt-Settings"}, 
+
+    "doc" : {"href" : "/mgmt/docs/config/RestMgmtInterface"}}, 
+
+    "mAdminState" : "enabled", 
+
+    "LocalAddress" : "0.0.0.0", 
+
+    "LocalPort" : 5554, 
+
+    "ACL" : {"value": "rest-mgmt", 
+
+    "href" : "/mgmt/config/default/AccessControlList/rest-mgmt"}, 
+
+    "SSLConfigType" : "server"}}
+</code></pre>
+
+<h3>Saving the Configuration</h3>
+
+<p>If you would like for the config values to persist and be picked up next time the DataPower container gets restarted, we can persist the configs to files.</p>
+
+<pre><code>idg(config)# write memory
+Overwrite previously saved configuration? Yes/No [y/n]: y
+Configuration saved successfully.
+</code></pre>
+
+<h3>Reference Commands and Outputs</h3>
+
+<pre><code>login: admin
+Password: *****
+
+Welcome to IBM DataPower Gateway console configuration. 
+Copyright IBM Corporation 1999, 2020 
+
+Version: IDG.2018.4.1.10 build 318002 on Feb 21, 2020 11:09:49 AM
+Delivery type: LTS
+Serial number: 0000001
+
+idg# configure
+Global mode
+idg(config)# ssh 0.0.0.0 9022
+
+%   Pending
+
+SSH service listener enabled
+
+idg(config)# web-mgmt 0 9090 9090;
+Web management: successfully started
+
+idg(config)# rest-mgmt 0  5554
+REST management: successfully started
+
+idg(config)# write memory
+Overwrite previously saved configuration? Yes/No [y/n]: y
+Configuration saved successfully.
+</code></pre>
 ]]></content>
   </entry>
   

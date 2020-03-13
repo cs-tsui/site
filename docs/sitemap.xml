@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
-<loc>http://www.cstsui.com/blog/2016/08/06/perl-nested-dispatch-table/</loc>
-<lastmod>2016-08-06T10:00:27-04:00</lastmod>
+<loc>http://www.cstsui.com/blog/2020/03/12/datapower-quickstart/</loc>
+<lastmod>2020-03-12T21:44:35-04:00</lastmod>
 </url>
 <url>
 <loc>http://www.cstsui.com/blog/2016/02/23/easy-html-table-generation-from-perl-dbi-and-sql/</loc>
@@ -96,5 +96,17 @@
 </url>
 <url>
 <loc>http://www.cstsui.com/blog/categories/general/</loc>
+</url>
+<url>
+<loc>http://www.cstsui.com/blog/categories/ibm/</loc>
+</url>
+<url>
+<loc>http://www.cstsui.com/blog/categories/datapower/</loc>
+</url>
+<url>
+<loc>http://www.cstsui.com/posts/2/</loc>
+</url>
+<url>
+<loc>http://www.cstsui.com/posts/3/</loc>
 </url>
 </urlset>
