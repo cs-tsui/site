@@ -7,12 +7,9 @@ sharing: true
 footer: true
 ---
 
-Currently Reading:
+Half Way There:
 
-* [The Open Organization: Igniting Passion and Performance - Jim Whitehurst](https://www.amazon.com/Open-Organization-Igniting-Passion-Performance/dp/1625275277/)
-
-
-On Hold:
+* [Jim Whitehurst - The Open Organization: Igniting Passion and Performance](https://www.amazon.com/Open-Organization-Igniting-Passion-Performance/dp/1625275277/)
 
 * [An Introduction to Statistical Learning](http://www-bcf.usc.edu/~gareth/ISL/)
 
