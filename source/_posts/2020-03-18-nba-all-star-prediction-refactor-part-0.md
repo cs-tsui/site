@@ -9,11 +9,12 @@ categories:
 - Analytics
 ---
 
-For the project in the Data and Visual Analytics course of the MS Analytics program at Georgia Tech, our topic of choice was to experiement with data analytics techniques to predict the NBA All-Star selection of the 2020 season. Ever since the course was over, I've wanted to fully refactor and productionize the data pipeline and the machine learning models required to automate the prediction process, 
+For the project in the Data and Visual Analytics course of the MS Analytics program at Georgia Tech, our topic of choice was to experiement with data analytics techniques to predict the NBA All-Star selection of the 2020 season. Ever since the course was over, I've wanted to fully refactor and productionize the data pipeline and the machine learning models required to automate the prediction process.
 
-In the first part (0) of this series of posts, it serves as a summary of the project, including data sets we used to generate the model, approach we took, various model experimentations, and visualization of the results.
+In this first part(0) of a series of posts, it will serve as the summary writeup of the project, including data sets we used to generate the model, approach we took, various model experimentations, and visualization of the results.
 
-### Introduction
+
+## Introduction
 Our team's goal is to predict the 2019-2020 season’s NBA All-Star team using a player’s game performance and social presence metrics.
 All-Star players are top-tier players selected by fans, a media panel, and coaches to participate in a mid-season exhibition game. As such, we hypothesized that a player's social influence would factor into his likelihood of being voted as an All-Star Starter.
 
@@ -58,6 +59,7 @@ Neural Network:
 * Predicted reasonable All-Stars with using stats but performed poorly with using stats and social data.
 
 Random forest
+
 * Tested combinations of columns with game stats only, stats with Google search trend, wiki page view, and # of social media followers
 * Tested various number of trees (10-500) and standardized selected features per season
 * The amount of Twitter and Instagram historical data was limiting because there was not enough data (only ~500 rows after mapping to one row per player/season)
@@ -65,7 +67,7 @@ Random forest
 ## Results
 The most accurate model is from using Random Forest for Starters prediction. The model comprises of using combined columns with selected performance stats, Google Search Trend Factor, and Wiki page views. Selected performance stats are chosen based on the top features returned by random forests' feature importance function. Two most important features are FP (fantasy points – which itself is based on a formula) and PTS (points per game).
 
-This model achieves ~96% accuracy in 70/30 test split. Specifically for the last 2018-19 season, it was able to predict all 10 All-Stars starters. The reserves prediction was less accurate even though the model achieved ~98% accuracy against 400+ NBA players last season. The 2019-20 season predictions are show below. It is early in the season with ~20 games played so far.
+This model achieves ~96% accuracy in 70/30 test split. Specifically for the last 2018-19 season, it was able to predict all 10 All-Stars starters. The reserves prediction was less accurate even though the model achieved an overall ~98% accuracy against 400+ NBA players last season. Due to the *highly imbalanced* nature of the dataset (24 players out of 300-400 players are all stars), even if the model predicts that no-one is an all-star, it is still going to achieve a 90%+ accuracy if we measure against the entire dataset. So we have to keep that in mind when using accuracy as the basis for evaluating the effectiveness of the model.
 
 ## Presentation - Web Visualization
 An interactive web user interface was created with HighCharts, Vue.js, Bootstrap that displays previous season all-star selections as well as interactions to see details about specific players and distribution of statistics.
