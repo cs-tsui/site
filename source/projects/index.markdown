@@ -11,6 +11,11 @@ footer: true
 * [Imgur Album Downloader](android-imgur-album-downloader "Android Album Downloader")
 -->
 
+### Data Science
+
+* NBA All-Star Prediction
+    * [Part-0]({{ site.baseurl }}{% post_url 2020-03-18-nba-all-star-prediction-refactor-part-0 %})
+
 ### Computer Architecture
 * [CPU Cache Visualizer](cache-visualizer "CPU Cache Visualizer")
 
