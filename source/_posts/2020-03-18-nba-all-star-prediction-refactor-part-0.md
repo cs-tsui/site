@@ -9,7 +9,7 @@ categories:
 - Analytics
 ---
 
-For the project in the Data and Visual Analytics course of the MS Analytics program at Georgia Tech, our topic of choice was to experiement with data analytics techniques to predict the NBA All-Star selection of the 2020 season. Ever since the course was over, I've wanted to fully refactor and productionize the data pipeline and the machine learning models required to automate the prediction process.
+For the project in the Data and Visual Analytics course ([CSE6242](https://www.omscs.gatech.edu/cse-6242-data-visual-analytics)) of the MS Analytics program at Georgia Tech, our topic of choice was to experiement with data analytics techniques to predict the NBA All-Star selection of the 2020 season. Ever since the course was over, I've wanted to fully refactor and productionize the data pipeline and the machine learning models required to automate the prediction process.
 
 In this first part(0) of a series of posts, it will serve as the summary writeup of the project, including data sets we used to generate the model, approach we took, various model experimentations, and visualization of the results.
 
@@ -48,8 +48,6 @@ Our approach was to combine the player in-game performance data and social data 
 We sorted classification results in descending order based on the probability of a player belonging to each class (starters, reserves, not- all-star) and filled in available slots(3 front court players and 2 guards players) for the top five players with the most starting votes from our random forest model, which gave us the highest accuracy when tested against test data. Whether a starter is a front court player or guard depends on what position he plays in the NBA.
 
 ## Model Experientation
-
-Our experimentation included using TensorFlow to build neural network, as well as various traditional machine learning techniques like regression and decision trees using Scikit Learn.
 
 Given the limited impact of social presence data on choices of all-star reserves, the in-game statistics data were first used for initial experimentation and the prediction of all-star reserves. In-game statistics combined with social presence data is used for the prediction of starters.
 

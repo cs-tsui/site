@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://www.cstsui.com/blog/2020/03/19/nba-all-star-prediction-refactor-part-0/</loc>
+<lastmod>2020-03-19T20:00:00-04:00</lastmod>
+</url>
+<url>
 <loc>http://www.cstsui.com/blog/2020/03/12/datapower-quickstart/</loc>
 <lastmod>2020-03-12T21:44:35-04:00</lastmod>
 </url>
@@ -102,5 +106,14 @@
 </url>
 <url>
 <loc>http://www.cstsui.com/blog/categories/datapower/</loc>
+</url>
+<url>
+<loc>http://www.cstsui.com/blog/categories/nba/</loc>
+</url>
+<url>
+<loc>http://www.cstsui.com/blog/categories/data-science/</loc>
+</url>
+<url>
+<loc>http://www.cstsui.com/blog/categories/analytics/</loc>
 </url>
 </urlset>
