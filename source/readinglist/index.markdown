@@ -9,7 +9,7 @@ footer: true
 
 Half Way There:
 
-* [An Introduction to Statistical Learning](http://www-bcf.usc.edu/~gareth/ISL/)
+* [An Introduction to Statistical Learning](http://faculty.marshall.usc.edu/gareth-james/ISL/)
 
 * [The Unix Programming Environment](https://www.amazon.com/Unix-Programming-Environment-Prentice-Hall-Software/dp/013937681X/)
 
