@@ -1,15 +1,13 @@
 ---
 layout: page
-title: "My Bookself"
-date: 2020-03-11 20:00
+title: "My Selected Bookself"
+date: 2020-03-27 10:00
 comments: true
 sharing: true
 footer: true
 ---
 
 Half Way There:
-
-* [Jim Whitehurst - The Open Organization: Igniting Passion and Performance](https://www.amazon.com/Open-Organization-Igniting-Passion-Performance/dp/1625275277/)
 
 * [An Introduction to Statistical Learning](http://www-bcf.usc.edu/~gareth/ISL/)
 
@@ -21,6 +19,8 @@ Half Way There:
 
 
 Previous:
+
+* [The Open Organization: Igniting Passion and Performance](https://www.amazon.com/Open-Organization-Igniting-Passion-Performance/dp/1625275277/)
 
 * [The Phoenix Project](https://www.amazon.com/Phoenix-Project-DevOps-Helping-Business/dp/0988262592/)
 
