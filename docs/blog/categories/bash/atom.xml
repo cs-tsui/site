@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Bash | Chun Sing Tsui]]></title>
+  <link href="http://www.cstsui.com/blog/categories/bash/atom.xml" rel="self"/>
+  <link href="http://www.cstsui.com/"/>
+  <updated>2020-03-23T22:21:08-04:00</updated>
+  <id>http://www.cstsui.com/</id>
+  <author>
+    <name><![CDATA[Chun Sing Tsui]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Virtual Environment Cheatsheet]]></title>
+    <link href="http://www.cstsui.com/blog/2020/03/23/virt-env-cheatsheet/"/>
+    <updated>2020-03-23T08:00:00-04:00</updated>
+    <id>http://www.cstsui.com/blog/2020/03/23/virt-env-cheatsheet</id>
+    <content type="html"><![CDATA[<p>Quick reminder for myself when I need to switch between virtual environments.</p>
+
+<p><code>RVM</code> for Ruby</p>
+
+<pre><code># List existing environments
+rvm list
+
+# Create new environment
+rvm install 2.6.3
+
+# Set default
+rvm --default use 2.6.3
+
+# Switch back to system's ruby
+rvm use system
+
+# Use a specific version
+rvm use 2.1.1
+</code></pre>
+
+<p><code>anaconda</code> for Python</p>
+
+<pre><code># List existing environments
+conda env list
+
+# Create new environment
+conda create --name py38 python=3.8
+
+# Activate environment
+conda activate py38
+
+# Deactivate active environment
+conda deactivate
+</code></pre>
+]]></content>
+  </entry>
+  
+</feed>
