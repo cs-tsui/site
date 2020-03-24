@@ -112,6 +112,12 @@
 <loc>http://www.cstsui.com/blog/categories/datapower/</loc>
 </url>
 <url>
+<loc>http://www.cstsui.com/blog/categories/docker/</loc>
+</url>
+<url>
+<loc>http://www.cstsui.com/blog/categories/containers/</loc>
+</url>
+<url>
 <loc>http://www.cstsui.com/blog/categories/nba/</loc>
 </url>
 <url>
@@ -131,5 +137,11 @@
 </url>
 <url>
 <loc>http://www.cstsui.com/blog/categories/python/</loc>
+</url>
+<url>
+<loc>http://www.cstsui.com/posts/2/</loc>
+</url>
+<url>
+<loc>http://www.cstsui.com/posts/3/</loc>
 </url>
 </urlset>

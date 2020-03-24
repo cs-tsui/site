@@ -6,6 +6,8 @@ comments: true
 categories:
 - IBM
 - DataPower
+- Docker
+- containers
 ---
 
 Following the [IBM Developer Guide](https://developer.ibm.com/datapower/docker) on the Dockerized version of DataPower is a great way to start playing around with the DataPower application gateway.
