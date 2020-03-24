@@ -6,8 +6,8 @@ comments: true
 categories:
 - cheatsheet
 - shell
-- bash
-- zsh
+- ruby
+- python
 ---
 
 Quick reminder for myself when I need to switch between virtual environments.
