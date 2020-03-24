@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby | Chun Sing Tsui]]></title>
   <link href="http://www.cstsui.com/blog/categories/ruby/atom.xml" rel="self"/>
   <link href="http://www.cstsui.com/"/>
-  <updated>2020-03-23T22:23:20-04:00</updated>
+  <updated>2020-03-24T07:41:25-04:00</updated>
   <id>http://www.cstsui.com/</id>
   <author>
     <name><![CDATA[Chun Sing Tsui]]></name>
@@ -16,13 +16,13 @@
   <entry>
     <title type="html"><![CDATA[Virtual Environment Cheatsheet]]></title>
     <link href="http://www.cstsui.com/blog/2020/03/23/virt-env-cheatsheet/"/>
-    <updated>2020-03-23T08:00:00-04:00</updated>
+    <updated>2020-03-23T20:30:00-04:00</updated>
     <id>http://www.cstsui.com/blog/2020/03/23/virt-env-cheatsheet</id>
     <content type="html"><![CDATA[<p>Quick reminder for myself when I need to switch between virtual environments.</p>
 
 <p><code>RVM</code> for Ruby</p>
 
-<pre><code># List existing environments
+<pre><code class="bash"># List existing environments
 rvm list
 
 # Create new environment
@@ -40,7 +40,7 @@ rvm use 2.1.1
 
 <p><code>anaconda</code> for Python</p>
 
-<pre><code># List existing environments
+<pre><code class="bash"># List existing environments
 conda env list
 
 # Create new environment
@@ -49,8 +49,23 @@ conda create --name py38 python=3.8
 # Activate environment
 conda activate py38
 
-# Deactivate active environment
+# Deactivate environment
 conda deactivate
+</code></pre>
+
+<p><code>virtualenv</code> for Python</p>
+
+<pre><code class="bash"># Create new environment (using the current Python version)
+virtualenv my-env
+
+# Create new environment (using a different Python version)
+virtualenv -p /usr/bin/python2.7 my-env
+
+# Activate new environment
+source my-env/bin/activate
+
+# Deactivate active environment
+deactivate
 </code></pre>
 ]]></content>
   </entry>

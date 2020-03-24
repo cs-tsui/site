@@ -9,8 +9,21 @@
   <meta name="author" content="Chun Sing Tsui">
 
   
-  <meta name="description" content="Quick reminder for myself when I need to switch between virtual environments. RVM for Ruby # List existing environments
-rvm list # Create new &hellip;">
+  <meta name="description" content="Quick reminder for myself when I need to switch between virtual environments. RVM for Ruby 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+# List existing &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -120,7 +133,7 @@ rvm list # Create new &hellip;">
 
 
 
-<time class='entry-date' datetime='2020-03-23T08:00:00-04:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2020</span></span> <span class='time'>8:00 am</span></time>
+<time class='entry-date' datetime='2020-03-23T20:30:00-04:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2020</span></span> <span class='time'>8:30 pm</span></time>
         
         
       </p>
@@ -132,36 +145,90 @@ rvm list # Create new &hellip;">
 
 <p><code>RVM</code> for Ruby</p>
 
-<pre><code># List existing environments
-rvm list
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># List existing environments</span>
+</span><span class='line'>rvm list
+</span><span class='line'>
+</span><span class='line'><span class="c"># Create new environment</span>
+</span><span class='line'>rvm install 2.6.3
+</span><span class='line'>
+</span><span class='line'><span class="c"># Set default</span>
+</span><span class='line'>rvm --default use 2.6.3
+</span><span class='line'>
+</span><span class='line'><span class="c"># Switch back to system&#39;s ruby</span>
+</span><span class='line'>rvm use system
+</span><span class='line'>
+</span><span class='line'><span class="c"># Use a specific version</span>
+</span><span class='line'>rvm use 2.1.1
+</span></code></pre></td></tr></table></div></figure>
 
-# Create new environment
-rvm install 2.6.3
-
-# Set default
-rvm --default use 2.6.3
-
-# Switch back to system's ruby
-rvm use system
-
-# Use a specific version
-rvm use 2.1.1
-</code></pre>
 
 <p><code>anaconda</code> for Python</p>
 
-<pre><code># List existing environments
-conda env list
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># List existing environments</span>
+</span><span class='line'>conda env list
+</span><span class='line'>
+</span><span class='line'><span class="c"># Create new environment</span>
+</span><span class='line'>conda create --name py38 <span class="nv">python</span><span class="o">=</span>3.8
+</span><span class='line'>
+</span><span class='line'><span class="c"># Activate environment</span>
+</span><span class='line'>conda activate py38
+</span><span class='line'>
+</span><span class='line'><span class="c"># Deactivate environment</span>
+</span><span class='line'>conda deactivate
+</span></code></pre></td></tr></table></div></figure>
 
-# Create new environment
-conda create --name py38 python=3.8
 
-# Activate environment
-conda activate py38
+<p><code>virtualenv</code> for Python</p>
 
-# Deactivate active environment
-conda deactivate
-</code></pre>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Create new environment (using the current Python version)</span>
+</span><span class='line'>virtualenv my-env
+</span><span class='line'>
+</span><span class='line'><span class="c"># Create new environment (using a different Python version)</span>
+</span><span class='line'>virtualenv -p /usr/bin/python2.7 my-env
+</span><span class='line'>
+</span><span class='line'><span class="c"># Activate new environment</span>
+</span><span class='line'><span class="nb">source </span>my-env/bin/activate
+</span><span class='line'>
+</span><span class='line'><span class="c"># Deactivate active environment</span>
+</span><span class='line'>deactivate
+</span></code></pre></td></tr></table></div></figure>
+
 </div>
 
 
@@ -184,7 +251,7 @@ conda deactivate
 
 
 
-<time class='entry-date' datetime='2020-03-23T08:00:00-04:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2020</span></span> <span class='time'>8:00 am</span></time>
+<time class='entry-date' datetime='2020-03-23T20:30:00-04:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2020</span></span> <span class='time'>8:30 pm</span></time>
       
       
 
