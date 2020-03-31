@@ -4,7 +4,7 @@
   <title><![CDATA[Chun Sing Tsui]]></title>
   <link href="http://www.cstsui.com/atom.xml" rel="self"/>
   <link href="http://www.cstsui.com/"/>
-  <updated>2020-03-24T07:45:46-04:00</updated>
+  <updated>2020-03-31T14:30:32-04:00</updated>
   <id>http://www.cstsui.com/</id>
   <author>
     <name><![CDATA[Chun Sing Tsui]]></name>
@@ -12,6 +12,79 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Commonly Used Commands]]></title>
+    <link href="http://www.cstsui.com/blog/2020/03/31/handy-commands/"/>
+    <updated>2020-03-31T18:12:00-04:00</updated>
+    <id>http://www.cstsui.com/blog/2020/03/31/handy-commands</id>
+    <content type="html"><![CDATA[<p>Get specific column using <code>cut</code>. Tab is the default delimiter in cut</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>cat content <span class="p">|</span> cut -d <span class="s1">&#39;delimiter&#39;</span> -f &lt;field number&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Output specific column using <code>awk</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>cat content <span class="p">|</span> awk -F/ <span class="s1">&#39;{print $1}&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Base64 encode (-n for no newline)</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">echo</span> -n <span class="s1">&#39;admin:password&#39;</span> <span class="p">|</span> base64
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Create gzipped tar</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>tar -czvf archive.tgz file1 dir2
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Extract gzipped tar</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Output dir has to exist</span>
+</span><span class='line'>tar -xzvf archive.tgz -C targetdir
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Heredoc Syntax to create multi-line file from command line</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>cat <span class="s">&lt;&lt;EOT &gt; app-pod.yml</span>
+</span><span class='line'><span class="s">apiVersion: v1</span>
+</span><span class='line'><span class="s">kind: Pod</span>
+</span><span class='line'><span class="s">metadata:</span>
+</span><span class='line'><span class="s">  name: my-app-ui</span>
+</span><span class='line'><span class="s">  labels:</span>
+</span><span class='line'><span class="s">    app: my-app</span>
+</span><span class='line'><span class="s">spec:</span>
+</span><span class='line'><span class="s">  containers:</span>
+</span><span class='line'><span class="s">    - name: nginx-server</span>
+</span><span class='line'><span class="s">      image: nginx</span>
+</span><span class='line'><span class="s">EOT</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Virtual Environment Cheatsheet]]></title>

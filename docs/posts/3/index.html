@@ -9,7 +9,7 @@
   <meta name="author" content="Chun Sing Tsui">
 
   
-  <meta name="description" content="Bought some new tools. I've read many good things about the Xuron Micro Shear Flush Cutter. Also bought the Micro Sol decal solution, Testors' putty &hellip;">
+  <meta name="description" content="This simple script hides the ridiculous sidebar that squishes up the content when viewing Reddit with only a small amount of screen space (e.g. half &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -111,7 +111,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2011/08/21/new-tools/">New Tools</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/06/16/greasemonkey-script-to-autohide-reddit-sidebar-2/">GreaseMonkey Script to AutoHide Reddit Sidebar</a></h1>
     
     
       <p class="meta">
@@ -120,7 +120,7 @@
 
 
 
-<time class='entry-date' datetime='2011-08-21T00:00:00-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2011</span></span> <span class='time'>12:00 am</span></time>
+<time class='entry-date' datetime='2014-06-16T00:00:00-04:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:00 am</span></time>
         
         
       </p>
@@ -128,18 +128,64 @@
   </header>
 
 
-  <div class="entry-content"><p>Bought some new tools. I've read many good things about the Xuron Micro Shear Flush Cutter. Also bought the Micro Sol decal solution, Testors' putty, and some empty paint bottles for custom paint mixes.</p>
+  <div class="entry-content"><p>This simple script hides the ridiculous sidebar that squishes up the content when viewing Reddit with only a small amount of screen space (e.g. half of screen or low resolution display). It only hides the sidebar when the window width is detected to be lower than half of your resolution.</p>
 
 
-<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/Tools/P8190631_979x734.jpg" alt="Photobucket" border="0" /></p>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// 1920 is your screen width; adjust accordingly</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">threshold</span> <span class="o">=</span> <span class="mi">1920</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Get sidebar div element and its original display style</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">sideBar</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByClassName</span><span class="p">(</span><span class="s1">&#39;side&#39;</span><span class="p">)</span> <span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">origStyle</span> <span class="o">=</span> <span class="nx">sideBar</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="c1">// Check the window width and hide it if it&#39;s too small</span>
+</span><span class='line'>    <span class="kd">function</span> <span class="nx">doCheck</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">innerWidth</span> <span class="o">&lt;</span> <span class="nx">threshold</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">sideBar</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>        <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>            <span class="nx">sideBar</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="nx">origStyle</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="c1">// Attach it the resize event</span>
+</span><span class='line'>    <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;resize&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">doCheck</span><span class="p">();</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>    <span class="c1">// Run it once initially</span>
+</span><span class='line'>    <span class="nx">doCheck</span><span class="p">();</span>
+</span><span class='line'><span class="p">}());</span>
+</span></code></pre></td></tr></table></div></figure>
 
 </div>
   
   
-    <footer>
-      <a rel="full-article" href="/blog/2011/08/21/new-tools/">Read on &rarr;</a>
-    </footer>
-  
 
 
     </article>
@@ -149,7 +195,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2011/08/10/mg-rx-178-mk-ii-complete/">MG RX-178 MK II Complete</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/05/10/setting-up-e2studio-for-rl78g14-rdk-developement/">Setting Up E<sup>2</sup>studio for RL78/G14 RDK Developement</a></h1>
     
     
       <p class="meta">
@@ -158,7 +204,7 @@
 
 
 
-<time class='entry-date' datetime='2011-08-10T00:00:00-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2011</span></span> <span class='time'>12:00 am</span></time>
+<time class='entry-date' datetime='2014-05-10T00:00:00-04:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:00 am</span></time>
         
         
       </p>
@@ -166,97 +212,34 @@
   </header>
 
 
-  <div class="entry-content"><p>Finished photos of the 1/100 MG Mk II v2.0. The camera picks up a lot more dust/imperfections than the eye can see. This is the first kit that I tried preshading on and I think the outcome is pretty decent. Only the white parts are preshaded because all the colored parts were painted last year when I first started working on it until I ran out of white paint.</p>
+  <div class="entry-content"><p>Set up e<sup>2</sup>studio for RL78 development following the steps below. These downloads are the files provided on the RL78/G14 RDK installation DVD. However, this will be useful if you happen to lose the DVD, don't have a DVD drive, or want to install/update a particular item when it becomes outdated.</p>
 
 
-<p>The kit will be considered finished for now, but I still need to touch up on the face area (lining) as well as apply decal solutions (when I get them), and then apply a final flat coat.</p>
+<h3>Setup e<sup>2</sup>studio</h3>
 
 
-<p>As usual the paints used are Tamiya Acrylics (except for the thrusters) and topcoated with Future. Decals used are the Bandai waterslides. The thrusters are an aluminum color from a spray can and the insides were painted over with clear red. I think the results look fairly close to the aftermarket machined thrusters that are far too expensive.</p>
+<p>1). Download/Install e<sup>2</sup>studio from Renesas website:</p>
 
 
+<ul>
+<li>http://sg.renesas.com/products/mpumcu/rl78/rl78g1x/rl78g14/soft_tools_index.jsp</li>
+</ul>
 
 
-<p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20MK%20II/P8100589_979x734.jpg" alt="Photobucket" border="0" /></p>
+<p>2) Download KPIT GNU Toolchain for RL78 and register it with e<sup>2</sup>studio (should automatically pop up when you open e<sup>2</sup>studio). The GNURL78 compiler is a free compiler with no size limitations.</p>
 
 
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2011/08/10/mg-rx-178-mk-ii-complete/">Read on &rarr;</a>
-    </footer>
-  
+<ul>
+<li>http://www.kpitgnutools.com/latestToolchain.php</li>
+</ul>
 
 
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/08/04/1100-mg-destiny-wip-part-2/">1/100 MG Destiny WIP - Part 2</a></h1>
-    
-    
-      <p class="meta">
-        
+<p>3) Download/Install IAR Plugin for e<sup>2</sup>studio using the appropriate update site. The IAR plugin allows projects for the IAR compiler to be built and debugged in e<sup>2</sup>studio.</p>
 
 
-
-
-<time class='entry-date' datetime='2011-08-04T00:00:00-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>4</span><span class='date-suffix'>th</span>, <span class='date-year'>2011</span></span> <span class='time'>12:00 am</span></time>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><p>Painting is about 95% complete. I just need to mask off some areas on the handles of the anti ship sword and the beam cannon as well as the beam rifle to spray it in a dark gray for a bit of contrast.</p>
-
-<p><p><img src="http://i151.photobucket.com/albums/s148/Tomster831/41f3436f-7d0a-43bb-99b1-146e9afaf1d7.jpg" alt="Photobucket" border="0" /></p></p>
-
-<p></div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2011/08/04/1100-mg-destiny-wip-part-2/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/08/02/1100-mg-destiny-wip-part-1/">1/100 MG Destiny WIP - Part 1</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2011-08-02T00:00:00-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>2</span><span class='date-suffix'>nd</span>, <span class='date-year'>2011</span></span> <span class='time'>12:00 am</span></time>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>The kit was already snapped together when I first got it a couple of years ago. I had planned on painting this kit from the start so all the parts were already prepared for painting (pegs were cut for easier removal of the pieces and the pieces were sanded).</p>
-
-
-<p>As usually Tamiya Arylics are my paint of choice. On with the painting:</p>
-
-<p>
-<img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/P7310473_979x734.jpg" alt="Photobucket" width="979" height="734" border="0" /></p>
+<ul>
+<li>http://www.iar.com/eclipse/</li>
+</ul>
 
 
 
@@ -265,7 +248,7 @@
   
   
     <footer>
-      <a rel="full-article" href="/blog/2011/08/02/1100-mg-destiny-wip-part-1/">Read on &rarr;</a>
+      <a rel="full-article" href="/blog/2014/05/10/setting-up-e2studio-for-rl78g14-rdk-developement/">Read on &rarr;</a>
     </footer>
   
 
@@ -277,7 +260,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2011/07/31/1100-mg-hi-nu-wip/">1/100 MG Hi-Nu WIP</a></h1>
+      <h1 class="entry-title"><a href="/blog/2012/03/20/useful-notepad-plugins/">Useful Notepad++ Plugins</a></h1>
     
     
       <p class="meta">
@@ -286,7 +269,7 @@
 
 
 
-<time class='entry-date' datetime='2011-07-31T00:00:00-04:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>31</span><span class='date-suffix'>st</span>, <span class='date-year'>2011</span></span> <span class='time'>12:00 am</span></time>
+<time class='entry-date' datetime='2012-03-20T00:00:00-04:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>20</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>12:00 am</span></time>
         
         
       </p>
@@ -294,25 +277,78 @@
   </header>
 
 
-  <div class="entry-content"><p>The kit is almost finish and here are several pics I've taken during the process. Not too many pictures were taken during this build.</p>
+  <div class="entry-content"><p><a href="http://notepad-plus-plus.org/">Notepad++</a> is easily one of the best text editors for Windows. I've compiled below a few useful plugins that extends its functionality even further.</p>
 
 
-<p><p>The entire kit was AB with Tamiya Acrylics, and gloss coated with Future for panel lining and decals.</p>
+<ul>
+<li>
+<h4><a href="http://sourceforge.net/projects/tabstospacesnpp/">CLR Tabs to Spaces</a></h4>
+</li>
+</ul>
 
-<p><p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Hi-Nu%20WIP/P8010517_1096x822.jpg" alt="Photobucket" border="0" /></p></p>
 
-<p></div>
+<p style="padding-left:60px;">If your code contains a mix of spaces and tabs, they will often be inconsistently displayed with different editors. One thing that I've tried to do is making sure my code contains no tabs to avoid inconsistency. This plugin makes it easy to convert tabs to spaces for existing code.</p>
+
+
+<ul>
+<li>
+<h4><a href="http://sourceforge.net/projects/npp-compare/">Compare</a></h4>
+</li>
+</ul>
+
+
+<p style="padding-left:60px;">Everyone needs a diff tool. File comparison is always a useful feature when you need to find the differences between two files.</p>
+
+
+<ul>
+<li>
+<h4><a href="http://sourceforge.net/projects/npp-plugins/files/MultiClipboard/">MultiClipboard</a></h4>
+</li>
+</ul>
+
+
+<p style="padding-left:60px;">This plugin conveniently allows you to have more than one item in your clipboard, easing copy and paste operations.</p>
+
+
+<ul>
+<li>
+<h4><a href="http://code.google.com/p/nppastyle/downloads/list">NppAStyle</a></h4>
+</li>
+</ul>
+
+
+<p style="padding-left:60px;">A plugin of <a href="http://astyle.sourceforge.net/">Artistic Style</a>, which is a C, C++, C#, and Java source code automatic formatter. The one complain that I have with NppAStyle is that it doesn't handle comments very well. Comments will stay at their original position, which is generally not the wanted action.</p>
+
+
+<ul>
+<li>
+<h4><a href="http://sites.google.com/site/fstellari/nppplugins">RunMe</a></h4>
+</li>
+</ul>
+
+
+<p style="padding-left:60px;">RunMe is excellent for allowing the execution of the currently open file based on its shell association. Since I've been working with Perl, this allows me to run and test the script easily at the file location.</p>
+
+
+<ul>
+<li>
+<h4><a href="http://sourceforge.net/projects/npp-plugins/files/TextFX/">TextFX</a></h4>
+</li>
+</ul>
+
+
+<p style="padding-left:60px;">TextFX contains a slew of functions that are too many to list. It no longer comes with the latest unicode version of Notepad++ (v5.9.6.2), but you can manual install it to get the added features.</p>
+
+</div>
   
-  
-    <footer>
-      <a rel="full-article" href="/blog/2011/07/31/1100-mg-hi-nu-wip/">Read on &rarr;</a>
-    </footer>
   
 
 
     </article>
   
   <div class="pagination">
+    
+      <a class="prev" href="/posts/4">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     

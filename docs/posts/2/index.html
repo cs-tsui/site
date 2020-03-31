@@ -9,7 +9,7 @@
   <meta name="author" content="Chun Sing Tsui">
 
   
-  <meta name="description" content="This simple script hides the ridiculous sidebar that squishes up the content when viewing Reddit with only a small amount of screen space (e.g. half &hellip;">
+  <meta name="description" content="Following the IBM Developer Guide on the Dockerized version of DataPower is a great way to start playing around with the DataPower application &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -111,7 +111,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/06/16/greasemonkey-script-to-autohide-reddit-sidebar-2/">GreaseMonkey Script to AutoHide Reddit Sidebar</a></h1>
+      <h1 class="entry-title"><a href="/blog/2020/03/12/datapower-quickstart/">DataPower QuickStart (Docker)</a></h1>
     
     
       <p class="meta">
@@ -120,7 +120,7 @@
 
 
 
-<time class='entry-date' datetime='2014-06-16T00:00:00-04:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:00 am</span></time>
+<time class='entry-date' datetime='2020-03-12T21:44:35-04:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2020</span></span> <span class='time'>9:44 pm</span></time>
         
         
       </p>
@@ -128,61 +128,145 @@
   </header>
 
 
-  <div class="entry-content"><p>This simple script hides the ridiculous sidebar that squishes up the content when viewing Reddit with only a small amount of screen space (e.g. half of screen or low resolution display). It only hides the sidebar when the window width is detected to be lower than half of your resolution.</p>
+  <div class="entry-content"><p>Following the <a href="https://developer.ibm.com/datapower/docker">IBM Developer Guide</a> on the Dockerized version of DataPower is a great way to start playing around with the DataPower application gateway.</p>
 
+<p>There are some small gotchas that the guide does not mention and they are noted here.</p>
 
+<h3>SSH Port Number</h3>
 
+<p>In the newer releases of DataPower in container form, the IDG process is not ran with root. Therefore using port 22 as the SSH port will fail since only root user is allowed to use ports under 1024. We have to make a small change to the target port mapping from 22 to 9022 (or another high numbered port number).</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1">// 1920 is your screen width; adjust accordingly</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">threshold</span> <span class="o">=</span> <span class="mi">1920</span> <span class="o">/</span> <span class="mi">2</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// Get sidebar div element and its original display style</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">sideBar</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByClassName</span><span class="p">(</span><span class="s1">&#39;side&#39;</span><span class="p">)</span> <span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">origStyle</span> <span class="o">=</span> <span class="nx">sideBar</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1">// Check the window width and hide it if it&#39;s too small</span>
-</span><span class='line'>    <span class="kd">function</span> <span class="nx">doCheck</span><span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">if</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">innerWidth</span> <span class="o">&lt;</span> <span class="nx">threshold</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">sideBar</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span><span class="p">;</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>        <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nx">sideBar</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="nx">origStyle</span><span class="p">;</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="c1">// Attach it the resize event</span>
-</span><span class='line'>    <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;resize&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nx">doCheck</span><span class="p">();</span>
-</span><span class='line'>    <span class="p">});</span>
-</span><span class='line'>    <span class="c1">// Run it once initially</span>
-</span><span class='line'>    <span class="nx">doCheck</span><span class="p">();</span>
-</span><span class='line'><span class="p">}());</span>
-</span></code></pre></td></tr></table></div></figure>
+<p>As seen in the <a href="https://developer.ibm.com/answers/questions/394482/ssh-service-on-new-datapower-docker-container-will/">Developer Works answer found here</a>:</p>
 
+<pre><code>One of the changes in 7.6 is that by default, the DataPower Gateway process runs as the non-root drouter user inside the Docker container. Because of this, DataPower does not have permissions to use privileged ports.
+</code></pre>
+
+<p>So we make the simple change to 9022:</p>
+
+<pre><code> docker run -it \
+    -v $PWD/config:/drouter/config \
+    -v $PWD/local:/drouter/local \
+    -e DATAPOWER_ACCEPT_LICENSE=true \
+    -e DATAPOWER_INTERACTIVE=true \
+    -p 9090:9090 \
+    -p 9022:9022 \
+    -p 5554:5554 \
+    -p 8000-8010:8000-8010 \
+    --name idg \
+    ibmcom/datapower
+</code></pre>
+
+<p>We can now enable ssh so we can log into the DataPower CLI and execute commands.</p>
+
+<h3>Enable SSH</h3>
+
+<p>After logging into the CLI with username and password, we can enable SSH and designate the port.</p>
+
+<p>Since we are port-forwarding via 9022, it will be the one used for SSH.</p>
+
+<pre><code>idg# configure
+Global mode
+idg(config)# ssh 0.0.0.0 9022
+
+%   Pending
+
+SSH service listener enabled
+</code></pre>
+
+<p>If the port number selected is still in the privilege range (i.e. &lt;1024), the confusing part in trying to bring up the SSH service via the web UI or the CLI is there aren&rsquo;t any obvious errors about why the SSH service does not come up (in the case of the Web UI) or why the service is reported as up but is not reachable (in the case of the CLI)</p>
+
+<h3>Enable Web Admin UI</h3>
+
+<p>Port 9090 is one of the port we are exposing in the Docker run commands, and we use this to reach the web admin UI.</p>
+
+<pre><code>idg(config)# web-mgmt 0 9090 9090;
+Web management: successfully started
+</code></pre>
+
+<p>When navigating to it in the browser via localhost, don&rsquo;t forget to specify <code>https</code></p>
+
+<pre><code>https://localhost:9090
+</code></pre>
+
+<h3>Enabling REST Management</h3>
+
+<p>This allows us to manage the gateway using its REST API</p>
+
+<pre><code>idg(config)# rest-mgmt 0  5554
+REST management: successfully started
+</code></pre>
+
+<p>After enabling, we can check if its enabled by curl-ing the REST endpoing</p>
+
+<pre><code>$ curl -k -u admin:admin https://localhost:5554/mgmt/config/default/RestMgmtInterface
+{
+
+    "_links" : {
+
+    "self" : {"href" : "/mgmt/config/default/RestMgmtInterface"}, 
+
+    "doc" : {"href" : "/mgmt/docs/config/RestMgmtInterface"}}, 
+
+    "RestMgmtInterface" : {"name" : "RestMgmt-Settings", 
+
+    "_links" : {
+
+    "self" : {"href" : "/mgmt/config/default/RestMgmtInterface/RestMgmt-Settings"}, 
+
+    "doc" : {"href" : "/mgmt/docs/config/RestMgmtInterface"}}, 
+
+    "mAdminState" : "enabled", 
+
+    "LocalAddress" : "0.0.0.0", 
+
+    "LocalPort" : 5554, 
+
+    "ACL" : {"value": "rest-mgmt", 
+
+    "href" : "/mgmt/config/default/AccessControlList/rest-mgmt"}, 
+
+    "SSLConfigType" : "server"}}
+</code></pre>
+
+<h3>Saving the Configuration</h3>
+
+<p>If you would like for the config values to persist and be picked up next time the DataPower container gets restarted, we can persist the configs to files.</p>
+
+<pre><code>idg(config)# write memory
+Overwrite previously saved configuration? Yes/No [y/n]: y
+Configuration saved successfully.
+</code></pre>
+
+<h3>Reference Commands and Outputs</h3>
+
+<pre><code>login: admin
+Password: *****
+
+Welcome to IBM DataPower Gateway console configuration. 
+Copyright IBM Corporation 1999, 2020 
+
+Version: IDG.2018.4.1.10 build 318002 on Feb 21, 2020 11:09:49 AM
+Delivery type: LTS
+Serial number: 0000001
+
+idg# configure
+Global mode
+idg(config)# ssh 0.0.0.0 9022
+
+%   Pending
+
+SSH service listener enabled
+
+idg(config)# web-mgmt 0 9090 9090;
+Web management: successfully started
+
+idg(config)# rest-mgmt 0  5554
+REST management: successfully started
+
+idg(config)# write memory
+Overwrite previously saved configuration? Yes/No [y/n]: y
+Configuration saved successfully.
+</code></pre>
 </div>
   
   
@@ -195,7 +279,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2014/05/10/setting-up-e2studio-for-rl78g14-rdk-developement/">Setting Up E<sup>2</sup>studio for RL78/G14 RDK Developement</a></h1>
+      <h1 class="entry-title"><a href="/blog/2016/02/23/easy-html-table-generation-from-perl-dbi-and-sql/">Easy HTML Table Generation From Perl DBI and SQL</a></h1>
     
     
       <p class="meta">
@@ -204,7 +288,7 @@
 
 
 
-<time class='entry-date' datetime='2014-05-10T00:00:00-04:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>12:00 am</span></time>
+<time class='entry-date' datetime='2016-02-23T22:17:32-05:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2016</span></span> <span class='time'>10:17 pm</span></time>
         
         
       </p>
@@ -212,166 +296,7 @@
   </header>
 
 
-  <div class="entry-content"><p>Set up e<sup>2</sup>studio for RL78 development following the steps below. These downloads are the files provided on the RL78/G14 RDK installation DVD. However, this will be useful if you happen to lose the DVD, don't have a DVD drive, or want to install/update a particular item when it becomes outdated.</p>
-
-
-<h3>Setup e<sup>2</sup>studio</h3>
-
-
-<p>1). Download/Install e<sup>2</sup>studio from Renesas website:</p>
-
-
-<ul>
-<li>http://sg.renesas.com/products/mpumcu/rl78/rl78g1x/rl78g14/soft_tools_index.jsp</li>
-</ul>
-
-
-<p>2) Download KPIT GNU Toolchain for RL78 and register it with e<sup>2</sup>studio (should automatically pop up when you open e<sup>2</sup>studio). The GNURL78 compiler is a free compiler with no size limitations.</p>
-
-
-<ul>
-<li>http://www.kpitgnutools.com/latestToolchain.php</li>
-</ul>
-
-
-<p>3) Download/Install IAR Plugin for e<sup>2</sup>studio using the appropriate update site. The IAR plugin allows projects for the IAR compiler to be built and debugged in e<sup>2</sup>studio.</p>
-
-
-<ul>
-<li>http://www.iar.com/eclipse/</li>
-</ul>
-
-
-
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2014/05/10/setting-up-e2studio-for-rl78g14-rdk-developement/">Read on &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/03/20/useful-notepad-plugins/">Useful Notepad++ Plugins</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2012-03-20T00:00:00-04:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>20</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>12:00 am</span></time>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://notepad-plus-plus.org/">Notepad++</a> is easily one of the best text editors for Windows. I've compiled below a few useful plugins that extends its functionality even further.</p>
-
-
-<ul>
-<li>
-<h4><a href="http://sourceforge.net/projects/tabstospacesnpp/">CLR Tabs to Spaces</a></h4>
-</li>
-</ul>
-
-
-<p style="padding-left:60px;">If your code contains a mix of spaces and tabs, they will often be inconsistently displayed with different editors. One thing that I've tried to do is making sure my code contains no tabs to avoid inconsistency. This plugin makes it easy to convert tabs to spaces for existing code.</p>
-
-
-<ul>
-<li>
-<h4><a href="http://sourceforge.net/projects/npp-compare/">Compare</a></h4>
-</li>
-</ul>
-
-
-<p style="padding-left:60px;">Everyone needs a diff tool. File comparison is always a useful feature when you need to find the differences between two files.</p>
-
-
-<ul>
-<li>
-<h4><a href="http://sourceforge.net/projects/npp-plugins/files/MultiClipboard/">MultiClipboard</a></h4>
-</li>
-</ul>
-
-
-<p style="padding-left:60px;">This plugin conveniently allows you to have more than one item in your clipboard, easing copy and paste operations.</p>
-
-
-<ul>
-<li>
-<h4><a href="http://code.google.com/p/nppastyle/downloads/list">NppAStyle</a></h4>
-</li>
-</ul>
-
-
-<p style="padding-left:60px;">A plugin of <a href="http://astyle.sourceforge.net/">Artistic Style</a>, which is a C, C++, C#, and Java source code automatic formatter. The one complain that I have with NppAStyle is that it doesn't handle comments very well. Comments will stay at their original position, which is generally not the wanted action.</p>
-
-
-<ul>
-<li>
-<h4><a href="http://sites.google.com/site/fstellari/nppplugins">RunMe</a></h4>
-</li>
-</ul>
-
-
-<p style="padding-left:60px;">RunMe is excellent for allowing the execution of the currently open file based on its shell association. Since I've been working with Perl, this allows me to run and test the script easily at the file location.</p>
-
-
-<ul>
-<li>
-<h4><a href="http://sourceforge.net/projects/npp-plugins/files/TextFX/">TextFX</a></h4>
-</li>
-</ul>
-
-
-<p style="padding-left:60px;">TextFX contains a slew of functions that are too many to list. It no longer comes with the latest unicode version of Notepad++ (v5.9.6.2), but you can manual install it to get the added features.</p>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2012/03/15/perl-finding-duplicate-files/">Finding Duplicate Files</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2012-03-15T00:00:00-04:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>12:00 am</span></time>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Another script I wrote to learn more about Perl. I used a script found on <a href="http://www.perlmonks.org/?node_id=49198">PerlMonks</a> as a starting point, and modified it with an additional function of moving all duplicate files into a folder. Again, it is heavily commented to help myself understand the code while I'm writing it.</p>
-
-
-
+  <div class="entry-content"><p>The following script is used to quickly generate HTML tables for reports using only a SQL query as an input. Useful if you needed to generate and send out a report quickly without installing yet yet another package.</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -403,181 +328,37 @@
 <span class='line-number'>28</span>
 <span class='line-number'>29</span>
 <span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-<span class='line-number'>70</span>
-<span class='line-number'>71</span>
-<span class='line-number'>72</span>
-<span class='line-number'>73</span>
-<span class='line-number'>74</span>
-<span class='line-number'>75</span>
-<span class='line-number'>76</span>
-<span class='line-number'>77</span>
-<span class='line-number'>78</span>
-<span class='line-number'>79</span>
-<span class='line-number'>80</span>
-<span class='line-number'>81</span>
-<span class='line-number'>82</span>
-<span class='line-number'>83</span>
-<span class='line-number'>84</span>
-<span class='line-number'>85</span>
-<span class='line-number'>86</span>
-<span class='line-number'>87</span>
-<span class='line-number'>88</span>
-<span class='line-number'>89</span>
-<span class='line-number'>90</span>
-<span class='line-number'>91</span>
-<span class='line-number'>92</span>
-<span class='line-number'>93</span>
-<span class='line-number'>94</span>
-<span class='line-number'>95</span>
-<span class='line-number'>96</span>
-<span class='line-number'>97</span>
-<span class='line-number'>98</span>
-<span class='line-number'>99</span>
-<span class='line-number'>100</span>
-<span class='line-number'>101</span>
 </pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="c1">#!/usr/bin/perl</span>
-</span><span class='line'><span class="k">use</span> <span class="n">Cwd</span><span class="p">;</span>
-</span><span class='line'><span class="k">use</span> <span class="nn">File::</span><span class="n">Find</span><span class="p">;</span>
-</span><span class='line'><span class="k">use</span> <span class="nn">Digest::</span><span class="n">MD5</span><span class="p">;</span>
 </span><span class='line'>
-</span><span class='line'><span class="c1">#-----------------------------------------------------</span>
-</span><span class='line'><span class="c1"># This is a script for finding duplicate files in the </span>
-</span><span class='line'><span class="c1"># current directory. It checks for the same file size. </span>
-</span><span class='line'><span class="c1"># If file sizes are different, then files are </span>
-</span><span class='line'><span class="c1"># different. If file sizes are the same, it goes on </span>
-</span><span class='line'><span class="c1"># to check for the MD5 value to determine uniqueness. </span>
-</span><span class='line'><span class="c1"># If MD5 matches, move duplicate files to a folder</span>
-</span><span class='line'><span class="c1">#-----------------------------------------------------</span>
-</span><span class='line'><span class="c1"># Get current working directory and create duplicate folder directory</span>
-</span><span class='line'><span class="nv">$currentDir</span> <span class="o">=</span> <span class="n">cwd</span><span class="p">();</span>
-</span><span class='line'><span class="nv">$dupFolder</span>  <span class="o">=</span> <span class="s">&quot;duplicates&quot;</span><span class="p">;</span>
-</span><span class='line'><span class="nv">$dupDir</span> <span class="o">=</span> <span class="nv">$currentDir</span><span class="o">.</span><span class="s">&quot;/&quot;</span><span class="o">.</span><span class="nv">$dupFolder</span><span class="p">;</span>
+</span><span class='line'><span class="k">use</span> <span class="n">DBI</span><span class="p">;</span>
 </span><span class='line'>
-</span><span class='line'><span class="c1"># Hash to store filesize as key and an array of filenames as value</span>
-</span><span class='line'><span class="nv">%filesSizeHash</span>  <span class="o">=</span> <span class="p">();</span>
-</span><span class='line'><span class="nv">$duplicateCount</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'><span class="nv">$totalDupSize</span>   <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class='line'><span class="c1"># Query as in input, and generate HTML table output </span>
+</span><span class='line'><span class="k">my</span> <span class="nv">$query</span> <span class="o">=</span> <span class="s">&#39;select * from data&#39;</span><span class="p">;</span>
 </span><span class='line'>
-</span><span class='line'><span class="c1"># Using the file() function, it calls the wanted() function on every </span>
-</span><span class='line'><span class="c1"># file in the current directory</span>
+</span><span class='line'><span class="c1"># 1) Connect and get DB handle</span>
+</span><span class='line'><span class="k">my</span> <span class="nv">$dbh</span> <span class="o">=</span> <span class="n">connect_db</span><span class="p">();</span> <span class="c1"># use your own connection here</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">find</span><span class="p">(</span><span class="o">\&amp;</span><span class="n">check_each_file</span><span class="p">,</span> <span class="nv">$currentDir</span><span class="p">);</span>
+</span><span class='line'><span class="c1"># 2) Run your query </span>
+</span><span class='line'><span class="k">my</span> <span class="nv">$sth</span>   <span class="o">=</span> <span class="nv">$dbh</span><span class="o">-&gt;</span><span class="n">prepare</span><span class="p">(</span><span class="nv">$query</span><span class="p">);</span>
+</span><span class='line'><span class="k">my</span> <span class="nv">@loh</span>   <span class="o">=</span> <span class="nv">@</span><span class="p">{</span> <span class="nv">$sth</span><span class="o">-&gt;</span><span class="n">fetchall_arrayref</span><span class="p">({})</span> <span class="p">};</span>
+</span><span class='line'><span class="k">my</span> <span class="nv">@cols</span>  <span class="o">=</span> <span class="nv">@</span><span class="p">{</span> <span class="nv">$sth</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">NAME</span><span class="p">}</span> <span class="p">};</span>
 </span><span class='line'>
-</span><span class='line'><span class="c1"># Loop to first find files of the same file size; </span>
-</span><span class='line'><span class="c1"># if there are multiple, check MD5values</span>
-</span><span class='line'><span class="k">foreach</span> <span class="k">my</span> <span class="nv">$size</span> <span class="p">(</span><span class="nb">sort</span> <span class="p">{</span><span class="nv">$b</span> <span class="sr">&lt;=&gt;</span> <span class="nv">$a</span><span class="p">}</span> <span class="nb">keys</span> <span class="nv">%filesSizeHash</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1"># Process next filesize unless there are more than one value in</span>
-</span><span class='line'>    <span class="k">next</span> <span class="k">unless</span> <span class="nv">@</span><span class="p">{</span><span class="nv">$filesSizeHash</span><span class="p">{</span><span class="nv">$size</span><span class="p">}}</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">;</span>
-</span><span class='line'>    <span class="c1">#print($size.&quot;\n&quot;);</span>
+</span><span class='line'><span class="c1"># 3) Generate HTML Table </span>
+</span><span class='line'><span class="k">my</span> <span class="nv">$thead</span> <span class="o">=</span> <span class="nb">join</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="nb">map</span> <span class="p">{</span><span class="s">&quot;&lt;td&gt;$_&lt;/td&gt;&quot;</span><span class="p">}</span> <span class="nv">@cols</span><span class="p">);</span>
 </span><span class='line'>
-</span><span class='line'>    <span class="c1"># Hash to store MD5 values as key and an array of filenames as value</span>
-</span><span class='line'>    <span class="k">my</span> <span class="nv">%fileMD5Hash</span> <span class="o">=</span> <span class="p">();</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># Loop through and get MD5 and store for each file with same size</span>
-</span><span class='line'>    <span class="k">foreach</span> <span class="k">my</span> <span class="nv">$file</span> <span class="p">(</span><span class="nv">@</span><span class="p">{</span><span class="nv">$filesSizeHash</span><span class="p">{</span><span class="nv">$size</span><span class="p">}})</span> <span class="p">{</span>
-</span><span class='line'>        <span class="nb">open</span><span class="p">(</span><span class="n">FILE</span><span class="p">,</span> <span class="nv">$file</span><span class="p">)</span> <span class="ow">or</span> <span class="k">next</span><span class="p">;</span>
-</span><span class='line'>        <span class="nb">binmode</span><span class="p">(</span><span class="n">FILE</span><span class="p">);</span>
-</span><span class='line'>        <span class="k">my</span> <span class="nv">$ctx</span> <span class="o">=</span> <span class="nn">Digest::</span><span class="n">MD5</span><span class="o">-&gt;</span><span class="k">new</span><span class="o">-&gt;</span><span class="n">addfile</span><span class="p">(</span><span class="o">*</span><span class="n">FILE</span><span class="p">);</span>
-</span><span class='line'>        <span class="nb">push</span> <span class="nv">@</span><span class="p">{</span><span class="nv">$fileMD5Hash</span><span class="p">{</span><span class="nv">$ctx</span><span class="o">-&gt;</span><span class="n">hexdigest</span><span class="p">}},</span><span class="nv">$file</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="c1"># Now, take care of file if more than one file has same MD5</span>
-</span><span class='line'>    <span class="k">foreach</span> <span class="k">my</span> <span class="nv">$hash</span> <span class="p">(</span><span class="nb">keys</span> <span class="nv">%fileMD5Hash</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="k">next</span> <span class="k">unless</span> <span class="nv">@</span><span class="p">{</span><span class="nv">$fileMD5Hash</span><span class="p">{</span><span class="nv">$hash</span><span class="p">}}</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">;</span>
-</span><span class='line'>        <span class="k">unless</span> <span class="p">(</span><span class="o">-</span><span class="n">d</span> <span class="nv">$dupDir</span><span class="p">){</span><span class="nb">mkdir</span> <span class="nv">$dupDir</span> <span class="ow">or</span> <span class="nb">die</span><span class="p">;}</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="c1"># There are duplicate files to deal with from this point</span>
-</span><span class='line'>        <span class="c1"># Until the currently accessed array inside the md5 hash has only</span>
-</span><span class='line'>        <span class="c1"># one item(file), move file into a different directory</span>
-</span><span class='line'>        <span class="k">my</span> <span class="nv">$count</span> <span class="o">=</span> <span class="nv">@</span><span class="p">{</span><span class="nv">$fileMD5Hash</span><span class="p">{</span><span class="nv">$hash</span><span class="p">}};</span>
-</span><span class='line'>        <span class="k">for</span><span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;</span> <span class="nv">$count</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">){</span>
-</span><span class='line'>            <span class="nv">$duplicateCount</span><span class="o">++</span><span class="p">;</span>
-</span><span class='line'>            <span class="k">my</span> <span class="nv">$fileName</span> <span class="o">=</span> <span class="nv">@</span><span class="p">{</span><span class="nv">$fileMD5Hash</span><span class="p">{</span><span class="nv">$hash</span><span class="p">}}[</span><span class="nv">$i</span><span class="p">];</span>
-</span><span class='line'>            <span class="nb">rename</span><span class="p">(</span><span class="nv">$fileName</span><span class="p">,</span> <span class="nv">$dupDir</span><span class="o">.</span><span class="s">&quot;/&quot;</span><span class="o">.</span><span class="nv">$fileName</span><span class="p">);</span>
-</span><span class='line'>            <span class="nv">$totalDupSize</span> <span class="o">=</span> <span class="nv">$totalDupSize</span> <span class="o">+</span> <span class="nv">$size</span><span class="p">;</span>
-</span><span class='line'>            <span class="k">print</span><span class="p">(</span><span class="s">&quot;[File moved]: $fileName\n&quot;</span><span class="p">);</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="k">my</span> <span class="nv">@rows</span> <span class="o">=</span> <span class="p">();</span>
+</span><span class='line'><span class="k">for</span> <span class="k">my</span> <span class="nv">$hr</span> <span class="p">(</span><span class="nv">@loh</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nb">push</span> <span class="nv">@rows</span><span class="p">,</span> <span class="nb">join</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="nb">map</span> <span class="p">{</span><span class="s">&quot;&lt;td&gt;$_&lt;/td&gt;&quot;</span><span class="p">}</span> <span class="nv">@</span><span class="p">{</span><span class="nv">$hr</span><span class="p">}{</span><span class="nv">@cols</span><span class="p">});</span>
 </span><span class='line'><span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'><span class="c1"># Loop to first find files of the same file size; if multiple, check MD5values</span>
-</span><span class='line'><span class="nv">$totalDupSize</span> <span class="o">=</span> <span class="n">size_format</span><span class="p">(</span><span class="nv">$totalDupSize</span><span class="p">);</span>
-</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="s">&quot;\n[Total number of duplicates found]: $duplicateCount\n&quot;</span><span class="p">);</span>
-</span><span class='line'><span class="k">print</span><span class="p">(</span><span class="s">&quot;[Toal size of duplicate files]:     $totalDupSize\n&quot;</span><span class="p">);</span>
+</span><span class='line'><span class="k">my</span> <span class="nv">$tbody</span> <span class="o">=</span> <span class="nb">join</span> <span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="nb">map</span> <span class="p">{</span><span class="s">&quot;&lt;tr&gt;$_&lt;/tr&gt;&quot;</span><span class="p">}</span> <span class="nv">@rows</span><span class="p">);</span>
 </span><span class='line'>
-</span><span class='line'><span class="c1"># Function that is called on every file in the directory of the find() function</span>
-</span><span class='line'><span class="k">sub </span><span class="nf">check_each_file</span><span class="p">{</span>
-</span><span class='line'>    <span class="c1">#If the current &quot;file&quot; is a file...</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">-</span><span class="n">f</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1"># Get  current file&#39;s name</span>
-</span><span class='line'>        <span class="nv">$currentFileName</span> <span class="o">=</span> <span class="nv">$</span><span class="nn">File::Find::</span><span class="nv">name</span><span class="p">;</span>
+</span><span class='line'><span class="k">my</span> <span class="nv">$html</span> <span class="o">=</span> <span class="sx">qq|&lt;table&gt; $thead &lt;thead&gt; $thead &lt;/thead&gt; &lt;tbody&gt; $tbody &lt;/tbody&gt; &lt;/table&gt;|</span><span class="p">;</span>
 </span><span class='line'>
-</span><span class='line'>        <span class="c1"># Get current file&#39;s size in bytes</span>
-</span><span class='line'>        <span class="k">my</span> <span class="nv">$filesize</span> <span class="o">=</span> <span class="p">(</span><span class="nb">stat</span><span class="p">(</span><span class="nv">$currentFileName</span><span class="p">))[</span><span class="mi">7</span><span class="p">];</span>
+</span><span class='line'><span class="k">print</span> <span class="nv">$html</span><span class="p">;</span>
 </span><span class='line'>
-</span><span class='line'>        <span class="c1"># Push the file into an hash of arrays declared at the top,</span>
-</span><span class='line'>        <span class="c1"># with filesize as key and an array of filenames as value</span>
-</span><span class='line'>        <span class="nb">push</span><span class="p">(</span> <span class="nv">@</span><span class="p">{</span> <span class="nv">$filesSizeHash</span> <span class="p">{</span><span class="nv">$filesize</span><span class="p">}},</span> <span class="nv">$_</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># Function for formatting the total output size of duplicate files</span>
-</span><span class='line'><span class="k">sub </span><span class="nf">size_format</span><span class="p">{</span>
-</span><span class='line'>   <span class="k">my</span> <span class="nv">$size</span> <span class="o">=</span> <span class="nb">shift</span><span class="p">(</span><span class="nv">@_</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'>   <span class="k">if</span> <span class="p">(</span><span class="nv">$size</span> <span class="o">&lt;</span> <span class="mi">1024</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="nv">$size</span> <span class="o">.</span> <span class="s">&quot; bytes&quot;</span><span class="p">;</span>
-</span><span class='line'>   <span class="p">}</span>
-</span><span class='line'>   <span class="k">if</span> <span class="p">(</span><span class="nv">$size</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="p">))</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="nb">sprintf</span><span class="p">(</span><span class="s">&quot;%.2f KB&quot;</span><span class="p">,</span><span class="nv">$size</span> <span class="o">/</span> <span class="mi">1024</span><span class="p">);</span>
-</span><span class='line'>   <span class="p">}</span>
-</span><span class='line'>   <span class="k">if</span> <span class="p">(</span><span class="nv">$size</span> <span class="o">&lt;</span> <span class="p">(</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="p">))</span> <span class="p">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="nb">sprintf</span><span class="p">(</span><span class="s">&quot;%.2f MB&quot;</span><span class="p">,</span><span class="nv">$size</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="p">));</span>
-</span><span class='line'>   <span class="p">}</span>
-</span><span class='line'>   <span class="k">return</span> <span class="nb">sprintf</span><span class="p">(</span><span class="s">&quot;%.2f GB&quot;</span><span class="p">,</span><span class="nv">$size</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="o">*</span><span class="mi">1024</span><span class="p">));</span>
-</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nb">exit</span> <span class="mi">0</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure>
-
-
 
 </div>
   
@@ -591,7 +372,7 @@
       
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2012/03/08/perl-random-file-renaming/">Random File Renaming - [Updated]</a></h1>
+      <h1 class="entry-title"><a href="/blog/2014/08/16/site-update/">Site Update</a></h1>
     
     
       <p class="meta">
@@ -600,7 +381,7 @@
 
 
 
-<time class='entry-date' datetime='2012-03-08T00:00:00-05:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2012</span></span> <span class='time'>12:00 am</span></time>
+<time class='entry-date' datetime='2014-08-16T08:17:22-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>8:17 am</span></time>
         
         
       </p>
@@ -608,186 +389,20 @@
   </header>
 
 
-  <div class="entry-content"><p><strong>Update:</strong> wrote an undo script that allows you undo the renaming once.</p>
+  <div class="entry-content"><p>Finally got around to migrating my site off of Wordpress. I&rsquo;ve read good things about Octopress, so that&rsquo;s what the new site is based on. It is relatively straightforward to migrate the posts into the Octopress/Jekyll markdown format using the included tools.</p>
 
+<p>Currently the site is using a popular theme called Whitespace. Hopefully I will get around to customizing the theme a bit in the near future.</p>
 
-<p>Small script I wrote in Perl for renaming files in the current directory to a random number based on the file extension, useful for randomizing images for slide show purposes.</p>
+<p>More updates that will be coming:</p>
 
-
-<p>Simply modify the @extensionArray if you want to add/remove extensions to check against.</p>
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-<span class='line-number'>70</span>
-<span class='line-number'>71</span>
-<span class='line-number'>72</span>
-<span class='line-number'>73</span>
-<span class='line-number'>74</span>
-<span class='line-number'>75</span>
-<span class='line-number'>76</span>
-<span class='line-number'>77</span>
-<span class='line-number'>78</span>
-<span class='line-number'>79</span>
-</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="c1">#!/usr/local/bin/perl</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">#-----------------------------------------------------</span>
-</span><span class='line'><span class="c1"># Script to rename files with a random number if </span>
-</span><span class='line'><span class="c1"># extension matches </span>
-</span><span class='line'><span class="c1">#</span>
-</span><span class='line'><span class="c1"># Updated: uses a different comparison: now checks </span>
-</span><span class='line'><span class="c1"># for exact match ignoring case</span>
-</span><span class='line'><span class="c1">#</span>
-</span><span class='line'><span class="c1"># Updated: outputs a file for undo feature</span>
-</span><span class='line'><span class="c1">#-----------------------------------------------------</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">## Define Variable ##</span>
-</span><span class='line'><span class="nv">@files</span> <span class="o">=</span> <span class="sr">&lt;*&gt;</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">#Array variable to hold extensions you may check</span>
-</span><span class='line'><span class="nv">@extensionArray</span> <span class="o">=</span> <span class="p">(</span><span class="s">&quot;jpg&quot;</span><span class="p">,</span> <span class="s">&quot;zip&quot;</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">#Variable for the largest value of the random #</span>
-</span><span class='line'><span class="nv">$randNumCeiling</span> <span class="o">=</span> <span class="mi">100000</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">#Simple file counter to keep track of # of files processed</span>
-</span><span class='line'><span class="nv">$numFilesRenamed</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">#Open a file for writing undo info</span>
-</span><span class='line'><span class="nb">open</span><span class="p">(</span><span class="n">UNDOFILE</span><span class="p">,</span> <span class="s">&#39;&gt;_undo_&#39;</span><span class="p">)</span><span class="ow">or</span> <span class="nb">die</span> <span class="s">&quot;$!&quot;</span><span class="p">;;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">#-----------------------------------------------------</span>
-</span><span class='line'><span class="c1"># Loop through all files in the directory</span>
-</span><span class='line'><span class="c1">#-----------------------------------------------------</span>
-</span><span class='line'><span class="c1"># If it is a file, get the extension</span>
-</span><span class='line'><span class="c1"># Checks if the extension is equal to wanted </span>
-</span><span class='line'><span class="c1"># extension(s)</span>
-</span><span class='line'><span class="c1">#</span>
-</span><span class='line'><span class="c1"># If match, generate random number for filename </span>
-</span><span class='line'><span class="c1"># and rename it</span>
-</span><span class='line'><span class="c1">#-----------------------------------------------------</span>
-</span><span class='line'><span class="k">foreach</span> <span class="nv">$file</span> <span class="p">(</span><span class="nv">@files</span><span class="p">)</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="o">-</span><span class="n">f</span> <span class="nv">$file</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>        <span class="c1"># find and ignore all characters that is not a dot, then get the rest</span>
-</span><span class='line'>        <span class="k">my</span> <span class="nv">$ext</span> <span class="o">=</span> <span class="p">(</span><span class="nv">$file</span> <span class="o">=~</span> <span class="sr">m/([^.]+)$/</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="n">extensionMatch</span><span class="p">(</span><span class="nv">$ext</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>            <span class="nv">$numFilesRenamed</span><span class="o">++</span><span class="p">;</span>
-</span><span class='line'>            <span class="k">print</span> <span class="s">&quot;($numFilesRenamed)\n&quot;</span><span class="p">;</span>
-</span><span class='line'>            <span class="c1">#Old file name</span>
-</span><span class='line'>            <span class="k">print</span> <span class="n">UNDOFILE</span> <span class="s">&quot;$file:&quot;</span><span class="p">;</span>
-</span><span class='line'>            <span class="k">print</span> <span class="s">&quot;Old file name: $file\n&quot;</span><span class="p">;</span>
-</span><span class='line'>            <span class="k">my</span> <span class="nv">$newName</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">rand</span><span class="p">(</span><span class="nv">$randNumCeiling</span><span class="p">));</span>
-</span><span class='line'>            <span class="nb">rename</span><span class="p">(</span><span class="nv">$file</span><span class="p">,</span> <span class="s">&quot;$newName.$ext&quot;</span><span class="p">);</span>
-</span><span class='line'>            <span class="c1">#New file name</span>
-</span><span class='line'>            <span class="k">print</span> <span class="s">&quot;New file name: $newName.$ext\n\n&quot;</span><span class="p">;</span>
-</span><span class='line'>            <span class="k">print</span> <span class="n">UNDOFILE</span> <span class="s">&quot;$newName.$ext\n&quot;</span><span class="p">;</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'><span class="nb">close</span> <span class="n">UNDOFILE</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1">#-----------------------------------------------------</span>
-</span><span class='line'><span class="c1"># Loop through extention array (defined a the top)</span>
-</span><span class='line'><span class="c1"># to check for match with the argment passed into</span>
-</span><span class='line'><span class="c1"># the function (which is the extension of the file</span>
-</span><span class='line'><span class="c1"># currently being processed</span>
-</span><span class='line'><span class="c1">#-----------------------------------------------------</span>
-</span><span class='line'><span class="c1"># Returns a 1 if extensions match</span>
-</span><span class='line'><span class="c1"># else returns 0</span>
-</span><span class='line'><span class="c1">#-----------------------------------------------------</span>
-</span><span class='line'><span class="k">sub </span><span class="nf">extensionMatch</span>
-</span><span class='line'><span class="p">{</span>
-</span><span class='line'>    <span class="nv">$passedInExt</span> <span class="o">=</span> <span class="nv">@_</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-</span><span class='line'>    <span class="k">foreach</span> <span class="nv">$extension</span> <span class="p">(</span><span class="nv">@extensionArray</span><span class="p">){</span>
-</span><span class='line'>        <span class="c1">#check for exact string ignoring case</span>
-</span><span class='line'>        <span class="k">if</span><span class="p">(</span><span class="nv">$extension</span> <span class="o">=~</span> <span class="sr">m/^$passedInExt$/i</span><span class="p">){</span>
-</span><span class='line'>            <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
+<ul>
+<li>import scale modeling posts</li>
+<li>rehost images</li>
+<li>add project pages</li>
+</ul>
 
 </div>
   
-  
-    <footer>
-      <a rel="full-article" href="/blog/2012/03/08/perl-random-file-renaming/">Read on &rarr;</a>
-    </footer>
   
 
 

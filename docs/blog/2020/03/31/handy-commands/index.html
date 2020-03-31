@@ -5,11 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Category: Cheatsheet - Chun Sing Tsui</title>
+  <title>Commonly Used Commands - Chun Sing Tsui</title>
   <meta name="author" content="Chun Sing Tsui">
 
   
-  <meta name="description" content="Category: cheatsheet">
+  <meta name="description" content="Get specific column using cut. Tab is the default delimiter in cut 1
+cat content | cut -d &#39;delimiter&#39; -f &lt;field number&gt; Output specific &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.cstsui.com/blog/categories/cheatsheet">
+  <link rel="canonical" href="http://www.cstsui.com/blog/2020/03/31/handy-commands">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Chun Sing Tsui" type="application/atom+xml">
@@ -104,60 +105,147 @@
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">Category: Cheatsheet</h1>
+    
+      
+        <h1 class="entry-title">Commonly Used Commands</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2020-03-31T18:12:00-04:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>31</span><span class='date-suffix'>st</span>, <span class='date-year'>2020</span></span> <span class='time'>6:12 pm</span></time>
+        
+        
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
+<div class="entry-content"><p>Get specific column using <code>cut</code>. Tab is the default delimiter in cut</p>
 
-  
-  <h2>2020</h2>
-
-<article>
-  
-<h1><a href="/blog/2020/03/31/handy-commands/">Commonly Used Commands</a></h1>
-<time datetime="2020-03-31T18:12:00-04:00" pubdate><span class='month'>Mar</span> <span class='day'>31</span> <span class='year'>2020</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/cheatsheet/'>cheatsheet</a>, <a class='category' href='/blog/categories/shell/'>shell</a></span>
-</footer>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>cat content <span class="p">|</span> cut -d <span class="s1">&#39;delimiter&#39;</span> -f &lt;field number&gt;
+</span></code></pre></td></tr></table></div></figure>
 
 
-</article>
+<p>Output specific column using <code>awk</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>cat content <span class="p">|</span> awk -F/ <span class="s1">&#39;{print $1}&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>Base64 encode (-n for no newline)</p>
 
-<article>
-  
-<h1><a href="/blog/2020/03/23/virt-env-cheatsheet/">Virtual Environment Cheatsheet</a></h1>
-<time datetime="2020-03-23T20:30:00-04:00" pubdate><span class='month'>Mar</span> <span class='day'>23</span> <span class='year'>2020</span></time>
-
-<footer>
-  <span class="categories">posted in <a class='category' href='/blog/categories/cheatsheet/'>cheatsheet</a>, <a class='category' href='/blog/categories/python/'>python</a>, <a class='category' href='/blog/categories/ruby/'>ruby</a>, <a class='category' href='/blog/categories/shell/'>shell</a></span>
-</footer>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">echo</span> -n <span class="s1">&#39;admin:password&#39;</span> <span class="p">|</span> base64
+</span></code></pre></td></tr></table></div></figure>
 
 
-</article>
+<p>Create gzipped tar</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>tar -czvf archive.tgz file1 dir2
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Extract gzipped tar</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Output dir has to exist</span>
+</span><span class='line'>tar -xzvf archive.tgz -C targetdir
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Heredoc Syntax to create multi-line file from command line</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>cat <span class="s">&lt;&lt;EOT &gt; app-pod.yml</span>
+</span><span class='line'><span class="s">apiVersion: v1</span>
+</span><span class='line'><span class="s">kind: Pod</span>
+</span><span class='line'><span class="s">metadata:</span>
+</span><span class='line'><span class="s">  name: my-app-ui</span>
+</span><span class='line'><span class="s">  labels:</span>
+</span><span class='line'><span class="s">    app: my-app</span>
+</span><span class='line'><span class="s">spec:</span>
+</span><span class='line'><span class="s">  containers:</span>
+</span><span class='line'><span class="s">    - name: nginx-server</span>
+</span><span class='line'><span class="s">      image: nginx</span>
+</span><span class='line'><span class="s">EOT</span>
+</span></code></pre></td></tr></table></div></figure>
 
 </div>
 
+
+  <footer>
+    <p class="meta">
+      
   
-</article>
 
 
-</div>
 
-<aside class="sidebar">
+  <span class="byline author vcard">Authored by <span class="fn">
   
+    Chun Sing Tsui
+  
+  </span></span>
+
+
+      
+
+
+
+
+<time class='entry-date' datetime='2020-03-31T18:12:00-04:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>31</span><span class='date-suffix'>st</span>, <span class='date-year'>2020</span></span> <span class='time'>6:12 pm</span></time>
+      
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/cheatsheet/'>cheatsheet</a>, <a class='category' href='/blog/categories/shell/'>shell</a>
+  
+</span>
+
+
+    </p>
     
+      <div class="sharing">
   
-</aside>
+  
+  
+</div>
 
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2020/03/23/virt-env-cheatsheet/" title="Previous Post: Virtual Environment Cheatsheet">&laquo; Virtual Environment Cheatsheet</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+
+</div>
 
     </div>
   </div>

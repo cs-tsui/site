@@ -9,21 +9,8 @@
   <meta name="author" content="Chun Sing Tsui">
 
   
-  <meta name="description" content="Quick reminder for myself when I need to switch between virtual environments. RVM for Ruby 1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-# List existing &hellip;">
+  <meta name="description" content="Get specific column using cut. Tab is the default delimiter in cut 1
+cat content | cut -d &#39;delimiter&#39; -f &lt;field number&gt; Output specific &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -119,6 +106,100 @@
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2020/03/31/handy-commands/">Commonly Used Commands</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2020-03-31T18:12:00-04:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>31</span><span class='date-suffix'>st</span>, <span class='date-year'>2020</span></span> <span class='time'>6:12 pm</span></time>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Get specific column using <code>cut</code>. Tab is the default delimiter in cut</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>cat content <span class="p">|</span> cut -d <span class="s1">&#39;delimiter&#39;</span> -f &lt;field number&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Output specific column using <code>awk</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>cat content <span class="p">|</span> awk -F/ <span class="s1">&#39;{print $1}&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Base64 encode (-n for no newline)</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">echo</span> -n <span class="s1">&#39;admin:password&#39;</span> <span class="p">|</span> base64
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Create gzipped tar</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>tar -czvf archive.tgz file1 dir2
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Extract gzipped tar</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Output dir has to exist</span>
+</span><span class='line'>tar -xzvf archive.tgz -C targetdir
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Heredoc Syntax to create multi-line file from command line</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>cat <span class="s">&lt;&lt;EOT &gt; app-pod.yml</span>
+</span><span class='line'><span class="s">apiVersion: v1</span>
+</span><span class='line'><span class="s">kind: Pod</span>
+</span><span class='line'><span class="s">metadata:</span>
+</span><span class='line'><span class="s">  name: my-app-ui</span>
+</span><span class='line'><span class="s">  labels:</span>
+</span><span class='line'><span class="s">    app: my-app</span>
+</span><span class='line'><span class="s">spec:</span>
+</span><span class='line'><span class="s">  containers:</span>
+</span><span class='line'><span class="s">    - name: nginx-server</span>
+</span><span class='line'><span class="s">      image: nginx</span>
+</span><span class='line'><span class="s">EOT</span>
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -340,308 +421,6 @@ All-Star players are top-tier players selected by fans, a media panel, and coach
 <p>An interactive web user interface was created with HighCharts, Vue.js, Bootstrap that displays previous season all-star selections as well as interactions to see details about specific players and distribution of statistics.</p>
 
 <p><img src="images/allstar-nba-img/web-ui-0.png" alt="Web UI" /></p>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2020/03/12/datapower-quickstart/">DataPower QuickStart (Docker)</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2020-03-12T21:44:35-04:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2020</span></span> <span class='time'>9:44 pm</span></time>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Following the <a href="https://developer.ibm.com/datapower/docker">IBM Developer Guide</a> on the Dockerized version of DataPower is a great way to start playing around with the DataPower application gateway.</p>
-
-<p>There are some small gotchas that the guide does not mention and they are noted here.</p>
-
-<h3>SSH Port Number</h3>
-
-<p>In the newer releases of DataPower in container form, the IDG process is not ran with root. Therefore using port 22 as the SSH port will fail since only root user is allowed to use ports under 1024. We have to make a small change to the target port mapping from 22 to 9022 (or another high numbered port number).</p>
-
-<p>As seen in the <a href="https://developer.ibm.com/answers/questions/394482/ssh-service-on-new-datapower-docker-container-will/">Developer Works answer found here</a>:</p>
-
-<pre><code>One of the changes in 7.6 is that by default, the DataPower Gateway process runs as the non-root drouter user inside the Docker container. Because of this, DataPower does not have permissions to use privileged ports.
-</code></pre>
-
-<p>So we make the simple change to 9022:</p>
-
-<pre><code> docker run -it \
-    -v $PWD/config:/drouter/config \
-    -v $PWD/local:/drouter/local \
-    -e DATAPOWER_ACCEPT_LICENSE=true \
-    -e DATAPOWER_INTERACTIVE=true \
-    -p 9090:9090 \
-    -p 9022:9022 \
-    -p 5554:5554 \
-    -p 8000-8010:8000-8010 \
-    --name idg \
-    ibmcom/datapower
-</code></pre>
-
-<p>We can now enable ssh so we can log into the DataPower CLI and execute commands.</p>
-
-<h3>Enable SSH</h3>
-
-<p>After logging into the CLI with username and password, we can enable SSH and designate the port.</p>
-
-<p>Since we are port-forwarding via 9022, it will be the one used for SSH.</p>
-
-<pre><code>idg# configure
-Global mode
-idg(config)# ssh 0.0.0.0 9022
-
-%   Pending
-
-SSH service listener enabled
-</code></pre>
-
-<p>If the port number selected is still in the privilege range (i.e. &lt;1024), the confusing part in trying to bring up the SSH service via the web UI or the CLI is there aren&rsquo;t any obvious errors about why the SSH service does not come up (in the case of the Web UI) or why the service is reported as up but is not reachable (in the case of the CLI)</p>
-
-<h3>Enable Web Admin UI</h3>
-
-<p>Port 9090 is one of the port we are exposing in the Docker run commands, and we use this to reach the web admin UI.</p>
-
-<pre><code>idg(config)# web-mgmt 0 9090 9090;
-Web management: successfully started
-</code></pre>
-
-<p>When navigating to it in the browser via localhost, don&rsquo;t forget to specify <code>https</code></p>
-
-<pre><code>https://localhost:9090
-</code></pre>
-
-<h3>Enabling REST Management</h3>
-
-<p>This allows us to manage the gateway using its REST API</p>
-
-<pre><code>idg(config)# rest-mgmt 0  5554
-REST management: successfully started
-</code></pre>
-
-<p>After enabling, we can check if its enabled by curl-ing the REST endpoing</p>
-
-<pre><code>$ curl -k -u admin:admin https://localhost:5554/mgmt/config/default/RestMgmtInterface
-{
-
-    "_links" : {
-
-    "self" : {"href" : "/mgmt/config/default/RestMgmtInterface"}, 
-
-    "doc" : {"href" : "/mgmt/docs/config/RestMgmtInterface"}}, 
-
-    "RestMgmtInterface" : {"name" : "RestMgmt-Settings", 
-
-    "_links" : {
-
-    "self" : {"href" : "/mgmt/config/default/RestMgmtInterface/RestMgmt-Settings"}, 
-
-    "doc" : {"href" : "/mgmt/docs/config/RestMgmtInterface"}}, 
-
-    "mAdminState" : "enabled", 
-
-    "LocalAddress" : "0.0.0.0", 
-
-    "LocalPort" : 5554, 
-
-    "ACL" : {"value": "rest-mgmt", 
-
-    "href" : "/mgmt/config/default/AccessControlList/rest-mgmt"}, 
-
-    "SSLConfigType" : "server"}}
-</code></pre>
-
-<h3>Saving the Configuration</h3>
-
-<p>If you would like for the config values to persist and be picked up next time the DataPower container gets restarted, we can persist the configs to files.</p>
-
-<pre><code>idg(config)# write memory
-Overwrite previously saved configuration? Yes/No [y/n]: y
-Configuration saved successfully.
-</code></pre>
-
-<h3>Reference Commands and Outputs</h3>
-
-<pre><code>login: admin
-Password: *****
-
-Welcome to IBM DataPower Gateway console configuration. 
-Copyright IBM Corporation 1999, 2020 
-
-Version: IDG.2018.4.1.10 build 318002 on Feb 21, 2020 11:09:49 AM
-Delivery type: LTS
-Serial number: 0000001
-
-idg# configure
-Global mode
-idg(config)# ssh 0.0.0.0 9022
-
-%   Pending
-
-SSH service listener enabled
-
-idg(config)# web-mgmt 0 9090 9090;
-Web management: successfully started
-
-idg(config)# rest-mgmt 0  5554
-REST management: successfully started
-
-idg(config)# write memory
-Overwrite previously saved configuration? Yes/No [y/n]: y
-Configuration saved successfully.
-</code></pre>
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2016/02/23/easy-html-table-generation-from-perl-dbi-and-sql/">Easy HTML Table Generation From Perl DBI and SQL</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2016-02-23T22:17:32-05:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2016</span></span> <span class='time'>10:17 pm</span></time>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>The following script is used to quickly generate HTML tables for reports using only a SQL query as an input. Useful if you needed to generate and send out a report quickly without installing yet yet another package.</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="c1">#!/usr/bin/perl</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">use</span> <span class="n">DBI</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># Query as in input, and generate HTML table output </span>
-</span><span class='line'><span class="k">my</span> <span class="nv">$query</span> <span class="o">=</span> <span class="s">&#39;select * from data&#39;</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># 1) Connect and get DB handle</span>
-</span><span class='line'><span class="k">my</span> <span class="nv">$dbh</span> <span class="o">=</span> <span class="n">connect_db</span><span class="p">();</span> <span class="c1"># use your own connection here</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># 2) Run your query </span>
-</span><span class='line'><span class="k">my</span> <span class="nv">$sth</span>   <span class="o">=</span> <span class="nv">$dbh</span><span class="o">-&gt;</span><span class="n">prepare</span><span class="p">(</span><span class="nv">$query</span><span class="p">);</span>
-</span><span class='line'><span class="k">my</span> <span class="nv">@loh</span>   <span class="o">=</span> <span class="nv">@</span><span class="p">{</span> <span class="nv">$sth</span><span class="o">-&gt;</span><span class="n">fetchall_arrayref</span><span class="p">({})</span> <span class="p">};</span>
-</span><span class='line'><span class="k">my</span> <span class="nv">@cols</span>  <span class="o">=</span> <span class="nv">@</span><span class="p">{</span> <span class="nv">$sth</span><span class="o">-&gt;</span><span class="p">{</span><span class="n">NAME</span><span class="p">}</span> <span class="p">};</span>
-</span><span class='line'>
-</span><span class='line'><span class="c1"># 3) Generate HTML Table </span>
-</span><span class='line'><span class="k">my</span> <span class="nv">$thead</span> <span class="o">=</span> <span class="nb">join</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="nb">map</span> <span class="p">{</span><span class="s">&quot;&lt;td&gt;$_&lt;/td&gt;&quot;</span><span class="p">}</span> <span class="nv">@cols</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">my</span> <span class="nv">@rows</span> <span class="o">=</span> <span class="p">();</span>
-</span><span class='line'><span class="k">for</span> <span class="k">my</span> <span class="nv">$hr</span> <span class="p">(</span><span class="nv">@loh</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="nb">push</span> <span class="nv">@rows</span><span class="p">,</span> <span class="nb">join</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="nb">map</span> <span class="p">{</span><span class="s">&quot;&lt;td&gt;$_&lt;/td&gt;&quot;</span><span class="p">}</span> <span class="nv">@</span><span class="p">{</span><span class="nv">$hr</span><span class="p">}{</span><span class="nv">@cols</span><span class="p">});</span>
-</span><span class='line'><span class="p">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">my</span> <span class="nv">$tbody</span> <span class="o">=</span> <span class="nb">join</span> <span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="nb">map</span> <span class="p">{</span><span class="s">&quot;&lt;tr&gt;$_&lt;/tr&gt;&quot;</span><span class="p">}</span> <span class="nv">@rows</span><span class="p">);</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">my</span> <span class="nv">$html</span> <span class="o">=</span> <span class="sx">qq|&lt;table&gt; $thead &lt;thead&gt; $thead &lt;/thead&gt; &lt;tbody&gt; $tbody &lt;/tbody&gt; &lt;/table&gt;|</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="k">print</span> <span class="nv">$html</span><span class="p">;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nb">exit</span> <span class="mi">0</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2014/08/16/site-update/">Site Update</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2014-08-16T08:17:22-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2014</span></span> <span class='time'>8:17 am</span></time>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>Finally got around to migrating my site off of Wordpress. I&rsquo;ve read good things about Octopress, so that&rsquo;s what the new site is based on. It is relatively straightforward to migrate the posts into the Octopress/Jekyll markdown format using the included tools.</p>
-
-<p>Currently the site is using a popular theme called Whitespace. Hopefully I will get around to customizing the theme a bit in the near future.</p>
-
-<p>More updates that will be coming:</p>
-
-<ul>
-<li>import scale modeling posts</li>
-<li>rehost images</li>
-<li>add project pages</li>
-</ul>
-
 </div>
   
   

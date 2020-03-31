@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Cheatsheet | Chun Sing Tsui]]></title>
   <link href="http://www.cstsui.com/blog/categories/cheatsheet/atom.xml" rel="self"/>
   <link href="http://www.cstsui.com/"/>
-  <updated>2020-03-24T07:45:46-04:00</updated>
+  <updated>2020-03-31T14:30:32-04:00</updated>
   <id>http://www.cstsui.com/</id>
   <author>
     <name><![CDATA[Chun Sing Tsui]]></name>
@@ -12,6 +12,55 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Commonly Used Commands]]></title>
+    <link href="http://www.cstsui.com/blog/2020/03/31/handy-commands/"/>
+    <updated>2020-03-31T18:12:00-04:00</updated>
+    <id>http://www.cstsui.com/blog/2020/03/31/handy-commands</id>
+    <content type="html"><![CDATA[<p>Get specific column using <code>cut</code>. Tab is the default delimiter in cut</p>
+
+<pre><code class="bash">cat content | cut -d 'delimiter' -f &lt;field number&gt;
+</code></pre>
+
+<p>Output specific column using <code>awk</code></p>
+
+<pre><code class="bash">cat content | awk -F/ '{print $1}'
+</code></pre>
+
+<p>Base64 encode (-n for no newline)</p>
+
+<pre><code class="bash">echo -n 'admin:password' | base64
+</code></pre>
+
+<p>Create gzipped tar</p>
+
+<pre><code class="bash">tar -czvf archive.tgz file1 dir2
+</code></pre>
+
+<p>Extract gzipped tar</p>
+
+<pre><code class="bash"># Output dir has to exist
+tar -xzvf archive.tgz -C targetdir
+</code></pre>
+
+<p>Heredoc Syntax to create multi-line file from command line</p>
+
+<pre><code class="bash">cat &lt;&lt;EOT &gt; app-pod.yml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-app-ui
+  labels:
+    app: my-app
+spec:
+  containers:
+    - name: nginx-server
+      image: nginx
+EOT
+</code></pre>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Virtual Environment Cheatsheet]]></title>
