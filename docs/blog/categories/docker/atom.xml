@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Docker | Chun Sing Tsui]]></title>
   <link href="http://www.cstsui.com/blog/categories/docker/atom.xml" rel="self"/>
   <link href="http://www.cstsui.com/"/>
-  <updated>2020-03-31T14:30:32-04:00</updated>
+  <updated>2020-04-04T10:24:14-04:00</updated>
   <id>http://www.cstsui.com/</id>
   <author>
     <name><![CDATA[Chun Sing Tsui]]></name>
@@ -86,7 +86,7 @@ Web management: successfully started
 REST management: successfully started
 </code></pre>
 
-<p>After enabling, we can check if its enabled by curl-ing the REST endpoing</p>
+<p>After enabling, we can check if its enabled by curl-ing the REST endpoint</p>
 
 <pre><code>$ curl -k -u admin:admin https://localhost:5554/mgmt/config/default/RestMgmtInterface
 {

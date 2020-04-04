@@ -74,7 +74,7 @@ This allows us to manage the gateway using its REST API
     idg(config)# rest-mgmt 0  5554
     REST management: successfully started
 
-After enabling, we can check if its enabled by curl-ing the REST endpoing
+After enabling, we can check if its enabled by curl-ing the REST endpoint
 
     $ curl -k -u admin:admin https://localhost:5554/mgmt/config/default/RestMgmtInterface
     {
