@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Python | Chun Sing Tsui]]></title>
   <link href="http://www.cstsui.com/blog/categories/python/atom.xml" rel="self"/>
   <link href="http://www.cstsui.com/"/>
-  <updated>2020-04-04T10:24:14-04:00</updated>
+  <updated>2020-04-04T10:26:57-04:00</updated>
   <id>http://www.cstsui.com/</id>
   <author>
     <name><![CDATA[Chun Sing Tsui]]></name>
@@ -18,7 +18,7 @@
     <link href="http://www.cstsui.com/blog/2020/03/23/virt-env-cheatsheet/"/>
     <updated>2020-03-23T20:30:00-04:00</updated>
     <id>http://www.cstsui.com/blog/2020/03/23/virt-env-cheatsheet</id>
-    <content type="html"><![CDATA[<p>Quick reminder for myself when I need to switch between virtual environments.</p>
+    <content type="html"><![CDATA[<p>For those who work with virual environments when developing, here&rsquo;s a handy cheatsheet in case you need to switch between various virt-envs.</p>
 
 <p><code>RVM</code> for Ruby</p>
 

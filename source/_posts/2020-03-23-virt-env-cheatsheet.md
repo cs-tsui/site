@@ -10,7 +10,7 @@ categories:
 - python
 ---
 
-Quick reminder for myself when I need to switch between virtual environments.
+For those who work with virual environments when developing, here's a handy cheatsheet in case you need to switch between various virt-envs.
 
 `RVM` for Ruby
 
