@@ -68,6 +68,22 @@ CNI - Container Network Interface
 `k edit deployments my-deployment`
 
 
+## Kubernetes Namespaces
+
+`kubectl api-resources`
+
+Not all resources can be namespaced. Cluster administrative type resources typically are not namespaced.
+
+While we have namespaces to logically separate pods and other resources, unless policies are added to restrict access, resources have access to namespaces and their resources.
+
+
+Deleting namespaces will remove all of its objects, but not the ones that it may be associated with but don't belong to any namespaces (PVs and Nodes)
+
+	k delete ns dev
+
+
+---
+
 #### Pods
 * Smallest unit of object K8s manages
 * Can contain multiple containers
