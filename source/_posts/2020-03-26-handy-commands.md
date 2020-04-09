@@ -60,3 +60,24 @@ spec:
       image: nginx
 EOT
 ```
+
+
+Working with systemd
+
+```
+# List all services
+systemctl list-units --type=service
+
+# Get logs by the service unit
+journalctl -u nginx.service
+
+# Get data from yesterday
+journalctl --since yesterday
+
+# Get data from specific timestamps
+journalctl --since "2015-01-10" --until "2015-01-11 03:00"
+
+# Get log data from previous boot
+journalctl -b -1
+
+```
