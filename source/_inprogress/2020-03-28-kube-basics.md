@@ -82,6 +82,26 @@ Deleting namespaces will remove all of its objects, but not the ones that it may
 	k delete ns dev
 
 
+## TGI Kubernetes 002 - Networking and Services
+
+```
+# See Calico config file
+cat /etc/cni/net.d/10-calico.conf
+```
+
+```
+# CNI bin dir
+/opt/cni
+```
+
+Services
+
+* External Name -  use kube for service discovery, but point it at something outside the cluster. Can point at DNS name to access outside resources.
+
+```
+
+
+
 ---
 
 #### Pods
