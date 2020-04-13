@@ -1,4 +1,4 @@
-## Summary
+# Kubernetes in Depth
 Notes from the course [Kubernetes in Depth](https://kube.academy/courses/kubernetes-in-depth)
 
 ## Architecture
@@ -82,6 +82,8 @@ Deleting namespaces will remove all of its objects, but not the ones that it may
 	k delete ns dev
 
 
+# TGI Kubernetes
+
 ## TGI Kubernetes 002 - Networking and Services
 
 ```
@@ -98,7 +100,24 @@ Services
 
 * External Name -  use kube for service discovery, but point it at something outside the cluster. Can point at DNS name to access outside resources.
 
-```
+* None - create a name service, with selector there that "points" to the pods. Basis for a named label query. Kubernetes collects this information into a different API object.
+  * Service/endpoint allows a decoding of a named service into a set of IP addresses
+  * service API with endpoint API is how kubernetes does service discovery
+  * `kubectl get endpoints <servicename>`
+
+* ClusterIP - creates a VIP from a separate IP range from pod IPS for the service. IP will not change for the life of the service
+  * kube-proxy on every node
+    * k get pods -n kube-system will show kube-proxy pods (if using daemon set to run on every node)
+    * Can run outside of kubernetes without daemon set
+    * Configures IP tables based on service definition on very node, and each node will forward the traffic to an IP that is under the service set based on probability
+    * `iptables -L`
+
+* NodePort - anyone hitting a cluster node on a particular port assigned to the service can talk to the service
+  * `curl <pod-ip>:8080/env/api` to get pod env information
+
+* LoadBalancer - built on top of nodeport. If configured properly, the loadbalancer will point to the nodes in the cluster, and forward traffic to a the node port. After it hits the port on some node, it will then be forwarded to some pod on the cluster. Later versions of kubernetes has a more direct way to connect external traffic to the pods with less hops
+
+* TODO: review iptables and watch pattern
 
 
 
