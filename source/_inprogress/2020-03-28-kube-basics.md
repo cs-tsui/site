@@ -119,6 +119,17 @@ Services
 
 * TODO: review iptables and watch pattern
 
+## TGI Kubernetes 003 - Istio
+
+* anything with a cluster role has ability to do something cluster wide that's not restricted to a namespace
+
+* Side car - buddy container to the main pod that gives extra capabilities to the main workload
+
+* Zipkin - tracing of a lifecycle of a service call
+
+* kubectl apply creates an update, create does not
+
+* Can run `kubectl delete` to delete deployed objects
 
 
 ---
