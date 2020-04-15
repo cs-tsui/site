@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Cheatsheet | Chun Sing Tsui]]></title>
   <link href="http://www.cstsui.com/blog/categories/cheatsheet/atom.xml" rel="self"/>
   <link href="http://www.cstsui.com/"/>
-  <updated>2020-04-07T21:05:24-04:00</updated>
+  <updated>2020-04-15T18:47:56-04:00</updated>
   <id>http://www.cstsui.com/</id>
   <author>
     <name><![CDATA[Chun Sing Tsui]]></name>
@@ -44,6 +44,24 @@
 tar -xzvf archive.tgz -C targetdir
 </code></pre>
 
+<p>Listening ports
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo netstat -plnt&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;h1&gt;or&lt;/h1&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;sudo lsof -i -P <span class="p">|</span> grep -i <span class="p">&amp;</span>lsquo<span class="p">;</span>listen<span class="p">&amp;</span>rsquo<span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>Disk usage sorted by size
+<code>bash
+du -hs * | sort -h
+</code></p>
+
 <p>Heredoc Syntax to create multi-line file from command line</p>
 
 <pre><code class="bash">cat &lt;&lt;EOT &gt; app-pod.yml
@@ -58,6 +76,24 @@ spec:
     - name: nginx-server
       image: nginx
 EOT
+</code></pre>
+
+<p>Working with systemd</p>
+
+<pre><code># List all services
+systemctl list-units --type=service
+
+# Get logs by the service unit
+journalctl -u nginx.service
+
+# Get data from yesterday
+journalctl --since yesterday
+
+# Get data from specific timestamps
+journalctl --since "2015-01-10" --until "2015-01-11 03:00"
+
+# Get log data from previous boot
+journalctl -b -1
 </code></pre>
 ]]></content>
   </entry>

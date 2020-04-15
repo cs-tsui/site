@@ -43,6 +43,21 @@ Extract gzipped tar
 tar -xzvf archive.tgz -C targetdir
 ```
 
+Listening ports
+```bash
+sudo netstat -plnt
+
+# or
+
+sudo lsof -i -P | grep -i 'listen'
+```
+
+Disk usage sorted by size
+```bash
+du -hs * | sort -h
+```
+
+
 
 Heredoc Syntax to create multi-line file from command line
 

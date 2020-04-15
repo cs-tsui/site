@@ -166,6 +166,28 @@ cat content | cut -d &#39;delimiter&#39; -f &lt;field number&gt; Output specific
 </span></code></pre></td></tr></table></div></figure>
 
 
+<p>Listening ports</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo netstat -plnt
+</span><span class='line'>
+</span><span class='line'><span class="c"># or</span>
+</span><span class='line'>
+</span><span class='line'>sudo lsof -i -P <span class="p">|</span> grep -i <span class="s1">&#39;listen&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Disk usage sorted by size</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>du -hs * <span class="p">|</span> sort -h
+</span></code></pre></td></tr></table></div></figure>
+
+
 <p>Heredoc Syntax to create multi-line file from command line</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -192,6 +214,39 @@ cat content | cut -d &#39;delimiter&#39; -f &lt;field number&gt; Output specific
 </span><span class='line'><span class="s">    - name: nginx-server</span>
 </span><span class='line'><span class="s">      image: nginx</span>
 </span><span class='line'><span class="s">EOT</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Working with systemd</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># List all services</span>
+</span><span class='line'>systemctl list-units --type<span class="o">=</span>service
+</span><span class='line'>
+</span><span class='line'><span class="c"># Get logs by the service unit</span>
+</span><span class='line'>journalctl -u nginx.service
+</span><span class='line'>
+</span><span class='line'><span class="c"># Get data from yesterday</span>
+</span><span class='line'>journalctl --since yesterday
+</span><span class='line'>
+</span><span class='line'><span class="c"># Get data from specific timestamps</span>
+</span><span class='line'>journalctl --since <span class="s2">&quot;2015-01-10&quot;</span> --until <span class="s2">&quot;2015-01-11 03:00&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Get log data from previous boot</span>
+</span><span class='line'>journalctl -b -1
 </span></code></pre></td></tr></table></div></figure>
 
 </div>
