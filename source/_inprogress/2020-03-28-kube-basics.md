@@ -131,6 +131,18 @@ Services
 
 * Can run `kubectl delete` to delete deployed objects
 
+TGI Kubernetes 005 - Probes
+
+Liveness Probe
+- is the app in a state where it is considered up or down to serve simple requests. Detect if program is in a completely not running state vs running state. More binary of the probes. Used to know when to restart a container
+
+
+Readiness Probe
+- is the app ready to receive traffic? a pod can be alive but not ready. Pod is considered ready when all its containers are ready. When a pod is not ready, it is removed form service load balancers
+
+Startup Probe
+
+Startup
 
 ---
 
