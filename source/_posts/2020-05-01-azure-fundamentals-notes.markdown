@@ -16,3 +16,12 @@ Azure Traffic Manager
 - Interal Load balancer - within an AZ virtual network
 
 
+Azure Application Gateway
+- Web traffic load balancer
+- Operates at level 7, vs level 4 (TCP/UDP)
+
+
+Azure Front Door
+- Specifically for the HTTP web traffic
+- Can be used together with AZ Traffic Manager, with FD handling HTTP traffic, and TM handling other protocols
+
