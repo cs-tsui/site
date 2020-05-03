@@ -141,9 +141,7 @@ Readiness Probe
 - is the app ready to receive traffic? a pod can be alive but not ready. Pod is considered ready when all its containers are ready. When a pod is not ready, it is removed form service load balancers
 
 Startup Probe
-
-Startup
-
+- if configured, it disables the other 2 probe checks until it succeeds. Newer type of probe than the other two, and is used specifically for startup
 ---
 
 #### Pods
