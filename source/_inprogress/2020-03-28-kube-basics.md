@@ -172,3 +172,22 @@ spec:
 Get yaml definition from POD
 
 `kubectl get pod <pod-name> -o yaml > pod-def.yaml`
+
+---
+
+## RBAC
+
+Roles Definition
+  - Resources
+  - Verbs
+
+Roles are specific to a namespace, unless a cluster role is created, which applies to the complete cluster.
+
+The role binding is what binds a role to a user or group.
+
+Pods use service accounts to bind to certain roles, so apps can have access to cluster resouces.
+
+Three major parts:
+  - subjects (users/groups/serviceaccounts)
+  - rules (roles/clusteroles)
+  - bindings (clusterrolebindings)
