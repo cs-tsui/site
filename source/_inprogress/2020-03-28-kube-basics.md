@@ -191,3 +191,71 @@ Three major parts:
   - subjects (users/groups/serviceaccounts)
   - rules (roles/clusteroles)
   - bindings (clusterrolebindings)
+
+---
+
+### Debugging Tips
+
+`kubectl attach`
+  - watch stdout of a container in real time
+
+`kubectl cp`
+  - copy files into and out of containers
+
+`kubectl get pods -v 99`
+
+`kubectl explain`
+  - get help with structure of a resource
+  - `kubectl explaind crd`
+  - `kubectl explaind crd.spec`
+
+
+#### Using curl
+
+```
+curl --header "Authorization: Bearer [token]" [API server URL]
+```
+
+Building and submitting requests:
+
+  - GET: request is contained in the URL itself (default method) — used to read/list/watch resources
+  - POST: submit a data blob to create resources
+  - PATCH: submit a data blob to merge-update resources
+  - PUT: submit a data blob to replace a resource
+  - DELETE: submit options to control deletion of a resource
+
+```
+curl --cert client.cert --key client.key --cacert cluster-ca.cert \https://192.168.100.10:6443/api/v1/namespaces/default/pods
+```
+
+```
+# Add watch=true at the end of the API call
+
+curl --cert client.cert --key client.key --cacert cluster-ca.cert \https://192.168.100.10:6443/api/v1/namespaces/default/pods?watch=true{"type":"ADDED","object":{"kind":"Pod","apiVersion":"v1","metadata":{"name
+```
+
+#### openssl
+```
+openssl verify -CAfile cluster-ca.cert client.cert
+```
+Some will certify, some don't
+
+```
+client.cert: OK
+
+or
+
+
+O = system:masters, CN = adminerror 20 at 0 depth lookup: unable to get local issuer certificateerror client.cert: verification failed
+```
+
+
+```
+# Connect to server manually
+openssl s_client -connect URL:6443
+```
+
+#### Network Tools
+```
+dig, tcpdump, netat, ss
+```
