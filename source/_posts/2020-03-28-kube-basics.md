@@ -1,3 +1,12 @@
+---
+layout: post
+title: "Kubernetes Basics"
+date: 2020-03-28 09:00:00 -0400
+comments: true
+published: false
+categories: 
+---
+
 # Kubernetes in Depth
 Notes from the course [Kubernetes in Depth](https://kube.academy/courses/kubernetes-in-depth)
 
