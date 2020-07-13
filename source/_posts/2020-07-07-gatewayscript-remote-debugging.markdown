@@ -57,7 +57,7 @@ Then use the `node` type and `inspector` protocol in the configuration as follow
 }
 ```
 Press `Run` to start the debugger, and then trigger your gatewayscript action.
-It 
+You'll then be able to step through the code or inspect variables.
 
 ![vscode-debug-statement](/images/gatewayscript-remote-debugging/debugger-breakpoint.png)
 

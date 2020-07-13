@@ -4,7 +4,7 @@
   <title><![CDATA[Chun Sing Tsui]]></title>
   <link href="http://www.cstsui.com/atom.xml" rel="self"/>
   <link href="http://www.cstsui.com/"/>
-  <updated>2020-07-12T21:46:00-04:00</updated>
+  <updated>2020-07-13T07:24:13-04:00</updated>
   <id>http://www.cstsui.com/</id>
   <author>
     <name><![CDATA[Chun Sing Tsui]]></name>
@@ -75,7 +75,7 @@
 
 
 <p>Press <code>Run</code> to start the debugger, and then trigger your gatewayscript action.
-It</p>
+You&rsquo;ll then be able to step through the code or inspect variables.</p>
 
 <p><img src="http://www.cstsui.com/images/gatewayscript-remote-debugging/debugger-breakpoint.png" alt="vscode-debug-statement" /></p>
 
@@ -162,6 +162,13 @@ It</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>du -hs * <span class="p">|</span> sort -h
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Xargs to pass arguments from standard in</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>xargs brew install &lt; list.txt
 </span></code></pre></td></tr></table></div></figure>
 
 
