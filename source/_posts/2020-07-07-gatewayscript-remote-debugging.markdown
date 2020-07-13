@@ -11,8 +11,6 @@ categories:
 - VS Code
 ---
 
-## Remote Debugging with Visual Studio Code
-
 This short guide will show how to connect a remote debugger like Visual Studio Code or Chrome DevTools to help debug your GatewayScript, allowing you to inspect variables and step through lines of code to help with troubleshooting and development.
 
 ## Enabling GatewayScript Remote Debugging
