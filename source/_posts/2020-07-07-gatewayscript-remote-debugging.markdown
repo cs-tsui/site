@@ -1,14 +1,14 @@
 ---
 layout: post
-title: "DataPower GatewayScript Remote Debugging"
-date: 2020-07-07 19:54:43 -0400
+title: "DataPower GatewayScript Remote Debugging with Visual Studio Code"
+date: 2020-07-12 19:54:43 -0400
 comments: true
 published: true
 categories:
 - datapower
 - ibm
 - gatewayscript
-- VS Code
+- vc
 ---
 
 This short guide will show how to connect a remote debugger like Visual Studio Code or Chrome DevTools to help debug your GatewayScript, allowing you to inspect variables and step through lines of code to help with troubleshooting and development.

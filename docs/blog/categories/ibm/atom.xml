@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ibm | Chun Sing Tsui]]></title>
   <link href="http://www.cstsui.com/blog/categories/ibm/atom.xml" rel="self"/>
   <link href="http://www.cstsui.com/"/>
-  <updated>2020-07-12T21:38:58-04:00</updated>
+  <updated>2020-07-12T21:41:11-04:00</updated>
   <id>http://www.cstsui.com/</id>
   <author>
     <name><![CDATA[Chun Sing Tsui]]></name>
@@ -14,10 +14,10 @@
 
   
   <entry>
-    <title type="html"><![CDATA[DataPower GatewayScript Remote Debugging]]></title>
-    <link href="http://www.cstsui.com/blog/2020/07/07/gatewayscript-remote-debugging/"/>
-    <updated>2020-07-07T19:54:43-04:00</updated>
-    <id>http://www.cstsui.com/blog/2020/07/07/gatewayscript-remote-debugging</id>
+    <title type="html"><![CDATA[DataPower GatewayScript Remote Debugging With Visual Studio Code]]></title>
+    <link href="http://www.cstsui.com/blog/2020/07/12/gatewayscript-remote-debugging/"/>
+    <updated>2020-07-12T19:54:43-04:00</updated>
+    <id>http://www.cstsui.com/blog/2020/07/12/gatewayscript-remote-debugging</id>
     <content type="html"><![CDATA[<p>This short guide will show how to connect a remote debugger like Visual Studio Code or Chrome DevTools to help debug your GatewayScript, allowing you to inspect variables and step through lines of code to help with troubleshooting and development.</p>
 
 <h2>Enabling GatewayScript Remote Debugging</h2>
