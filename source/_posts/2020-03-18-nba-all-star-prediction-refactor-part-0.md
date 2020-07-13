@@ -70,4 +70,4 @@ This model achieves ~96% accuracy in 70/30 test split. Specifically for the last
 ## Presentation - Web Visualization
 An interactive web user interface was created with HighCharts, Vue.js, Bootstrap that displays previous season all-star selections as well as interactions to see details about specific players and distribution of statistics.
 
-![Web UI](images/allstar-nba-img/web-ui-0.png)
+![Web UI](/images/allstar-nba-img/web-ui-0.png)

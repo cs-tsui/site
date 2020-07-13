@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Nba | Chun Sing Tsui]]></title>
   <link href="http://www.cstsui.com/blog/categories/nba/atom.xml" rel="self"/>
   <link href="http://www.cstsui.com/"/>
-  <updated>2020-07-12T21:41:11-04:00</updated>
+  <updated>2020-07-12T21:46:00-04:00</updated>
   <id>http://www.cstsui.com/</id>
   <author>
     <name><![CDATA[Chun Sing Tsui]]></name>
@@ -98,7 +98,7 @@ All-Star players are top-tier players selected by fans, a media panel, and coach
 
 <p>An interactive web user interface was created with HighCharts, Vue.js, Bootstrap that displays previous season all-star selections as well as interactions to see details about specific players and distribution of statistics.</p>
 
-<p><img src="images/allstar-nba-img/web-ui-0.png" alt="Web UI" /></p>
+<p><img src="/images/allstar-nba-img/web-ui-0.png" alt="Web UI" /></p>
 ]]></content>
   </entry>
   

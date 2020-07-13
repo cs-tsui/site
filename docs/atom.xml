@@ -4,7 +4,7 @@
   <title><![CDATA[Chun Sing Tsui]]></title>
   <link href="http://www.cstsui.com/atom.xml" rel="self"/>
   <link href="http://www.cstsui.com/"/>
-  <updated>2020-07-12T21:41:11-04:00</updated>
+  <updated>2020-07-12T21:46:00-04:00</updated>
   <id>http://www.cstsui.com/</id>
   <author>
     <name><![CDATA[Chun Sing Tsui]]></name>
@@ -26,21 +26,21 @@
 
 <p>For example, if DataPower is running on local Docker, use <code>docker run ... -p 9229:9229 ...</code> to expose the port. If running on Kubernetes/Openshift, use <code>kubectl port-forward dp-pod 9229:9229</code> so it is accessible via <code>localhost</code>.</p>
 
-<p><img src="images/gatewayscript-remote-debugging/enable-remote-debugging.png" alt="remote-debugging" /></p>
+<p><img src="http://www.cstsui.com/images/gatewayscript-remote-debugging/enable-remote-debugging.png" alt="remote-debugging" /></p>
 
 <p>Then in the script that you want to debug, add in the <code>debugger;</code> statement to trigger the debugger during execution.</p>
 
-<p><img src="images/gatewayscript-remote-debugging/script-example.png" width="450" alt="gwscript-debugger" /></p>
+<p><img src="http://www.cstsui.com/images/gatewayscript-remote-debugging/script-example.png" width="450" alt="gwscript-debugger" /></p>
 
 <p>Also, we need to enable debugging for the GatewayScript Action.</p>
 
-<p><img src="images/gatewayscript-remote-debugging/enable-action-debug.png" width="450" alt="action-debugging" /></p>
+<p><img src="http://www.cstsui.com/images/gatewayscript-remote-debugging/enable-action-debug.png" width="450" alt="action-debugging" /></p>
 
 <h2>Connecting with Visual Studio Code</h2>
 
 <p>First we need to create a <code>launch.json</code> file to tell VS Code how to connect to the DP Debugging interface:</p>
 
-<p><img src="images/gatewayscript-remote-debugging/create-launch-json.png" width="250" alt="vscode-debug-launch" /></p>
+<p><img src="http://www.cstsui.com/images/gatewayscript-remote-debugging/create-launch-json.png" width="250" alt="vscode-debug-launch" /></p>
 
 <p>Then use the <code>node</code> type and <code>inspector</code> protocol in the configuration as follows. Set <code>timeout</code> to be a larger number so it won&rsquo;t time out while you trigger the policy/gatewayscript action.</p>
 
@@ -77,17 +77,17 @@
 <p>Press <code>Run</code> to start the debugger, and then trigger your gatewayscript action.
 It</p>
 
-<p><img src="images/gatewayscript-remote-debugging/debugger-breakpoint.png" alt="vscode-debug-statement" /></p>
+<p><img src="http://www.cstsui.com/images/gatewayscript-remote-debugging/debugger-breakpoint.png" alt="vscode-debug-statement" /></p>
 
 <p>You can also see the status of the debug action in DataPower by searching for <code>Debug Action Status</code> to see any live debug sessions.</p>
 
-<p><img src="images/gatewayscript-remote-debugging/debug-action-status.png" alt="vscode-debug-statement" /></p>
+<p><img src="http://www.cstsui.com/images/gatewayscript-remote-debugging/debug-action-status.png" alt="vscode-debug-statement" /></p>
 
 <h2>Connecting with Chrome DevTools</h2>
 
 <p>Connecting with Chrome DevTools is quite straight-forward. Navigate to <code>chrome://inspect/#devices</code>, and press <code>Configure..</code> to add your debugging address/port (e.g. <code>localhost:9229</code>) to the list if it doesn&rsquo;t already exist. When the GWS action is triggered, the debug session should show up and you can then click on <code>inspect</code> to show the debugger.</p>
 
-<p><img src="images/gatewayscript-remote-debugging/chrome-debugger.png" alt="vscode-debug-statement" /></p>
+<p><img src="http://www.cstsui.com/images/gatewayscript-remote-debugging/chrome-debugger.png" alt="vscode-debug-statement" /></p>
 
 <h2>References</h2>
 
@@ -410,7 +410,7 @@ All-Star players are top-tier players selected by fans, a media panel, and coach
 
 <p>An interactive web user interface was created with HighCharts, Vue.js, Bootstrap that displays previous season all-star selections as well as interactions to see details about specific players and distribution of statistics.</p>
 
-<p><img src="images/allstar-nba-img/web-ui-0.png" alt="Web UI" /></p>
+<p><img src="http://www.cstsui.com/images/allstar-nba-img/web-ui-0.png" alt="Web UI" /></p>
 ]]></content>
   </entry>
   

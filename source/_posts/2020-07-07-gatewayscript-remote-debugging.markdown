@@ -8,7 +8,7 @@ categories:
 - datapower
 - ibm
 - gatewayscript
-- vc
+- vscode
 ---
 
 This short guide will show how to connect a remote debugger like Visual Studio Code or Chrome DevTools to help debug your GatewayScript, allowing you to inspect variables and step through lines of code to help with troubleshooting and development.
@@ -19,24 +19,24 @@ First we need to enable remote debugging. Search `gatewayscript remote debugger`
 
 For example, if DataPower is running on local Docker, use `docker run ... -p 9229:9229 ...` to expose the port. If running on Kubernetes/Openshift, use `kubectl port-forward dp-pod 9229:9229` so it is accessible via `localhost`.
 
-![remote-debugging](images/gatewayscript-remote-debugging/enable-remote-debugging.png)
+![remote-debugging](/images/gatewayscript-remote-debugging/enable-remote-debugging.png)
 
 
 Then in the script that you want to debug, add in the `debugger;` statement to trigger the debugger during execution.
 
-![gwscript-debugger](images/gatewayscript-remote-debugging/script-example.png =450x)
+![gwscript-debugger](/images/gatewayscript-remote-debugging/script-example.png =450x)
 
 
 Also, we need to enable debugging for the GatewayScript Action.
 
-![action-debugging](images/gatewayscript-remote-debugging/enable-action-debug.png =450x)
+![action-debugging](/images/gatewayscript-remote-debugging/enable-action-debug.png =450x)
 
 
 ## Connecting with Visual Studio Code
 
 First we need to create a `launch.json` file to tell VS Code how to connect to the DP Debugging interface:
 
-![vscode-debug-launch](images/gatewayscript-remote-debugging/create-launch-json.png =250x)
+![vscode-debug-launch](/images/gatewayscript-remote-debugging/create-launch-json.png =250x)
 
 Then use the `node` type and `inspector` protocol in the configuration as follows. Set `timeout` to be a larger number so it won't time out while you trigger the policy/gatewayscript action.
 
@@ -59,12 +59,12 @@ Then use the `node` type and `inspector` protocol in the configuration as follow
 Press `Run` to start the debugger, and then trigger your gatewayscript action.
 It 
 
-![vscode-debug-statement](images/gatewayscript-remote-debugging/debugger-breakpoint.png)
+![vscode-debug-statement](/images/gatewayscript-remote-debugging/debugger-breakpoint.png)
 
 You can also see the status of the debug action in DataPower by searching for `Debug Action Status` to see any live debug sessions.
 
 
-![vscode-debug-statement](images/gatewayscript-remote-debugging/debug-action-status.png)
+![vscode-debug-statement](/images/gatewayscript-remote-debugging/debug-action-status.png)
 
 
 ## Connecting with Chrome DevTools
@@ -72,7 +72,7 @@ You can also see the status of the debug action in DataPower by searching for `D
 Connecting with Chrome DevTools is quite straight-forward. Navigate to `chrome://inspect/#devices`, and press `Configure..` to add your debugging address/port (e.g. `localhost:9229`) to the list if it doesn't already exist. When the GWS action is triggered, the debug session should show up and you can then click on `inspect` to show the debugger.
 
 
-![vscode-debug-statement](images/gatewayscript-remote-debugging/chrome-debugger.png)
+![vscode-debug-statement](/images/gatewayscript-remote-debugging/chrome-debugger.png)
 
 
 ## References
