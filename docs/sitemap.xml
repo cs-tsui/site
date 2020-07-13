@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://www.cstsui.com/blog/2020/07/07/gatewayscript-remote-debugging/</loc>
+<lastmod>2020-07-07T19:54:43-04:00</lastmod>
+</url>
+<url>
 <loc>http://www.cstsui.com/blog/2020/03/31/handy-commands/</loc>
 <lastmod>2020-03-31T18:12:00-04:00</lastmod>
 </url>
@@ -141,6 +145,12 @@
 </url>
 <url>
 <loc>http://www.cstsui.com/blog/categories/python/</loc>
+</url>
+<url>
+<loc>http://www.cstsui.com/blog/categories/gatewayscript/</loc>
+</url>
+<url>
+<loc>http://www.cstsui.com/blog/categories/vs-code/</loc>
 </url>
 <url>
 <loc>http://www.cstsui.com/posts/2/</loc>

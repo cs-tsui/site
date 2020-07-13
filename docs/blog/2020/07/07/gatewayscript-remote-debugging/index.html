@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Chun Sing Tsui</title>
+  <title>DataPower GatewayScript Remote Debugging - Chun Sing Tsui</title>
   <meta name="author" content="Chun Sing Tsui">
 
   
-  <meta name="description" content="The kit was already snapped together when I first got it a couple of years ago. I had planned on painting this kit from the start so all the parts &hellip;">
+  <meta name="description" content="Remote Debugging with Visual Studio Code This short guide will show how to connect a remote debugger like Visual Studio Code or Chrome DevTools to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.cstsui.com/posts/6">
+  <link rel="canonical" href="http://www.cstsui.com/blog/2020/07/07/gatewayscript-remote-debugging">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="Chun Sing Tsui" type="application/atom+xml">
@@ -103,15 +103,14 @@
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/2011/08/02/1100-mg-destiny-wip-part-1/">1/100 MG Destiny WIP - Part 1</a></h1>
+      
+        <h1 class="entry-title">DataPower GatewayScript Remote Debugging</h1>
+      
     
     
       <p class="meta">
@@ -120,7 +119,7 @@
 
 
 
-<time class='entry-date' datetime='2011-08-02T00:00:00-04:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>2</span><span class='date-suffix'>nd</span>, <span class='date-year'>2011</span></span> <span class='time'>12:00 am</span></time>
+<time class='entry-date' datetime='2020-07-07T19:54:43-04:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2020</span></span> <span class='time'>7:54 pm</span></time>
         
         
       </p>
@@ -128,81 +127,139 @@
   </header>
 
 
-  <div class="entry-content"><p>The kit was already snapped together when I first got it a couple of years ago. I had planned on painting this kit from the start so all the parts were already prepared for painting (pegs were cut for easier removal of the pieces and the pieces were sanded).</p>
+<div class="entry-content"><h2>Remote Debugging with Visual Studio Code</h2>
+
+<p>This short guide will show how to connect a remote debugger like Visual Studio Code or Chrome DevTools to help debug your GatewayScript, allowing you to inspect variables and step through lines of code to help with troubleshooting and development.</p>
+
+<h2>Enabling GatewayScript Remote Debugging</h2>
+
+<p>First we need to enable remote debugging. Search <code>gatewayscript remote debugger</code> and set to <code>enabled</code>. Make sure the port is accessible from your local machine.</p>
+
+<p>For example, if DataPower is running on local Docker, use <code>docker run ... -p 9229:9229 ...</code> to expose the port. If running on Kubernetes/Openshift, use <code>kubectl port-forward dp-pod 9229:9229</code> so it is accessible via <code>localhost</code>.</p>
+
+<p><img src="images/gatewayscript-remote-debugging/enable-remote-debugging.png" alt="remote-debugging" /></p>
+
+<p>Then in the script that you want to debug, add in the <code>debugger;</code> statement to trigger the debugger during execution.</p>
+
+<p><img src="images/gatewayscript-remote-debugging/script-example.png" width="450" alt="gwscript-debugger" /></p>
+
+<p>Also, we need to enable debugging for the GatewayScript Action.</p>
+
+<p><img src="images/gatewayscript-remote-debugging/enable-action-debug.png" width="450" alt="action-debugging" /></p>
+
+<h2>Connecting with Visual Studio Code</h2>
+
+<p>First we need to create a <code>launch.json</code> file to tell VS Code how to connect to the DP Debugging interface:</p>
+
+<p><img src="images/gatewayscript-remote-debugging/e" width="450" alt="vscode-debug-launch" /></p>
+
+<p>Then use the <code>node</code> type and <code>inspector</code> protocol in the configuration as follows. Set <code>timeout</code> to be a larger number so it won&rsquo;t time out while you trigger the policy/gatewayscript action.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>    "version": "0.2.0",
+</span><span class='line'>    "configurations": [
+</span><span class='line'>        {
+</span><span class='line'>            "type": "node",
+</span><span class='line'>            "request": "attach",
+</span><span class='line'>            "name": "Attach to DP",
+</span><span class='line'>            "address": "localhost",
+</span><span class='line'>            "port": "9229",
+</span><span class='line'>            "protocol": "inspector",
+</span><span class='line'>            "timeout": 100000
+</span><span class='line'>          }
+</span><span class='line'>    ]
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
 
 
-<p>As usually Tamiya Arylics are my paint of choice. On with the painting:</p>
+<p>Press <code>Run</code> to start the debugger, and then trigger your gatewayscript action.
+It</p>
 
-<p>
-<img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Destiny%20WIP/P7310473_979x734.jpg" alt="Photobucket" width="979" height="734" border="0" /></p>
+<p><img src="images/gatewayscript-remote-debugging/debugger-breakpoint.png" alt="vscode-debug-statement" /></p>
 
+<p>You can also see the status of the debug action in DataPower by searching for <code>Debug Action Status</code> to see any live debug sessions.</p>
 
+<p><img src="images/gatewayscript-remote-debugging/debug-action-status.png" alt="vscode-debug-statement" /></p>
 
+<h2>Connecting with Chrome DevTools</h2>
 
+<p>Connecting with Chrome DevTools is quite straight-forward. Navigate to <code>chrome://inspect/#devices</code>, and press <code>Configure..</code> to add your debugging address/port (e.g. <code>localhost:9229</code>) to the list if it doesn&rsquo;t already exist. When the GWS action is triggered, the debug session should show up and you can then click on <code>inspect</code> to show the debugger.</p>
+
+<p><img src="images/gatewayscript-remote-debugging/chrome-debugger.png" alt="vscode-debug-statement" /></p>
+
+<h2>References</h2>
+
+<p><a href="https://www.ibm.com/support/knowledgecenter/SS9H2Y_7.7.0/com.ibm.dp.doc/debugger_remotedebugging.html">https://www.ibm.com/support/knowledgecenter/SS9H2Y_7.7.0/com.ibm.dp.doc/debugger_remotedebugging.html</a></p>
+
+<p><a href="https://github.com/ibm-datapower/datapower-tutorials/blob/master/gatewayscript-remote-debugging/gateway-script-remote-debugging.md">https://github.com/ibm-datapower/datapower-tutorials/blob/master/gatewayscript-remote-debugging/gateway-script-remote-debugging.md</a></p>
+
+<p><a href="https://code.visualstudio.com/docs/nodejs/nodejs-debugging">https://code.visualstudio.com/docs/nodejs/nodejs-debugging</a></p>
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2011/08/02/1100-mg-destiny-wip-part-1/">Read on &rarr;</a>
-    </footer>
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2011/07/31/1100-mg-hi-nu-wip/">1/100 MG Hi-Nu WIP</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2011-07-31T00:00:00-04:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>31</span><span class='date-suffix'>st</span>, <span class='date-year'>2011</span></span> <span class='time'>12:00 am</span></time>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>The kit is almost finish and here are several pics I've taken during the process. Not too many pictures were taken during this build.</p>
-
-
-<p><p>The entire kit was AB with Tamiya Acrylics, and gloss coated with Future for panel lining and decals.</p>
-
-<p><p><img src="http://i151.photobucket.com/albums/s148/Tomster831/MG%20Hi-Nu%20WIP/P8010517_1096x822.jpg" alt="Photobucket" border="0" /></p></p>
-
-<p></div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/2011/07/31/1100-mg-hi-nu-wip/">Read on &rarr;</a>
-    </footer>
   
 
 
-    </article>
+
+  <span class="byline author vcard">Authored by <span class="fn">
   
-  <div class="pagination">
+    Chun Sing Tsui
+  
+  </span></span>
+
+
+      
+
+
+
+
+<time class='entry-date' datetime='2020-07-07T19:54:43-04:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2020</span></span> <span class='time'>7:54 pm</span></time>
+      
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/datapower/'>datapower</a>, <a class='category' href='/blog/categories/gatewayscript/'>gatewayscript</a>, <a class='category' href='/blog/categories/ibm/'>ibm</a>, <a class='category' href='/blog/categories/vs-code/'>vs code</a>
+  
+</span>
+
+
+    </p>
     
-    <a href="/blog/archives">Blog Archives</a>
-    
-    <a class="next" href="/posts/5">Newer &rarr;</a>
-    
-  </div>
+      <div class="sharing">
+  
+  
+  
 </div>
-<aside class="sidebar">
-  
+
     
-  
-</aside>
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2020/03/31/handy-commands/" title="Previous Post: Commonly Used Commands">&laquo; Commonly Used Commands</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+
+</div>
 
     </div>
   </div>

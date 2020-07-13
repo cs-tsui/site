@@ -9,8 +9,7 @@
   <meta name="author" content="Chun Sing Tsui">
 
   
-  <meta name="description" content="Get specific column using cut. Tab is the default delimiter in cut 1
-cat content | cut -d &#39;delimiter&#39; -f &lt;field number&gt; Output specific &hellip;">
+  <meta name="description" content="Remote Debugging with Visual Studio Code This short guide will show how to connect a remote debugger like Visual Studio Code or Chrome DevTools to &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -112,6 +111,115 @@ cat content | cut -d &#39;delimiter&#39; -f &lt;field number&gt; Output specific
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/2020/07/07/gatewayscript-remote-debugging/">DataPower GatewayScript Remote Debugging</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2020-07-07T19:54:43-04:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2020</span></span> <span class='time'>7:54 pm</span></time>
+        
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>Remote Debugging with Visual Studio Code</h2>
+
+<p>This short guide will show how to connect a remote debugger like Visual Studio Code or Chrome DevTools to help debug your GatewayScript, allowing you to inspect variables and step through lines of code to help with troubleshooting and development.</p>
+
+<h2>Enabling GatewayScript Remote Debugging</h2>
+
+<p>First we need to enable remote debugging. Search <code>gatewayscript remote debugger</code> and set to <code>enabled</code>. Make sure the port is accessible from your local machine.</p>
+
+<p>For example, if DataPower is running on local Docker, use <code>docker run ... -p 9229:9229 ...</code> to expose the port. If running on Kubernetes/Openshift, use <code>kubectl port-forward dp-pod 9229:9229</code> so it is accessible via <code>localhost</code>.</p>
+
+<p><img src="images/gatewayscript-remote-debugging/enable-remote-debugging.png" alt="remote-debugging" /></p>
+
+<p>Then in the script that you want to debug, add in the <code>debugger;</code> statement to trigger the debugger during execution.</p>
+
+<p><img src="images/gatewayscript-remote-debugging/script-example.png" width="450" alt="gwscript-debugger" /></p>
+
+<p>Also, we need to enable debugging for the GatewayScript Action.</p>
+
+<p><img src="images/gatewayscript-remote-debugging/enable-action-debug.png" width="450" alt="action-debugging" /></p>
+
+<h2>Connecting with Visual Studio Code</h2>
+
+<p>First we need to create a <code>launch.json</code> file to tell VS Code how to connect to the DP Debugging interface:</p>
+
+<p><img src="images/gatewayscript-remote-debugging/e" width="450" alt="vscode-debug-launch" /></p>
+
+<p>Then use the <code>node</code> type and <code>inspector</code> protocol in the configuration as follows. Set <code>timeout</code> to be a larger number so it won&rsquo;t time out while you trigger the policy/gatewayscript action.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>    "version": "0.2.0",
+</span><span class='line'>    "configurations": [
+</span><span class='line'>        {
+</span><span class='line'>            "type": "node",
+</span><span class='line'>            "request": "attach",
+</span><span class='line'>            "name": "Attach to DP",
+</span><span class='line'>            "address": "localhost",
+</span><span class='line'>            "port": "9229",
+</span><span class='line'>            "protocol": "inspector",
+</span><span class='line'>            "timeout": 100000
+</span><span class='line'>          }
+</span><span class='line'>    ]
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Press <code>Run</code> to start the debugger, and then trigger your gatewayscript action.
+It</p>
+
+<p><img src="images/gatewayscript-remote-debugging/debugger-breakpoint.png" alt="vscode-debug-statement" /></p>
+
+<p>You can also see the status of the debug action in DataPower by searching for <code>Debug Action Status</code> to see any live debug sessions.</p>
+
+<p><img src="images/gatewayscript-remote-debugging/debug-action-status.png" alt="vscode-debug-statement" /></p>
+
+<h2>Connecting with Chrome DevTools</h2>
+
+<p>Connecting with Chrome DevTools is quite straight-forward. Navigate to <code>chrome://inspect/#devices</code>, and press <code>Configure..</code> to add your debugging address/port (e.g. <code>localhost:9229</code>) to the list if it doesn&rsquo;t already exist. When the GWS action is triggered, the debug session should show up and you can then click on <code>inspect</code> to show the debugger.</p>
+
+<p><img src="images/gatewayscript-remote-debugging/chrome-debugger.png" alt="vscode-debug-statement" /></p>
+
+<h2>References</h2>
+
+<p><a href="https://www.ibm.com/support/knowledgecenter/SS9H2Y_7.7.0/com.ibm.dp.doc/debugger_remotedebugging.html">https://www.ibm.com/support/knowledgecenter/SS9H2Y_7.7.0/com.ibm.dp.doc/debugger_remotedebugging.html</a></p>
+
+<p><a href="https://github.com/ibm-datapower/datapower-tutorials/blob/master/gatewayscript-remote-debugging/gateway-script-remote-debugging.md">https://github.com/ibm-datapower/datapower-tutorials/blob/master/gatewayscript-remote-debugging/gateway-script-remote-debugging.md</a></p>
+
+<p><a href="https://code.visualstudio.com/docs/nodejs/nodejs-debugging">https://code.visualstudio.com/docs/nodejs/nodejs-debugging</a></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/2020/03/31/handy-commands/">Commonly Used Commands</a></h1>
     
     
@@ -129,7 +237,9 @@ cat content | cut -d &#39;delimiter&#39; -f &lt;field number&gt; Output specific
   </header>
 
 
-  <div class="entry-content"><p>Get specific column using <code>cut</code>. Tab is the default delimiter in cut</p>
+  <div class="entry-content"><p>Here&rsquo;s a short cheatsheet for some useful commands when working with Linux/Unix systems.</p>
+
+<p>Get specific column using <code>cut</code>. Tab is the default delimiter in cut</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>cat content <span class="p">|</span> cut -d <span class="s1">&#39;delimiter&#39;</span> -f &lt;field number&gt;
@@ -366,116 +476,6 @@ cat content | cut -d &#39;delimiter&#39; -f &lt;field number&gt; Output specific
 </span><span class='line'>deactivate
 </span></code></pre></td></tr></table></div></figure>
 
-</div>
-  
-  
-
-
-    </article>
-  
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/2020/03/19/nba-all-star-prediction-refactor-part-0/">NBA All-Star Prediction Project Refactor - Part 0</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2020-03-19T20:00:00-04:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>19</span><span class='date-suffix'>th</span>, <span class='date-year'>2020</span></span> <span class='time'>8:00 pm</span></time>
-        
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>For the project in the Data and Visual Analytics course (<a href="https://www.omscs.gatech.edu/cse-6242-data-visual-analytics">CSE6242</a>) of the MS Analytics program at Georgia Tech, our topic of choice was to experiement with data analytics techniques to predict the NBA All-Star selection of the 2020 season. Ever since the course was over, I&rsquo;ve wanted to fully refactor and productionize the data pipeline and the machine learning models required to automate the prediction process.</p>
-
-<p>In this first part(0) of a series of posts, it will serve as the summary writeup of the project, including data sets we used to generate the model, approach we took, various model experimentations, and visualization of the results.</p>
-
-<h2>Introduction</h2>
-
-<p>Our team&rsquo;s goal is to predict the 2019-2020 season’s NBA All-Star team using a player’s game performance and social presence metrics.
-All-Star players are top-tier players selected by fans, a media panel, and coaches to participate in a mid-season exhibition game. As such, we hypothesized that a player&rsquo;s social influence would factor into his likelihood of being voted as an All-Star Starter.</p>
-
-<p>Current models do not account for a player’s social influence. Marketers, NBA fans, or sports bettors may be interested in having fun with the results or using them in marketing activities.</p>
-
-<h2>Data Collection</h2>
-
-<p>Primary data sets include:</p>
-
-<ul>
-<li>Player Performance Statistics</li>
-<li>Google Search Trend</li>
-<li>Wikipedia Page View Raw Count</li>
-<li>Twitter Followers Count and Tweet Count</li>
-<li>Instagram Follows Count and Posts Count</li>
-</ul>
-
-
-<h2>All-Star Selection</h2>
-
-<p>The game is the Eastern Conference versus the Western Conference. The Eastern and Western conference each has 5 starters and 7 reserves, for a total of 24 all-stars per season.</p>
-
-<p>5 Starters</p>
-
-<ul>
-<li>Fan vote weighs 50%</li>
-<li>Other 50% split between the media and the current NBA players ballot evenly. Split by positions – front- count: 3 slots, guards: 2 slots</li>
-</ul>
-
-
-<p>7 Reserves</p>
-
-<ul>
-<li>All 30 NBA coaches are given a ballot with the ability to the 7 reserve players, including wildcard</li>
-</ul>
-
-
-<h2>Approach</h2>
-
-<p>Our approach was to combine the player in-game performance data and social data for each NBA player and test classifications models with different features. We experimented with different algorithms in classifying players into 3 classes: starters, reserves, or neither.</p>
-
-<p>We sorted classification results in descending order based on the probability of a player belonging to each class (starters, reserves, not- all-star) and filled in available slots(3 front court players and 2 guards players) for the top five players with the most starting votes from our random forest model, which gave us the highest accuracy when tested against test data. Whether a starter is a front court player or guard depends on what position he plays in the NBA.</p>
-
-<h2>Model Experientation</h2>
-
-<p>Given the limited impact of social presence data on choices of all-star reserves, the in-game statistics data were first used for initial experimentation and the prediction of all-star reserves. In-game statistics combined with social presence data is used for the prediction of starters.</p>
-
-<p>Neural Network:</p>
-
-<ul>
-<li>Python Keras' backpropagation neural network was used with two hidden layers containing 36 nodes each.</li>
-<li>Predicted reasonable All-Stars with using stats but performed poorly with using stats and social data.</li>
-</ul>
-
-
-<p>Random forest</p>
-
-<ul>
-<li>Tested combinations of columns with game stats only, stats with Google search trend, wiki page view, and # of social media followers</li>
-<li>Tested various number of trees (10-500) and standardized selected features per season</li>
-<li>The amount of Twitter and Instagram historical data was limiting because there was not enough data (only ~500 rows after mapping to one row per player/season)</li>
-</ul>
-
-
-<h2>Results</h2>
-
-<p>The most accurate model is from using Random Forest for Starters prediction. The model comprises of using combined columns with selected performance stats, Google Search Trend Factor, and Wiki page views. Selected performance stats are chosen based on the top features returned by random forests' feature importance function. Two most important features are FP (fantasy points – which itself is based on a formula) and PTS (points per game).</p>
-
-<p>This model achieves ~96% accuracy in 70/30 test split. Specifically for the last 2018-19 season, it was able to predict all 10 All-Stars starters. The reserves prediction was less accurate even though the model achieved an overall ~98% accuracy against 400+ NBA players last season. Due to the <em>highly imbalanced</em> nature of the dataset (24 players out of 300-400 players are all stars), even if the model predicts that no-one is an all-star, it is still going to achieve a 90%+ accuracy if we measure against the entire dataset. So we have to keep that in mind when using accuracy as the basis for evaluating the effectiveness of the model.</p>
-
-<h2>Presentation - Web Visualization</h2>
-
-<p>An interactive web user interface was created with HighCharts, Vue.js, Bootstrap that displays previous season all-star selections as well as interactions to see details about specific players and distribution of statistics.</p>
-
-<p><img src="images/allstar-nba-img/web-ui-0.png" alt="Web UI" /></p>
 </div>
   
   

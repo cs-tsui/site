@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Shell | Chun Sing Tsui]]></title>
   <link href="http://www.cstsui.com/blog/categories/shell/atom.xml" rel="self"/>
   <link href="http://www.cstsui.com/"/>
-  <updated>2020-06-28T08:44:43-04:00</updated>
+  <updated>2020-07-12T21:34:12-04:00</updated>
   <id>http://www.cstsui.com/</id>
   <author>
     <name><![CDATA[Chun Sing Tsui]]></name>
@@ -18,7 +18,9 @@
     <link href="http://www.cstsui.com/blog/2020/03/31/handy-commands/"/>
     <updated>2020-03-31T18:12:00-04:00</updated>
     <id>http://www.cstsui.com/blog/2020/03/31/handy-commands</id>
-    <content type="html"><![CDATA[<p>Get specific column using <code>cut</code>. Tab is the default delimiter in cut</p>
+    <content type="html"><![CDATA[<p>Here&rsquo;s a short cheatsheet for some useful commands when working with Linux/Unix systems.</p>
+
+<p>Get specific column using <code>cut</code>. Tab is the default delimiter in cut</p>
 
 <pre><code class="bash">cat content | cut -d 'delimiter' -f &lt;field number&gt;
 </code></pre>

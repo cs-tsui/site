@@ -8,6 +8,8 @@ categories:
 - shell
 ---
 
+Here's a short cheatsheet for some useful commands when working with Linux/Unix systems.
+
 Get specific column using `cut`. Tab is the default delimiter in cut
 
 ```bash
