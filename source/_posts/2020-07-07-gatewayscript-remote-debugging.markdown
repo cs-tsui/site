@@ -38,7 +38,7 @@ Also, we need to enable debugging for the GatewayScript Action.
 
 First we need to create a `launch.json` file to tell VS Code how to connect to the DP Debugging interface:
 
-![vscode-debug-launch](images/gatewayscript-remote-debugging/e =450x)
+![vscode-debug-launch](images/gatewayscript-remote-debugging/create-launch-json.png =250x)
 
 Then use the `node` type and `inspector` protocol in the configuration as follows. Set `timeout` to be a larger number so it won't time out while you trigger the policy/gatewayscript action.
 
