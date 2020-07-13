@@ -59,7 +59,11 @@ Disk usage sorted by size
 du -hs * | sort -h
 ```
 
+Xargs to pass arguments from standard in
 
+```
+xargs brew install < list.txt
+```
 
 Heredoc Syntax to create multi-line file from command line
 

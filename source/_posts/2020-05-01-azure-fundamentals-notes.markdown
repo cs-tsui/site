@@ -25,3 +25,10 @@ Azure Front Door
 - Specifically for the HTTP web traffic
 - Can be used together with AZ Traffic Manager, with FD handling HTTP traffic, and TM handling other protocols
 
+
+### Azure Subscription
+- separate for different levels of control
+  - cost limit
+  - organizational structure
+  - environments
+  - https://docs.microsoft.com/en-us/learn/modules/create-an-azure-account/media/4-billing-structure-overview.png
