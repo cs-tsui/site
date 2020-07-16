@@ -6,9 +6,11 @@ comments: true
 categories:
 - cheatsheet
 - shell
+- linux
 ---
 
 Here's a short cheatsheet for some useful commands when working with Linux/Unix systems.
+
 
 Get specific column using `cut`. Tab is the default delimiter in cut
 
@@ -59,7 +61,7 @@ Disk usage sorted by size
 du -hs * | sort -h
 ```
 
-Xargs to pass arguments from standard in
+Xargs to pass arguments from stdin
 
 ```
 xargs brew install < list.txt
@@ -83,11 +85,28 @@ EOT
 ```
 
 
+Working with Docker
+```
+# Remove stopped containers and all unused images
+docker system prune -a
+
+# Remove certain images 
+docker images -a | grep "pattern" | awk '{print $3}' | xargs docker rmi
+
+
+# Remove all images
+docker rmi $(docker images -a -q)
+
+```
+
 Working with systemd
 
 ```
 # List all services
 systemctl list-units --type=service
+
+# Restart
+systemctl restart application.service
 
 # Get logs by the service unit
 journalctl -u nginx.service

@@ -4,7 +4,7 @@
   <title><![CDATA[Chun Sing Tsui]]></title>
   <link href="http://www.cstsui.com/atom.xml" rel="self"/>
   <link href="http://www.cstsui.com/"/>
-  <updated>2020-07-13T07:24:13-04:00</updated>
+  <updated>2020-07-16T06:29:00-04:00</updated>
   <id>http://www.cstsui.com/</id>
   <author>
     <name><![CDATA[Chun Sing Tsui]]></name>
@@ -165,7 +165,7 @@ You&rsquo;ll then be able to step through the code or inspect variables.</p>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Xargs to pass arguments from standard in</p>
+<p>Xargs to pass arguments from stdin</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>xargs brew install &lt; list.txt
@@ -201,6 +201,29 @@ You&rsquo;ll then be able to step through the code or inspect variables.</p>
 </span></code></pre></td></tr></table></div></figure>
 
 
+<p>Working with Docker</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Remove stopped containers and all unused images</span>
+</span><span class='line'>docker system prune -a
+</span><span class='line'>
+</span><span class='line'><span class="c"># Remove certain images </span>
+</span><span class='line'>docker images -a <span class="p">|</span> grep <span class="s2">&quot;pattern&quot;</span> <span class="p">|</span> awk <span class="s1">&#39;{print $3}&#39;</span> <span class="p">|</span> xargs docker rmi
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c"># Remove all images</span>
+</span><span class='line'>docker rmi <span class="k">$(</span>docker images -a -q<span class="k">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
 <p>Working with systemd</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -217,8 +240,14 @@ You&rsquo;ll then be able to step through the code or inspect variables.</p>
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># List all services</span>
 </span><span class='line'>systemctl list-units --type<span class="o">=</span>service
+</span><span class='line'>
+</span><span class='line'><span class="c"># Restart</span>
+</span><span class='line'>systemctl restart application.service
 </span><span class='line'>
 </span><span class='line'><span class="c"># Get logs by the service unit</span>
 </span><span class='line'>journalctl -u nginx.service

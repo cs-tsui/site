@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Cheatsheet | Chun Sing Tsui]]></title>
   <link href="http://www.cstsui.com/blog/categories/cheatsheet/atom.xml" rel="self"/>
   <link href="http://www.cstsui.com/"/>
-  <updated>2020-07-13T07:24:13-04:00</updated>
+  <updated>2020-07-16T06:29:00-04:00</updated>
   <id>http://www.cstsui.com/</id>
   <author>
     <name><![CDATA[Chun Sing Tsui]]></name>
@@ -64,7 +64,7 @@ tar -xzvf archive.tgz -C targetdir
 du -hs * | sort -h
 </code></p>
 
-<p>Xargs to pass arguments from standard in</p>
+<p>Xargs to pass arguments from stdin</p>
 
 <pre><code>xargs brew install &lt; list.txt
 </code></pre>
@@ -85,23 +85,50 @@ spec:
 EOT
 </code></pre>
 
-<p>Working with systemd</p>
+<p>Working with Docker
+```</p>
 
-<pre><code># List all services
-systemctl list-units --type=service
+<h1>Remove stopped containers and all unused images</h1>
 
-# Get logs by the service unit
-journalctl -u nginx.service
+<p>docker system prune -a</p>
 
-# Get data from yesterday
-journalctl --since yesterday
+<h1>Remove certain images</h1>
 
-# Get data from specific timestamps
-journalctl --since "2015-01-10" --until "2015-01-11 03:00"
+<p>docker images -a | grep &ldquo;pattern&rdquo; | awk &lsquo;{print $3}&rsquo; | xargs docker rmi</p>
 
-# Get log data from previous boot
-journalctl -b -1
+<h1>Remove all images</h1>
+
+<p>docker rmi $(docker images -a -q)</p>
+
+<pre><code>
+Working with systemd
 </code></pre>
+
+<h1>List all services</h1>
+
+<p>systemctl list-units &ndash;type=service</p>
+
+<h1>Restart</h1>
+
+<p>systemctl restart application.service</p>
+
+<h1>Get logs by the service unit</h1>
+
+<p>journalctl -u nginx.service</p>
+
+<h1>Get data from yesterday</h1>
+
+<p>journalctl &ndash;since yesterday</p>
+
+<h1>Get data from specific timestamps</h1>
+
+<p>journalctl &ndash;since &ldquo;2015-01-10&rdquo; &ndash;until &ldquo;2015-01-11 03:00&rdquo;</p>
+
+<h1>Get log data from previous boot</h1>
+
+<p>journalctl -b -1</p>
+
+<p>```</p>
 ]]></content>
   </entry>
   
