@@ -86,6 +86,7 @@ EOT
 
 
 Working with Docker
+
 ```
 # Remove stopped containers and all unused images
 docker system prune -a
@@ -93,10 +94,8 @@ docker system prune -a
 # Remove certain images 
 docker images -a | grep "pattern" | awk '{print $3}' | xargs docker rmi
 
-
 # Remove all images
 docker rmi $(docker images -a -q)
-
 ```
 
 Working with systemd
@@ -120,4 +119,17 @@ journalctl --since "2015-01-10" --until "2015-01-11 03:00"
 # Get log data from previous boot
 journalctl -b -1
 
+```
+
+
+Working with Openshift
+
+```
+# Get list of users with IAM in the name and put them in a group
+# and bind the group with cluster-admin. Use space in awk split
+oc adm groups new cloudiam
+
+oc get users | grep IAM | awk -F '[[:space:]][[:space:]]+' '{print $1}' | xargs -I '{}' oc adm groups add-users cloudiam '{}'
+
+oc adm policy add-cluster-role-to-group cluster-admin cloudiam
 ```

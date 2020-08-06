@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Linux | Chun Sing Tsui]]></title>
   <link href="http://www.cstsui.com/blog/categories/linux/atom.xml" rel="self"/>
   <link href="http://www.cstsui.com/"/>
-  <updated>2020-07-16T06:29:00-04:00</updated>
+  <updated>2020-08-06T10:59:30-04:00</updated>
   <id>http://www.cstsui.com/</id>
   <author>
     <name><![CDATA[Chun Sing Tsui]]></name>
@@ -85,50 +85,49 @@ spec:
 EOT
 </code></pre>
 
-<p>Working with Docker
-```</p>
+<p>Working with Docker</p>
 
-<h1>Remove stopped containers and all unused images</h1>
+<pre><code># Remove stopped containers and all unused images
+docker system prune -a
 
-<p>docker system prune -a</p>
+# Remove certain images 
+docker images -a | grep "pattern" | awk '{print $3}' | xargs docker rmi
 
-<h1>Remove certain images</h1>
-
-<p>docker images -a | grep &ldquo;pattern&rdquo; | awk &lsquo;{print $3}&rsquo; | xargs docker rmi</p>
-
-<h1>Remove all images</h1>
-
-<p>docker rmi $(docker images -a -q)</p>
-
-<pre><code>
-Working with systemd
+# Remove all images
+docker rmi $(docker images -a -q)
 </code></pre>
 
-<h1>List all services</h1>
+<p>Working with systemd</p>
 
-<p>systemctl list-units &ndash;type=service</p>
+<pre><code># List all services
+systemctl list-units --type=service
 
-<h1>Restart</h1>
+# Restart
+systemctl restart application.service
 
-<p>systemctl restart application.service</p>
+# Get logs by the service unit
+journalctl -u nginx.service
 
-<h1>Get logs by the service unit</h1>
+# Get data from yesterday
+journalctl --since yesterday
 
-<p>journalctl -u nginx.service</p>
+# Get data from specific timestamps
+journalctl --since "2015-01-10" --until "2015-01-11 03:00"
 
-<h1>Get data from yesterday</h1>
+# Get log data from previous boot
+journalctl -b -1
+</code></pre>
 
-<p>journalctl &ndash;since yesterday</p>
+<p>Working with Openshift</p>
 
-<h1>Get data from specific timestamps</h1>
+<pre><code># Get list of users with IAM in the name and put them in a group
+# and bind the group with cluster-admin. Use space in awk split
+oc adm groups new cloudiam
 
-<p>journalctl &ndash;since &ldquo;2015-01-10&rdquo; &ndash;until &ldquo;2015-01-11 03:00&rdquo;</p>
+oc get users | grep IAM | awk -F '[[:space:]][[:space:]]+' '{print $1}' | xargs -I '{}' oc adm groups add-users cloudiam '{}'
 
-<h1>Get log data from previous boot</h1>
-
-<p>journalctl -b -1</p>
-
-<p>```</p>
+oc adm policy add-cluster-role-to-group cluster-admin cloudiam
+</code></pre>
 ]]></content>
   </entry>
   

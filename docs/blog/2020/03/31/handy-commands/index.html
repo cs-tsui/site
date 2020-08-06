@@ -234,13 +234,11 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-<span class='line-number'>9</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Remove stopped containers and all unused images</span>
 </span><span class='line'>docker system prune -a
 </span><span class='line'>
 </span><span class='line'><span class="c"># Remove certain images </span>
 </span><span class='line'>docker images -a <span class="p">|</span> grep <span class="s2">&quot;pattern&quot;</span> <span class="p">|</span> awk <span class="s1">&#39;{print $3}&#39;</span> <span class="p">|</span> xargs docker rmi
-</span><span class='line'>
 </span><span class='line'>
 </span><span class='line'><span class="c"># Remove all images</span>
 </span><span class='line'>docker rmi <span class="k">$(</span>docker images -a -q<span class="k">)</span>
@@ -283,6 +281,25 @@
 </span><span class='line'>
 </span><span class='line'><span class="c"># Get log data from previous boot</span>
 </span><span class='line'>journalctl -b -1
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Working with Openshift</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Get list of users with IAM in the name and put them in a group</span>
+</span><span class='line'><span class="c"># and bind the group with cluster-admin. Use space in awk split</span>
+</span><span class='line'>oc adm groups new cloudiam
+</span><span class='line'>
+</span><span class='line'>oc get users <span class="p">|</span> grep IAM <span class="p">|</span> awk -F <span class="s1">&#39;[[:space:]][[:space:]]+&#39;</span> <span class="s1">&#39;{print $1}&#39;</span> <span class="p">|</span> xargs -I <span class="s1">&#39;{}&#39;</span> oc adm groups add-users cloudiam <span class="s1">&#39;{}&#39;</span>
+</span><span class='line'>
+</span><span class='line'>oc adm policy add-cluster-role-to-group cluster-admin cloudiam
 </span></code></pre></td></tr></table></div></figure>
 
 </div>
